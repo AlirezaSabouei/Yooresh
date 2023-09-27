@@ -1,4 +1,4 @@
 # Eloy
 A browser based strategic MMORPG game
 
-![alt text](https://github.com/eloyjoon/yooresh/yooresh.jpg?raw=true)
+![alt text](https://github.com/Eloyjoon/Yooresh/blob/master/Yooresh.jpg?raw=true)
