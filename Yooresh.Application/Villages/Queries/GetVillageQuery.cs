@@ -22,10 +22,11 @@ public class GetVillageQueryHandler : IRequestHandler<GetVillageQuery, Village>
     public async Task<Village> Handle(GetVillageQuery request, CancellationToken cancellationToken)
     {
         var village = await _context.Villages
-            .Include(a => a.Player)
+            .Include(a=>a.Faction)
+            .Include(a=>a.Player)
             .Include(a => a.Resource)
             .AsNoTracking()
-            .FirstAsync(a => a.Player.Id == request.PlayerId, cancellationToken);
+            .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken);
 
         return village;
     }

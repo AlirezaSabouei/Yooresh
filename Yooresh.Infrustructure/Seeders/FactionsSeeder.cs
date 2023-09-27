@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Yooresh.Infrastructure.Seeders;
 
-public class FactionsSeeder : IEntityTypeConfiguration<Faction>
+/*public class FactionsSeeder : IEntityTypeConfiguration<Faction>
 {
     public void Configure(EntityTypeBuilder<Faction> builder)
     {
@@ -28,6 +28,6 @@ public class FactionsSeeder : IEntityTypeConfiguration<Faction>
                     }
                 }
             }
-        );*/
+        );#1#
     }
-}
+}*/

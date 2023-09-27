@@ -4,13 +4,14 @@ using MediatR;
 
 namespace Yooresh.Application.Villages.Commands;
 
-public record CreateVillageCommand : IRequest<Village>
+public record CreateVillageCommand : IRequest<bool>
 {
     public string Name { get; set; }
-    public PlayerReference Player { get; set; }
+    public Guid PlayerId { get; set; }
+    public Guid FactionId { get; set; }
 }
 
-public class CreateVillageCommandHandler : IRequestHandler<CreateVillageCommand, Village>
+public class CreateVillageCommandHandler : IRequestHandler<CreateVillageCommand, bool>
 {
     private readonly IContext _context;
 
@@ -19,9 +20,11 @@ public class CreateVillageCommandHandler : IRequestHandler<CreateVillageCommand,
         _context = context;
     }
     
-    public Task<Village> Handle(CreateVillageCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(CreateVillageCommand request, CancellationToken cancellationToken)
     {
-        return null;
-       // Village newVillage=new Village(request.Name,)
+        var village = new Village(request.Name, request.FactionId, request.PlayerId);
+        _context.Villages.Add(village);
+        await _context.SaveChangesAsync(cancellationToken);
+        return true;
     }
 }

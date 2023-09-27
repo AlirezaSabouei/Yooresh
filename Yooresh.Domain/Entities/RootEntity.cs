@@ -1,5 +1,5 @@
 namespace Yooresh.Domain.Entities;
 
-public class RootEntity : BaseEntity
+public abstract class RootEntity : BaseEntity
 {
 }

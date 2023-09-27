@@ -1,3 +1,4 @@
+using AutoMapper;
 using Yooresh.Application.ResourceBuildings.Commands;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Microsoft.AspNetCore.Authorization;
@@ -10,6 +11,10 @@ namespace Yooresh.API.Controllers;
 [Authorize]
 public class ResourceBuildingController : BaseApiController
 {
+    public ResourceBuildingController(IMapper mapper) : base(mapper)
+    {
+    }
+    
     [HttpPost]
     public async Task<ActionResult<List<ResourceBuilding>>> SeedBasicDataForResourceBuildings([FromBody] SeedResourceBuildingsCommand command)
     {

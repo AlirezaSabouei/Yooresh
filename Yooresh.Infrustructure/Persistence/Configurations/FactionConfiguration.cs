@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
-public class FactionConfiguration : IEntityTypeConfiguration<Faction>
+/*public class FactionConfiguration : IEntityTypeConfiguration<Faction>
 {
     public void Configure(EntityTypeBuilder<Faction> builder)
     {
@@ -29,4 +29,4 @@ public class FactionConfiguration : IEntityTypeConfiguration<Faction>
         builder.Ignore(a => a.AdvantagesList);
         builder.Ignore(a => a.DisadvantagesList);
     }
-}
+}*/

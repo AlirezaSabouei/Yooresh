@@ -1,8 +1,8 @@
 using Yooresh.Domain.Entities.Villages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Diagnostics;
-using System.Reflection.Emit;
+using Yooresh.Domain.Entities;
+using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -10,6 +10,8 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
 {
     public void Configure(EntityTypeBuilder<Village> builder)
     {
+        builder.ToTable(nameof(Village));
+
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Id).ValueGeneratedOnAdd();
         
@@ -17,34 +19,21 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.HasOne(a => a.Faction)
+        builder.HasOne(a=>a.Player)
+            .WithOne()
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(a=>a.Faction)
             .WithMany()
-            .IsRequired();
-        
-       // builder.OwnsOne(a => a.Faction.Name, b =>
-       // {
-           // b.Property(fi => fi.SomeProperty)
-              //  .HasColumnName(nameof(FactionInfo.SomeProperty))
-               // .IsRequired();
+            .HasForeignKey(a => a.FactionId)
+            .OnDelete(DeleteBehavior.NoAction);
 
-            // Add more configuration for FactionInfo properties here if needed
-       // });
+        builder.OwnsOne(a => a.Resource, ConfigureResource);
 
-        builder.OwnsOne(a => a.Player, b => ConfigurePersonReference(b));
-        builder.OwnsOne(a => a.Resource, b => ConfigureVillageResource(b));
-
-        builder.OwnsMany(a => a.Troops, b => b.WithOwner());
-    }
-
-    private void ConfigurePersonReference(OwnedNavigationBuilder<Village, PlayerReference> ownedNavigationBuilder)
-    {
-        ownedNavigationBuilder
-            .Property(a => a.Id)
-            .HasColumnName(nameof(Village.Player) + nameof(Village.Player.Id))
-            .IsRequired();
+        // builder.OwnsMany(a => a.Troops, b => b.WithOwner());
     }
     
-    private void ConfigureVillageResource(OwnedNavigationBuilder<Village, Resource> ownedNavigationBuilder)
+    private void ConfigureResource(OwnedNavigationBuilder<Village, Resource> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)

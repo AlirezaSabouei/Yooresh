@@ -22,9 +22,8 @@ public class ConfirmPlayerCommandHandlerTests:
 
     protected override void SetupDependencies()
     {
-        _playerMock!.SetupGet(a=>a.Id).Returns(Guid.NewGuid());
         _contextMock!.Setup(a => a.Players)
-            .ReturnsDbSet((new List<Player>(){_playerMock.Object}).AsQueryable());
+            .ReturnsDbSet((new List<Player>(){_playerMock!.Object}).AsQueryable());
     }
 
     protected override ConfirmPlayerCommand CreateValidCommand()
