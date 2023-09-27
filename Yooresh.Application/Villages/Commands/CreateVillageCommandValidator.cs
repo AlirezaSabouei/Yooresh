@@ -1,6 +1,4 @@
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Application.Players.Commands;
-using Yooresh.Domain.Entities.Villages;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,31 +12,39 @@ public class CreateVillageCommandValidator : AbstractValidator<CreateVillageComm
     {
         _context = context;
 
-        RuleFor(a => a.Player)
-            .NotNull()
-            .WithMessage("No player is selected")
-            .Must(NotDefault)
-            .WithMessage("No such player exists")
-            .MustAsync(BeUnique)
-            .WithMessage("You already have a village");
-
         RuleFor(a => a.Name)
             .NotNull()
             .NotEmpty()
             .WithMessage("Village name can not be empty")
             .Length(1, 100)
             .WithMessage("Village name should be between 1 and 100");
+
+        RuleFor(a => a.PlayerId)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("No player is selected")
+            .WithMessage("No such player exists")
+            .MustAsync(BeUnique)
+            .WithMessage("You already have a village");
+
+        RuleFor(a => a.FactionId)
+            .NotNull()
+            .NotEmpty()
+            .MustAsync(Exists)
+            .WithMessage("No such faction exists");
     }
 
-    private bool NotDefault(PlayerReference player)
-    {
-        return player.Id != default;
-    }
-
-    private async Task<bool> BeUnique(PlayerReference player, CancellationToken cancellationToken)
+    private async Task<bool> Exists(Guid factionId, CancellationToken cancellationToken)
     {
         return await _context.Villages
             .AsNoTracking()
-            .CountAsync(a => a.Player.Id == player.Id, cancellationToken) == 0;
+            .AnyAsync(a => a.FactionId == factionId, cancellationToken);
+    }
+
+    private async Task<bool> BeUnique(Guid playerId, CancellationToken cancellationToken)
+    {
+        return await _context.Villages
+            .AsNoTracking()
+            .CountAsync(a => a.FactionId == playerId, cancellationToken) == 0;
     }
 }

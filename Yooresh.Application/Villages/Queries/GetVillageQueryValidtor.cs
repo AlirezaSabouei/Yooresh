@@ -30,6 +30,6 @@ public class GetVillageQueryValidtor : AbstractValidator<GetVillageQuery>
     {
         return await _context.Villages
             .AsNoTracking()
-            .AnyAsync(a => a.Player.Id == playerId, cancellationToken);
+            .AnyAsync(a => a.PlayerId == playerId, cancellationToken);
     }
 }

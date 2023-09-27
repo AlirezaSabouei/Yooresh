@@ -53,7 +53,9 @@ public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPla
 
         //Assert
         result.IsValid.ShouldBe(false);
-        result.Errors.ShouldContain(a => a.ErrorMessage.Contains(nameof(ConfirmPlayerCommand.PlayerId)));
+        result.Errors
+            .All(a => a.PropertyName.Contains(nameof(ConfirmPlayerCommand.PlayerId)))
+            .ShouldBeTrue();
     }
     
     [Fact]
@@ -67,6 +69,8 @@ public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPla
 
         //Assert
         result.IsValid.ShouldBe(false);
-        result.Errors.ShouldContain(a => a.ErrorMessage.Contains(nameof(Player)));
+        result.Errors
+            .All(a => a.PropertyName.Contains(nameof(Player)))
+            .ShouldBeTrue();
     }
 }

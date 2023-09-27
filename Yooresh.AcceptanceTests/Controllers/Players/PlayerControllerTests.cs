@@ -122,7 +122,6 @@ public class PlayersControllerTests : ControllerTests<PlayersController>
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
         context.Players.RemoveRange(context.Players);
-        context.Factions.RemoveRange(context.Factions);
         await context.SaveChangesAsync();
     }
     

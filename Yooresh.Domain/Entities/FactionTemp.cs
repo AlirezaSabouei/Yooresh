@@ -1,6 +1,6 @@
-namespace Yooresh.Domain.Entities.Villages;
+namespace Yooresh.Domain.Entities;
 
-public class Faction : BaseEntity
+public class Faction:RootEntity
 {
     public string Name { get; set; } = null!;
     private List<string> Advantages { get; set; } = null!;
@@ -20,6 +20,4 @@ public class Faction : BaseEntity
         Advantages = advantages;
         Disadvantages = disadvantages;
     }
-    
-
 }

@@ -10,7 +10,6 @@ public class Context : DbContext, IContext
 {
     public DbSet<Player> Players { get; set; }
     public DbSet<Village> Villages { get; set; }
-    public DbSet<Faction> Factions { get; set; }
 
     public Context(DbContextOptions options) : base(options)
     {

@@ -1,4 +1,5 @@
-﻿using Yooresh.Application.Villages.Commands;
+﻿using AutoMapper;
+using Yooresh.Application.Villages.Commands;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Entities.Villages;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,10 @@ namespace Yooresh.API.Controllers
     [Authorize(Roles = "SimplePlayer,SuperAdmin,Admin")]
     public class VillageController : BaseApiController
     {
+        public VillageController(IMapper mapper) : base(mapper)
+        {
+        }
+
         [HttpGet]
         public async Task<ActionResult<Village>> GetVillage()
         {
@@ -28,9 +33,9 @@ namespace Yooresh.API.Controllers
             {
                 foreach (var error in ex.Errors)
                 {
-                    ModelState.AddModelError(error.PropertyName,error.ErrorMessage);
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
-  
+
                 return BadRequest(ModelState);
             }
             catch (Exception e)
@@ -38,21 +43,24 @@ namespace Yooresh.API.Controllers
                 return BadRequest(e.Message);
             }
         }
-        
+
         [HttpPost]
-        public async Task<ActionResult<Village>> GetVillage([FromBody]CreateVillageCommand command)
+        public async Task<ActionResult<bool>> GetVillage([FromBody] CreateVillageCommandDto body)
         {
             try
             {
+                var command = _mapper.Map<CreateVillageCommand>(body);
+                command.PlayerId = PlayerId;
+                
                 return await Mediator.Send(command);
             }
             catch (FluentValidation.ValidationException ex)
             {
                 foreach (var error in ex.Errors)
                 {
-                    ModelState.AddModelError(error.PropertyName,error.ErrorMessage);
+                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
                 }
-  
+
                 return BadRequest(ModelState);
             }
             catch (Exception e)

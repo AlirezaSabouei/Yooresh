@@ -2,40 +2,31 @@ using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.Domain.Entities.Villages;
 
-public class Village : BaseEntity
+public class Village : RootEntity
 {
-    private const int STARTING_AMOUNT = 100;
-    public string Name { get; private set; } = null!;
-    public Faction Faction { get; private set; } = null!;
-    public PlayerReference Player { get; private set; } = null!;
-    public Resource Resource { get; private set; } = null!;
-
-    public List<Troop> Troops { get; set; }
+    public string Name { get; private set; }
+    public Guid FactionId { get; private set; }
+    public Faction Faction { get; private set; }
+    public Guid PlayerId { get; private set; }
+    public Player Player { get; private set; }
+    public Resource Resource { get; private set; }
 
     //For EF
-    private Village(){ }
-
-    public Village(string name,Faction faction,PlayerReference player,Resource? villageResource=null)
+    private Village()
     {
-        Name = name;
-        Faction = faction;
-        Player = player;
-        Resource = villageResource ?? new Resource(0,0,0,0,0);
     }
 
-    public void AddInitialResources()
+    public Village(string name, Guid factionId, Guid playerId)
     {
-        Resource = new Resource(STARTING_AMOUNT,STARTING_AMOUNT,STARTING_AMOUNT,STARTING_AMOUNT,STARTING_AMOUNT);
+        Id = Guid.NewGuid();
+        Name = name;
+        FactionId = factionId;
+        PlayerId = playerId;
+        Resource = new Resource(0, 0, 0, 0, 0);
     }
 
     public void AddResource(Resource resource)
     {
         Resource += resource;
     }
-}
-
-public class Troop:ValueObject
-{
-    public string Name { get; set; }
-    public int Power { get; set; }
 }
