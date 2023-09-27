@@ -1,7 +1,11 @@
 
 # Yooresh
-<img src="https://github.com/Eloyjoon/Yooresh/blob/master/Yooresh.jpg" width="200" style="float: left; margin-right: 15px;">
-Browser based strategy game
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue)](https://www.linkedin.com/in/alireza-sabouei/)
+
+<p><img src="https://github.com/Eloyjoon/Yooresh/blob/master/Yooresh.jpg" width="10%" style="float: left;"></p>
+<p>Browser based strategy game.
+
+</p>
 
 ## Technologies and Concepts
 * [ASP.NET Core 7](https://docs.microsoft.com/en-us/aspnet/core/introduction-to-aspnet-core)
