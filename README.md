@@ -1,5 +1,4 @@
 # Eloy
 A browser based strategic MMORPG game
 
-#Technologies
-.Net Core
+<a href="URL_REDIRECT" target="blank"><img align="center" src="URL_TO_YOUR_IMAGE" height="100" />Test</a>
