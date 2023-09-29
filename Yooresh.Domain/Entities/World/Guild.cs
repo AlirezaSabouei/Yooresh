@@ -1,3 +1,4 @@
+using Yooresh.Domain.Common;
 using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.Domain.Entities.World;

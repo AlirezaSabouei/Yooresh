@@ -1,11 +1,11 @@
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.ResourceBuildings;
+
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Yooresh.Application.ResourceBuildings.Commands;
 
-public record SeedResourceBuildingsCommand:IRequest<List<ResourceBuilding>>
+/*public record SeedResourceBuildingsCommand:IRequest<List<ResourceBuilding>>
 {
 }
 
@@ -51,4 +51,4 @@ public class SeedResourceBuildingsCommandHandler : IRequestHandler<SeedResourceB
         
        // _context.ResourceBuildings.AddRange(buildings);
     }
-}
+}*/

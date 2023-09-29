@@ -1,6 +1,6 @@
-﻿using Yooresh.Village.WinForms.Temp;
+﻿using Yooresh.Client.WinForms.Temp;
 
-namespace Yooresh.Village.WinForms;
+namespace Yooresh.Client.WinForms;
 
 partial class Form1
 {

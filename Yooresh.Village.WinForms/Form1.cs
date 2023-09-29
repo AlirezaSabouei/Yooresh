@@ -1,4 +1,4 @@
-namespace Yooresh.Village.WinForms;
+namespace Yooresh.Client.WinForms;
 
 public partial class Form1 : Form
 {

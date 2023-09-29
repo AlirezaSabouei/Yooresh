@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Common;
+﻿namespace Yooresh.Client.WinForms.Common;
 
 public static class Statics
 {

@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Common.Forms
+﻿namespace Yooresh.Client.WinForms.Common.Forms
 {
     partial class BaseForm
     {
@@ -36,6 +36,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Name = "BaseForm";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "BaseForm";
             FormClosing += BaseForm_FormClosing;
             Load += BaseForm_Load;

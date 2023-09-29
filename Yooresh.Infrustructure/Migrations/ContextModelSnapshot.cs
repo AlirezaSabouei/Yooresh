@@ -23,7 +23,7 @@ namespace Yooresh.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Yooresh.Domain.Entities.Faction", b =>
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.ResourceBuilding", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,11 +31,98 @@ namespace Yooresh.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ProductionType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<Guid?>("RequirementId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeSpan>("UpgradeDuration")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Faction");
+                    b.HasIndex("RequirementId");
+
+                    b.ToTable("ResourceBuilding", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+                            Name = "Farm1",
+                            ProductionType = "Food",
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("0986a9a2-d235-4a62-8ae4-1eb1a31eab18"),
+                            Name = "Farm2",
+                            ProductionType = "Food",
+                            RequirementId = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+                            UpgradeDuration = new TimeSpan(0, 0, 2, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Factions.Faction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Advantages")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Disadvantages")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Faction", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("012fc556-7788-42b7-82f7-f093d37ec517"),
+                            Advantages = "Advantage1,Advantage2",
+                            Disadvantages = "Disadvantage1,Disadvantage2",
+                            Name = "Orc"
+                        },
+                        new
+                        {
+                            Id = new Guid("52559f4b-4052-4438-b5b9-9bac92dc75fb"),
+                            Advantages = "Advantage1,Advantage2",
+                            Disadvantages = "Disadvantage1,Disadvantage2",
+                            Name = "Human"
+                        },
+                        new
+                        {
+                            Id = new Guid("1a060e07-fd38-4c1b-96e8-b8daee50421e"),
+                            Advantages = "Advantage1,Advantage2",
+                            Disadvantages = "Disadvantage1,Disadvantage2",
+                            Name = "Elf"
+                        },
+                        new
+                        {
+                            Id = new Guid("56d9e842-3c04-4741-9cda-4bfe38aa1f57"),
+                            Advantages = "Advantage1,Advantage2",
+                            Disadvantages = "Disadvantage1,Disadvantage2",
+                            Name = "Undead"
+                        });
                 });
 
             modelBuilder.Entity("Yooresh.Domain.Entities.Players.Player", b =>
@@ -74,6 +161,17 @@ namespace Yooresh.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Player", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("a58bef94-8437-4856-bd87-a7b861285773"),
+                            Confirmed = true,
+                            Email = "alireza.sabouei@gmail.com",
+                            Name = "Alireza Sabouei",
+                            Password = "Aa123456",
+                            Role = "SimplePlayer"
+                        });
                 });
 
             modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
@@ -82,8 +180,14 @@ namespace Yooresh.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AvailableBuilders")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("FactionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("LastResourceChangeTime")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -103,9 +207,189 @@ namespace Yooresh.Infrastructure.Migrations
                     b.ToTable("Village", (string)null);
                 });
 
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageResourceBuilding", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ResourceBuildingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VillageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceBuildingId");
+
+                    b.HasIndex("VillageId");
+
+                    b.ToTable("VillageResourceBuilding");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageUpgradeQueue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Completed")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTimeOffset>("EndTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid?>("FromId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("StartTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("ToId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UpgradeType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid?>("VillageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillageId");
+
+                    b.ToTable("VillageUpgradeQueue", (string)null);
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.ResourceBuilding", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.ResourceBuilding", "Requirement")
+                        .WithMany()
+                        .HasForeignKey("RequirementId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.OwnsOne("Yooresh.Domain.Common.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("ResourceBuildingId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("ResourceBuildingId");
+
+                            b1.ToTable("ResourceBuilding");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ResourceBuildingId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ResourceBuildingId = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+                                    Food = 600,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    ResourceBuildingId = new Guid("0986a9a2-d235-4a62-8ae4-1eb1a31eab18"),
+                                    Food = 1200,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.OwnsOne("Yooresh.Domain.Common.Resource", "UpgradeCost", b1 =>
+                        {
+                            b1.Property<Guid>("ResourceBuildingId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("UpgradeCostFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("UpgradeCostGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("UpgradeCostLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("UpgradeCostMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("UpgradeCostStone");
+
+                            b1.HasKey("ResourceBuildingId");
+
+                            b1.ToTable("ResourceBuilding");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ResourceBuildingId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    ResourceBuildingId = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    ResourceBuildingId = new Guid("0986a9a2-d235-4a62-8ae4-1eb1a31eab18"),
+                                    Food = 10,
+                                    Gold = 0,
+                                    Lumber = 10,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+
+                    b.Navigation("Requirement");
+
+                    b.Navigation("UpgradeCost")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
                 {
-                    b.HasOne("Yooresh.Domain.Entities.Faction", "Faction")
+                    b.HasOne("Yooresh.Domain.Entities.Factions.Faction", "Faction")
                         .WithMany()
                         .HasForeignKey("FactionId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -117,7 +401,7 @@ namespace Yooresh.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.OwnsOne("Yooresh.Domain.Entities.Villages.Resource", "Resource", b1 =>
+                    b.OwnsOne("Yooresh.Domain.Common.Resource", "Resource", b1 =>
                         {
                             b1.Property<Guid>("VillageId")
                                 .HasColumnType("uniqueidentifier");
@@ -156,6 +440,40 @@ namespace Yooresh.Infrastructure.Migrations
 
                     b.Navigation("Resource")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageResourceBuilding", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.ResourceBuilding", "ResourceBuilding")
+                        .WithMany()
+                        .HasForeignKey("ResourceBuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", "Village")
+                        .WithMany("ResourceBuildings")
+                        .HasForeignKey("VillageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ResourceBuilding");
+
+                    b.Navigation("Village");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageUpgradeQueue", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", null)
+                        .WithMany("Upgrades")
+                        .HasForeignKey("VillageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
+                {
+                    b.Navigation("ResourceBuildings");
+
+                    b.Navigation("Upgrades");
                 });
 #pragma warning restore 612, 618
         }

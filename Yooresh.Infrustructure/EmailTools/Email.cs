@@ -37,10 +37,6 @@ public class Email : IEmail
             // Send the email
             smtpClient.Send(mail);
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
         finally
         {
             // Dispose of resources

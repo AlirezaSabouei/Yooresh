@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Temp.Buildings
+﻿namespace Yooresh.Client.WinForms.Temp.Buildings
 {
     partial class Tower_1
     {

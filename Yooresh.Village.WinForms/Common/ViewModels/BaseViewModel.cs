@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 
-namespace Yooresh.Village.WinForms.Common.ViewModels;
+namespace Yooresh.Client.WinForms.Common.ViewModels;
 
 [PropertyChanged.AddINotifyPropertyChangedInterface]
 public class BaseViewModel

@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace Yooresh.Village.WinForms.Players.Forms;
+namespace Yooresh.Client.WinForms.Players.Forms;
 
 partial class LoginForm
 {
@@ -109,7 +109,6 @@ partial class LoginForm
         txtPassword.Location = new Point(43, 186);
         txtPassword.Margin = new Padding(40, 10, 40, 3);
         txtPassword.Name = "txtPassword";
-        txtPassword.PasswordChar = '*';
         txtPassword.Size = new Size(375, 39);
         txtPassword.TabIndex = 1;
         // 
@@ -200,8 +199,6 @@ partial class LoginForm
         MinimumSize = new Size(724, 619);
         Name = "LoginForm";
         ProgressBar = progressBar1;
-        ShowInTaskbar = false;
-        StartPosition = FormStartPosition.CenterScreen;
         Text = "Login";
         groupBox2.ResumeLayout(false);
         groupBox2.PerformLayout();

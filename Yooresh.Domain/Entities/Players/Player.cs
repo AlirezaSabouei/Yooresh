@@ -11,13 +11,17 @@ public class Player : RootEntity
     //For EF
     private Player() { }
 
-    public Player(string name, string email, string password, Role role)
+    public Player(string name, string email, string password, Role role,Guid? id=null)
     {
         Id = Guid.NewGuid();
         Name = name;
         Email = email.ToLower();
         Password = password;
         Role = role;
+        if(id.HasValue)
+        {
+            Id=id.Value;
+        }
     }
 
     public virtual void ConfirmPlayer()

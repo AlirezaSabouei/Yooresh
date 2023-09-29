@@ -1,24 +1,24 @@
-using Yooresh.Village.WinForms.Common;
-using Yooresh.Village.WinForms.Common.Forms;
-using Yooresh.Village.WinForms.Common.ViewModels;
-using Yooresh.Village.WinForms.Players.ViewModels;
-using Yooresh.Village.WinForms.Properties;
-using Yooresh.Village.WinForms.Village.Forms;
+using Yooresh.Client.WinForms.Common;
+using Yooresh.Client.WinForms.Common.Forms;
+using Yooresh.Client.WinForms.Players.ViewModels;
+using Yooresh.Client.WinForms.Properties;
+using Yooresh.Client.WinForms.Villages.Forms;
 
-namespace Yooresh.Village.WinForms.Players.Forms;
+namespace Yooresh.Client.WinForms.Players.Forms;
 
 public partial class LoginForm : BaseForm
 {
     private readonly LoginFormViewModel _viewModel;
     private readonly SignUpForm _signUpForm;
     private readonly VillageForm _villageForm;
+    private readonly CreateVillageForm _createVillageForm;
 
     protected override void LoadSettings()
     {
         checkBox1.Checked = Settings.Default.LoginForm_RememberMe;
-        if (!checkBox1.Checked) return;
-        txtEmail.Text = Settings.Default.LoginForm_Email;
-        txtPassword.Text = Settings.Default.LoginForm_Password;
+        if (!Settings.Default.LoginForm_RememberMe) return;
+        _viewModel.Email = Settings.Default.LoginForm_Email;
+        _viewModel.Password = Settings.Default.LoginForm_Password;
     }
 
     protected override void SaveSettings()
@@ -35,12 +35,13 @@ public partial class LoginForm : BaseForm
         txtPassword.DataBindings.Add(nameof(TextBox.Text), _viewModel, nameof(LoginFormViewModel.Password));
     }
 
-    public LoginForm(LoginFormViewModel viewModel, SignUpForm signUpForm, VillageForm villageForm)
+    public LoginForm(LoginFormViewModel viewModel, SignUpForm signUpForm, VillageForm villageForm, CreateVillageForm createVillageForm)
     {
         InitializeComponent();
         _viewModel = viewModel;
         _signUpForm = signUpForm;
         _villageForm = villageForm;
+        _createVillageForm = createVillageForm;
     }
 
     private void lblSignUp_Click(object sender, EventArgs e)
@@ -59,7 +60,15 @@ public partial class LoginForm : BaseForm
         {
             Loader(true);
             await _viewModel.Login();
-            _villageForm.ShowDialog();
+            await _viewModel.VillageExists();
+            if (_viewModel.HasVillage)
+            {
+                _villageForm.ShowDialog();
+            }
+            else
+            {
+                _createVillageForm.ShowDialog();
+            }
         }
         catch (InformException informException)
         {
