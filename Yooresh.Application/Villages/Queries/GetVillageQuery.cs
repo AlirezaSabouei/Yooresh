@@ -23,8 +23,7 @@ public class GetVillageQueryHandler : IRequestHandler<GetVillageQuery, Village>
     {
         var village = (await _context.Villages
             .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken))
-            .GatherResources()
-            .ApplyFinishedUpgrades();
+            .GatherResources();
 
         await _context.SaveChangesAsync(cancellationToken);
         

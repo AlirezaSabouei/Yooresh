@@ -71,5 +71,6 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
         builder.Navigation(a => a.Faction).AutoInclude();
         builder.Navigation(a => a.Player).AutoInclude();
         builder.Navigation(a => a.ResourceBuildings).AutoInclude();
+        builder.Navigation(a => a.ResourceBuildings).AutoInclude();
     }
 }

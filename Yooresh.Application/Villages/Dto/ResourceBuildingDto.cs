@@ -3,7 +3,7 @@ using Yooresh.Application.Common.Mappings;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.ValueObjects;
 
-namespace Yooresh.Application.ResourceBuildings.Dto;
+namespace Yooresh.Application.Villages.Dto;
 
 public class ResourceBuildingDto : IMapFrom<ResourceBuilding>
 {
@@ -12,8 +12,9 @@ public class ResourceBuildingDto : IMapFrom<ResourceBuilding>
     public TimeSpan UpgradeDuration { get; set; }
     public Resource UpgradeCost { get; set; }
     public int Level { get; set; }
-    public Guid? RequirementId { get; set; }
-    public ResourceBuildingDto? Requirement { get; set; }
+    public Guid? TargetId { get; set; }
+    public ResourceBuildingDto? Target { get; set; }
+    public Resource HourlyProduction { get; set; }
     
     public void Mapping(Profile profile)
     {

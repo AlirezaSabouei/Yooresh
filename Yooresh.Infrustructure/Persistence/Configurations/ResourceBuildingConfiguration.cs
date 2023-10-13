@@ -34,9 +34,13 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
             .IsRequired()
             .HasConversion(
                 v => v.ToString(), // Convert enum to string
-                v => (ResourceType) Enum.Parse(typeof(ResourceType), v) // Parse string to enum                
+                v => (ResourceType)Enum.Parse(typeof(ResourceType), v) // Parse string to enum                
             )
             .HasMaxLength(20);
+
+
+        builder.Property(a => a.UpgradeName)
+            .HasMaxLength(100);
 
         builder.OwnsOne(a => a.HourlyProduction, ConfigureHourlyProduction);
 
@@ -44,6 +48,8 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
         SeedLumberMills(builder);
         SeedStoneMines(builder);
         SeedMetalMines(builder);
+
+        ConfigureAutoIncludes(builder);
     }
 
     private void ConfigureUpgradeCost(OwnedNavigationBuilder<ResourceBuilding, Resource> ownedNavigationBuilder)
@@ -115,16 +121,16 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
             SeedResourceBuilding(new ResourceBuilding()
             {
                 Id = ids[i],
-                Name = i == 0 ? $"ِDamaged Farm" : $"Farm {i}",
+                Name = i == 0 ? $"Damaged Farm" : $"Farm {i}",
                 ProductionType = ResourceType.Food,
                 UpgradeDuration = new TimeSpan(0, i * i * i, 0),
                 HourlyProduction = new Resource(i * i * 60, 0, 0, 0, 0),
-                UpgradeCost = new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
+                UpgradeCost = i == 1 ? new Resource(0, 0, 0, 0, 0) : new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
                 NeedBuilderForUpgrade = true,
-                UpgradeInProgress = false,
                 UpgradeName = i == 0 ? $"Repair The Farm" : $"Upgrade To Farm {i + 1}",
                 TargetId = i == 25 ? null : ids[i + 1],
-                Level = i
+                Level = i,
+                LastResourceGatherDate = DateTimeOffset.UtcNow
             }, builder);
         }
     }
@@ -142,16 +148,16 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
             SeedResourceBuilding(new ResourceBuilding()
             {
                 Id = ids[i],
-                Name = i == 0 ? $"ِDamaged Lumber Mill" : $"Lumber Mill {i}",
+                Name = i == 0 ? $"Damaged Lumber Mill" : $"Lumber Mill {i}",
                 ProductionType = ResourceType.Lumber,
                 UpgradeDuration = new TimeSpan(0, i * i * i, 0),
                 HourlyProduction = new Resource(0, i * i * 60, 0, 0, 0),
-                UpgradeCost = new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
+                UpgradeCost = i == 1 ? new Resource(0, 0, 0, 0, 0) : new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
                 NeedBuilderForUpgrade = true,
-                UpgradeInProgress = false,
                 UpgradeName = i == 0 ? $"Repair The Lumber Mill" : $"Upgrade To Lumber Mill {i + 1}",
                 TargetId = i == 25 ? null : ids[i + 1],
-                Level = i
+                Level = i,
+                LastResourceGatherDate = DateTimeOffset.UtcNow
             }, builder);
         }
     }
@@ -168,16 +174,16 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
             SeedResourceBuilding(new ResourceBuilding()
             {
                 Id = ids[i],
-                Name = i == 0 ? $"ِDamaged Stone Mine" : $"Stone Mine {i}",
+                Name = i == 0 ? $"Damaged Stone Mine" : $"Stone Mine {i}",
                 ProductionType = ResourceType.Stone,
                 UpgradeDuration = new TimeSpan(0, i * i * i, 0),
                 HourlyProduction = new Resource(0, 0, i * i * 60, 0, 0),
-                UpgradeCost = new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
+                UpgradeCost = i == 1 ? new Resource(0, 0, 0, 0, 0) : new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
                 NeedBuilderForUpgrade = true,
-                UpgradeInProgress = false,
                 UpgradeName = i == 0 ? $"Repair The Stone Mine" : $"Upgrade To Stone Mine {i + 1}",
                 TargetId = i == 25 ? null : ids[i + 1],
-                Level = i
+                Level = i,
+                LastResourceGatherDate = DateTimeOffset.UtcNow
             }, builder);
         }
     }
@@ -194,20 +200,20 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
             SeedResourceBuilding(new ResourceBuilding()
             {
                 Id = ids[i],
-                Name = i == 0 ? $"ِDamaged Metal Mine" : $"Metal Mine {i}",
+                Name = i == 0 ? $"Damaged Metal Mine" : $"Metal Mine {i}",
                 ProductionType = ResourceType.Metal,
                 UpgradeDuration = new TimeSpan(0, i * i * i, 0),
                 HourlyProduction = new Resource(0, 0, 0, 0, i * i * 60),
-                UpgradeCost = new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
+                UpgradeCost = i == 1 ? new Resource(0, 0, 0, 0, 0) : new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
                 NeedBuilderForUpgrade = true,
-                UpgradeInProgress = false,
                 UpgradeName = i == 0 ? $"Repair The Metal Mine" : $"Upgrade To Metal Mine {i + 1}",
                 TargetId = i == 25 ? null : ids[i + 1],
-                Level = i
+                Level = i,
+                LastResourceGatherDate = DateTimeOffset.UtcNow
             }, builder);
         }
     }
-    
+
     private void SeedResourceBuilding(ResourceBuilding resourceBuilding, EntityTypeBuilder<ResourceBuilding> builder)
     {
         builder.HasData(
@@ -218,9 +224,10 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
                 resourceBuilding.ProductionType,
                 resourceBuilding.UpgradeDuration,
                 resourceBuilding.NeedBuilderForUpgrade,
-                resourceBuilding.UpgradeInProgress,
                 resourceBuilding.UpgradeName,
-                resourceBuilding.TargetId
+                resourceBuilding.TargetId,
+                resourceBuilding.Level,
+                resourceBuilding.LastResourceGatherDate
             });
 
         builder.OwnsOne(a => a.HourlyProduction).HasData(
@@ -231,7 +238,9 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
                 resourceBuilding.HourlyProduction.Stone,
                 resourceBuilding.HourlyProduction.Gold,
                 resourceBuilding.HourlyProduction.Metal,
-                ResourceBuildingId = resourceBuilding.Id
+                ResourceBuildingId = resourceBuilding.Id,
+                resourceBuilding.Level,
+                resourceBuilding.LastResourceGatherDate
             });
 
         builder.OwnsOne(a => a.UpgradeCost).HasData(
@@ -242,10 +251,15 @@ public class ResourceBuildingConfiguration : IEntityTypeConfiguration<ResourceBu
                 resourceBuilding.UpgradeCost.Stone,
                 resourceBuilding.UpgradeCost.Gold,
                 resourceBuilding.UpgradeCost.Metal,
-                ResourceBuildingId = resourceBuilding.Id
+                ResourceBuildingId = resourceBuilding.Id,
+                resourceBuilding.Level,
+                resourceBuilding.LastResourceGatherDate
             });
     }
 
-
+    private void ConfigureAutoIncludes(EntityTypeBuilder<ResourceBuilding> builder)
+    {
+        builder.Navigation(a => a.HourlyProduction).AutoInclude();
+    }
 
 }

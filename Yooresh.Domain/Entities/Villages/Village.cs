@@ -28,11 +28,11 @@ public class Village : RootEntity
         {
             resourceBuilding.GatherProducedResources(this);
         }
-
+        
         return this;
     }
 
-    public Village ApplyFinishedUpgrades()
+    /*public Village ApplyFinishedUpgrades()
     {
         var newResourceBuildings = new List<ResourceBuilding>();
         foreach (var resourceBuilding in ResourceBuildings)
@@ -48,5 +48,5 @@ public class Village : RootEntity
         ResourceBuildings.AddRange(newResourceBuildings);
 
         return this;
-    }
+    }*/
 }
