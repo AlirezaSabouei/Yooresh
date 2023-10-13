@@ -72,13 +72,13 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         await context.SaveChangesAsync();
         return faction;
     }
-    
+
     private async Task CreateBasicResourceBuildingsInDatabase()
     {
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        
+
         var farm = new ResourceBuilding()
         {
             Id = Guid.NewGuid(),
@@ -88,7 +88,6 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
             HourlyProduction = new Resource(0, 0, 0, 0, 0),
             UpgradeCost = new Resource(0, 0, 0, 0, 0),
             NeedBuilderForUpgrade = true,
-            UpgradeInProgress = false,
             UpgradeName = "Repair The Farm",
             TargetId = null,
             Level = 0
@@ -104,7 +103,6 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
             HourlyProduction = new Resource(0, 0, 0, 0, 0),
             UpgradeCost = new Resource(0, 0, 0, 0, 0),
             NeedBuilderForUpgrade = true,
-            UpgradeInProgress = false,
             UpgradeName = "Repair The Farm",
             TargetId = null,
             Level = 0
@@ -120,7 +118,6 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
             HourlyProduction = new Resource(0, 0, 0, 0, 0),
             UpgradeCost = new Resource(0, 0, 0, 0, 0),
             NeedBuilderForUpgrade = true,
-            UpgradeInProgress = false,
             UpgradeName = "Repair The Farm",
             TargetId = null,
             Level = 0
@@ -136,7 +133,6 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
             HourlyProduction = new Resource(0, 0, 0, 0, 0),
             UpgradeCost = new Resource(0, 0, 0, 0, 0),
             NeedBuilderForUpgrade = true,
-            UpgradeInProgress = false,
             UpgradeName = "Repair The Farm",
             TargetId = null,
             Level = 0
@@ -268,8 +264,8 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        var village = context.Villages.Include(a=>a.ResourceBuildings).First();
-        var resourceBuilding = new ResourceBuilding()
+        var village = context.Villages.Include(a => a.ResourceBuildings).First();
+        var resourceBuilding1 = new ResourceBuilding()
         {
             Id = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
             Name = "Farm1",
@@ -278,55 +274,34 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
             HourlyProduction = new Resource(1200, 0, 0, 0, 0),
             UpgradeCost = new Resource(0, 0, 0, 0, 0),
             NeedBuilderForUpgrade = false,
-            UpgradeInProgress = false,
             UpgradeName = "Upgrade To Farm2",
-           // TargetId = new Guid("0986a9a2-d235-4a62-8ae4-1eb1a31eab18")
+            Level = 1,
+            LastResourceGatherDate = DateTimeOffset.UtcNow,
+            TargetId = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c")
         };
-        context.ResourceBuildings.Add(resourceBuilding);
-        await context.SaveChangesAsync();
-        village.ResourceBuildings.Add(resourceBuilding);
-      // context.Villages.Attach(village);
-        await context.SaveChangesAsync();
-        return resourceBuilding;
-    }
-
-    [Fact]
-    public async Task UpgradeResourceBuilding_CommandIsValid_UpgradeAdded()
-    {
-        //Arrange
-        var dbPlayer = await CreateAPlayerInDatabase(confirmed: true);
-        var dbFaction = await CreateAFactionInDatabase();
-        var village = await CreateAVillageInDatabase(dbFaction, dbPlayer);
-        var dbBuilding = await CreateAResourceBuildingInDatabase(village.Id);
-        var upgradeResourceBuildingCommandDto = new UpgradeResourceBuildingCommandDto()
+        
+        var resourceBuilding2 = new ResourceBuilding()
         {
-            ResourceBuildingId = dbBuilding.Id
+            Id = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c"),
+            Name = "Farm2",
+            ProductionType = ResourceType.Food,
+            UpgradeDuration = new TimeSpan(0, 2, 0),
+            HourlyProduction = new Resource(2200, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = false,
+            UpgradeName = "Upgrade To Farm3",
+            Level = 2,
+            LastResourceGatherDate = DateTimeOffset.UtcNow,
+            TargetId = Guid.NewGuid()
         };
-        AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
-        var request = BuildUpdateResourceBuildingRequest(upgradeResourceBuildingCommandDto);
-
-        //Act
-        var result = await Client.SendAsync(request);
-        var databaseVillage = await GetCreatedVillageFromDatabase();
-
-        //Assert
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        databaseVillage.ResourceBuildings.Count(a => a.UpgradeInProgress).ShouldBe(1);
+        context.ResourceBuildings.Add(resourceBuilding1);        
+        context.ResourceBuildings.Add(resourceBuilding2);
+        await context.SaveChangesAsync();
+        village.ResourceBuildings.Add(resourceBuilding1);
+        await context.SaveChangesAsync();
+        return resourceBuilding1;
     }
-
-    private static HttpRequestMessage BuildUpdateResourceBuildingRequest(
-        UpgradeResourceBuildingCommandDto upgradeResourceBuildingCommandDto)
-    {
-        var request = new HttpRequestMessage
-        {
-            Content = JsonContent.Create(upgradeResourceBuildingCommandDto),
-            Method = HttpMethod.Post,
-            RequestUri = new Uri("api/villages/UpgradeResourceBuilding", UriKind.Relative)
-        };
-        return request;
-    }
-
-    //TODO: Validator should prevent 2 same class upgrades at the same time
+    
     [Fact]
     public async Task UpgradeResourceBuilding_CommandIsValid_BuildingGoesToNextLevel()
     {
@@ -355,6 +330,18 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
 
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        databaseVillage.ResourceBuildings.Count(a => a.UpgradeInProgress).ShouldBe(1);
+        databaseVillage.ResourceBuildings.Count(a => a.Id == dbBuilding.TargetId).ShouldBe(1);
+    }
+
+    private static HttpRequestMessage BuildUpdateResourceBuildingRequest(
+        UpgradeResourceBuildingCommandDto upgradeResourceBuildingCommandDto)
+    {
+        var request = new HttpRequestMessage
+        {
+            Content = JsonContent.Create(upgradeResourceBuildingCommandDto),
+            Method = HttpMethod.Post,
+            RequestUri = new Uri("api/villages/UpgradeResourceBuilding", UriKind.Relative)
+        };
+        return request;
     }
 }

@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Players\Queries\" />
-    <Folder Include="ResourceBuildings\EventHandlers" />
-    <Folder Include="Villages\EventHandlers" />
   </ItemGroup>
 
   <ItemGroup>

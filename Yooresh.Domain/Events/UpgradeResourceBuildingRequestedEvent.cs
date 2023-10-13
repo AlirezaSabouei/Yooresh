@@ -1,13 +1,15 @@
+using Yooresh.Domain.Entities.Villages;
+
 namespace Yooresh.Domain.Events;
 
 public class UpgradeResourceBuildingRequestedEvent : BaseEvent
 {
-    public Guid To { get; }
+    public Guid ResourceBuildingId { get; }
     public Guid VillageId { get; }
 
-    public UpgradeResourceBuildingRequestedEvent(Guid villageId,Guid to)
+    public UpgradeResourceBuildingRequestedEvent(Guid villageId,Guid resourceBuildingId)
     {
-        To = to;
         VillageId = villageId;
+        ResourceBuildingId = resourceBuildingId;
     }
 }

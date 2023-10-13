@@ -23,13 +23,14 @@ public class UpdateResourceBuildingCommandHandler : IRequestHandler<UpdateResour
     public async Task<bool> Handle(UpdateResourceBuildingCommand request, CancellationToken cancellationToken)
     {
         var village = (await _context.Villages
-                .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken))
-            .GatherResources()
-            .ApplyFinishedUpgrades();
+            .Include(a=>a.ResourceBuildings)
+            .ThenInclude(b=>b.Target)
+            .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken))                
+            .GatherResources();
 
-        var building = await _context.ResourceBuildings.FindAsync(request.ResourceBuildingId, cancellationToken);
-
-        building!.StartUpgrade(village);
+        village.ResourceBuildings
+            .First(a=>a.Id==request.ResourceBuildingId)
+            .StartUpgrade(village);
 
         await _context.SaveChangesAsync(cancellationToken);
 

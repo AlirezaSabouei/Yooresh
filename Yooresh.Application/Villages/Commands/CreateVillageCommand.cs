@@ -40,15 +40,19 @@ public class CreateVillageCommandHandler : IRequestHandler<CreateVillageCommand,
     {
         var farm = await _context.ResourceBuildings.SingleAsync(a =>
             a.ProductionType == ResourceType.Food && a.Level == 0);
+        farm.LastResourceGatherDate = DateTimeOffset.UtcNow;
         
         var lumberMill = await _context.ResourceBuildings.SingleAsync(a =>
             a.ProductionType == ResourceType.Food && a.Level == 0);
+        lumberMill.LastResourceGatherDate = DateTimeOffset.UtcNow;
         
         var stoneMine = await _context.ResourceBuildings.SingleAsync(a =>
             a.ProductionType == ResourceType.Food && a.Level == 0);
+        stoneMine.LastResourceGatherDate = DateTimeOffset.UtcNow;
         
         var metalMine = await _context.ResourceBuildings.SingleAsync(a =>
             a.ProductionType == ResourceType.Food && a.Level == 0);
+        metalMine.LastResourceGatherDate = DateTimeOffset.UtcNow;
         
         village.ResourceBuildings.Add(farm);
         village.ResourceBuildings.Add(lumberMill);

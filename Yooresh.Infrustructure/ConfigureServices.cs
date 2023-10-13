@@ -23,5 +23,12 @@ public static class ConfigureServices
         var senderPassword = configuration.GetSection("Email")!["Password"]!;
         
         services.AddScoped<IEmail>(s=> new Email(senderEmail, senderPassword));
+        
+        // Dependency injection setup
+      //  var eventBus = new RabbitMqEventBus("localhost", "guest", "guest");
+       // eventBus.Subscribe<VillageCreatedEvent, VillageCreatedEventHandler>(new VillageCreatedEventHandler());
+
+// Start consuming events
+       // eventBus.StartConsuming();
     }
 }

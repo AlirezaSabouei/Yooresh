@@ -1,5 +1,4 @@
 ﻿using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Domain.Interfaces;
@@ -12,9 +11,16 @@ public interface IUpgradable<T> where T: BaseEntity
     public Guid? TargetId { get; set; }
     public T? Target { get; set; }
     public bool NeedBuilderForUpgrade { get; set; }
-    public bool UpgradeInProgress { get; set; }
-    public DateTimeOffset? UpgradeStartTime { get; set; }
-    public bool IsFinished { get; }
-    public void StartUpgrade(Village village);
     public int Level { get; set; }
+
+    #region These props are commented out for the sake of easy development. They will be added in the next phase
+
+    // public bool UpgradeInProgress { get; set; }
+    // public DateTimeOffset? UpgradeStartTime { get; set; }
+    //
+    
+    //
+    // public bool IsUpgradeFinished => UpgradeInProgress && DateTimeOffset.Now <= UpgradeStartTime!.Value.Add(ResourceBuilding.UpgradeDuration);
+
+    #endregion
 }

@@ -13,7 +13,7 @@ public interface IGatherable
 {
     public ResourceType ProductionType { get; set; }
     public Resource HourlyProduction { get; set; }
-    public DateTimeOffset? LastResourceGatherDate { get; set; }
+    public DateTimeOffset LastResourceGatherDate { get; set; }
 
     public void GatherProducedResources(Village village);
 }

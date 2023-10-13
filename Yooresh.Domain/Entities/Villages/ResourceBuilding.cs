@@ -1,4 +1,5 @@
 using Yooresh.Domain.Enums;
+using Yooresh.Domain.Events;
 using Yooresh.Domain.Exceptions;
 using Yooresh.Domain.Interfaces;
 using Yooresh.Domain.ValueObjects;
@@ -9,44 +10,29 @@ public class ResourceBuilding : BaseEntity, IUpgradable<ResourceBuilding>, IGath
 {
     public string Name { get; set; }
 
+    #region Upgrade
 
     public string UpgradeName { get; set; }
-    public TimeSpan UpgradeDuration { get; set; }
     public Resource UpgradeCost { get; set; }
+    public TimeSpan UpgradeDuration { get; set; }
     public Guid? TargetId { get; set; }
     public ResourceBuilding? Target { get; set; }
     public bool NeedBuilderForUpgrade { get; set; }
-    public bool UpgradeInProgress { get; set; }
-    public DateTimeOffset? UpgradeStartTime { get; set; }
     public int Level { get; set; }
-
-
-    public ResourceType ProductionType { get; set; }
-    public Resource HourlyProduction { get; set; }
-    public DateTimeOffset? LastResourceGatherDate { get; set; }
-    public bool IsFinished => UpgradeInProgress && DateTimeOffset.Now <= UpgradeStartTime!.Value.Add(UpgradeDuration);
-
-    public void GatherProducedResources(Village village)
-    {
-        var elapsedTimeSinceLastResourceChangeTime = (DateTimeOffset.Now - LastResourceGatherDate!.Value).TotalHours;
-
-        village.Resource += (HourlyProduction * elapsedTimeSinceLastResourceChangeTime);
-
-        LastResourceGatherDate = DateTimeOffset.Now;
-    }
 
     public void StartUpgrade(Village village)
     {
+        if (TargetId == null)
+            return;
         CheckAvailableResources(village);
         CheckAvailableBuilders(village);
         SendAWorkerToDoTheJob(village);
-        UpgradeInProgress = true;
-        UpgradeStartTime = DateTimeOffset.Now;
+        AddDomainEvent(new UpgradeResourceBuildingRequestedEvent(village.Id, Id));
     }
 
     private void CheckAvailableResources(Village village)
     {
-        if (UpgradeCost > village.Resource)
+        if (Target!.UpgradeCost > village.Resource)
         {
             throw new NotEnoughResourcesException();
         }
@@ -57,7 +43,7 @@ public class ResourceBuilding : BaseEntity, IUpgradable<ResourceBuilding>, IGath
         if (NeedBuilderForUpgrade && village.AvailableBuilders == 0)
         {
             throw new NotAvailableBuildersException();
-        }        
+        }
     }
 
     private void SendAWorkerToDoTheJob(Village village)
@@ -67,4 +53,23 @@ public class ResourceBuilding : BaseEntity, IUpgradable<ResourceBuilding>, IGath
             village.AvailableBuilders -= 1;
         }
     }
+
+    #endregion
+
+    #region Resource Production
+
+    public ResourceType ProductionType { get; set; }
+    public Resource HourlyProduction { get; set; }
+    public DateTimeOffset LastResourceGatherDate { get; set; }
+
+    public void GatherProducedResources(Village village)
+    {
+        var elapsedTimeSinceLastResourceChangeTime = (DateTimeOffset.Now - LastResourceGatherDate).TotalHours;
+
+        village.Resource += (HourlyProduction * elapsedTimeSinceLastResourceChangeTime);
+
+        LastResourceGatherDate = DateTimeOffset.Now;
+    }
+
+    #endregion
 }
