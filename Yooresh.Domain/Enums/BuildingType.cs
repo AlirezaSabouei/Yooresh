@@ -1,4 +1,4 @@
-namespace Yooresh.Domain.Common;
+namespace Yooresh.Domain.Enums;
 
 public enum BuildingType
 {

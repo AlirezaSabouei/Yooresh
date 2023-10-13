@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Yooresh.Application.Factions.Dto;
 using Yooresh.Application.Factions.Queries;
 using Yooresh.Domain.Entities.Factions;
 
@@ -16,13 +17,15 @@ public class FactionsController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Faction>>> GetFactions()
+    public async Task<ActionResult<List<FactionDto>>> GetFactions()
     {
         try
         {
             var query = new GetFactionsQuery();
-                
-            return await Mediator.Send(query);
+            
+            var result=await Mediator.Send(query);
+
+            return _mapper.Map<List<FactionDto>>(result);
         }
         catch (FluentValidation.ValidationException ex)
         {

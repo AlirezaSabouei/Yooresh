@@ -1,6 +1,8 @@
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.Villages;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Yooresh.Domain.Enums;
 
 namespace Yooresh.Application.Villages.Commands;
 
@@ -22,9 +24,35 @@ public class CreateVillageCommandHandler : IRequestHandler<CreateVillageCommand,
     
     public async Task<bool> Handle(CreateVillageCommand request, CancellationToken cancellationToken)
     {
-        var village = new Village(request.Name, request.FactionId, request.PlayerId);
+        var village = new Village()
+        {
+            Name = request.Name,
+            PlayerId = request.PlayerId,
+            FactionId = request.FactionId
+        };
+        await AddBasicResourceBuildings(village);
         _context.Villages.Add(village);
         await _context.SaveChangesAsync(cancellationToken);
         return true;
+    }
+
+    private async Task AddBasicResourceBuildings(Village village)
+    {
+        var farm = await _context.ResourceBuildings.SingleAsync(a =>
+            a.ProductionType == ResourceType.Food && a.Level == 0);
+        
+        var lumberMill = await _context.ResourceBuildings.SingleAsync(a =>
+            a.ProductionType == ResourceType.Food && a.Level == 0);
+        
+        var stoneMine = await _context.ResourceBuildings.SingleAsync(a =>
+            a.ProductionType == ResourceType.Food && a.Level == 0);
+        
+        var metalMine = await _context.ResourceBuildings.SingleAsync(a =>
+            a.ProductionType == ResourceType.Food && a.Level == 0);
+        
+        village.ResourceBuildings.Add(farm);
+        village.ResourceBuildings.Add(lumberMill);
+        village.ResourceBuildings.Add(stoneMine);
+        village.ResourceBuildings.Add(metalMine);
     }
 }

@@ -8,13 +8,13 @@ using Shouldly;
 using Xunit;
 using Yooresh.API.Controllers;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Application.ResourceBuildings.Dto;
 using Yooresh.Application.Villages.Commands;
-using Yooresh.Domain.Common;
-using Yooresh.Domain.Entities.Buildings;
+using Yooresh.Application.Villages.Dto;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Entities.Villages;
+using Yooresh.Domain.Enums;
+using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.AcceptanceTests.Controllers.Villages;
 
@@ -26,7 +26,8 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         //Arrange
         var dbPlayer = await CreateAPlayerInDatabase();
         var dbFaction = await CreateAFactionInDatabase();
-        var createVillageCommand = CreateValidCreateVillageCommand(dbPlayer,dbFaction);
+        await CreateBasicResourceBuildingsInDatabase();
+        var createVillageCommand = CreateValidCreateVillageCommand(dbPlayer, dbFaction);
         AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
         var request = BuildCreateVillageRequest(createVillageCommand);
 
@@ -40,13 +41,12 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         databaseVillage.Faction.Id.ShouldBe(dbFaction.Id);
         databaseVillage.Player.Id.ShouldBe(dbPlayer.Id);
         databaseVillage.Name.ShouldBe(createVillageCommand.Name);
-        databaseVillage.Resource.ShouldBeEquivalentTo(new Resource(0,0,0,0,0));
-        databaseVillage.Upgrades.Count.ShouldBe(0);
+        databaseVillage.Resource.ShouldBeEquivalentTo(new Resource(0, 0, 0, 0, 0));
         databaseVillage.AvailableBuilders.ShouldBe(2);
         databaseVillage.ResourceBuildings.Count.ShouldBe(0);
     }
-    
-    private async Task<Player> CreateAPlayerInDatabase(bool confirmed=true)
+
+    private async Task<Player> CreateAPlayerInDatabase(bool confirmed = true)
     {
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
@@ -56,11 +56,12 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         {
             player.ConfirmPlayer();
         }
+
         context.Players.Add(player);
         await context.SaveChangesAsync();
         return player;
     }
-    
+
     private async Task<Faction> CreateAFactionInDatabase()
     {
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
@@ -71,8 +72,81 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         await context.SaveChangesAsync();
         return faction;
     }
+    
+    private async Task CreateBasicResourceBuildingsInDatabase()
+    {
+        var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<IContext>();
+        
+        var farm = new ResourceBuilding()
+        {
+            Id = Guid.NewGuid(),
+            Name = $"ِDamaged Farm",
+            ProductionType = ResourceType.Food,
+            UpgradeDuration = new TimeSpan(0, 0, 0),
+            HourlyProduction = new Resource(0, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = true,
+            UpgradeInProgress = false,
+            UpgradeName = "Repair The Farm",
+            TargetId = null,
+            Level = 0
+        };
+        context.ResourceBuildings.Add(farm);
 
-    private CreateVillageCommand CreateValidCreateVillageCommand(Player player,Faction faction)
+        var lumberMill = new ResourceBuilding()
+        {
+            Id = Guid.NewGuid(),
+            Name = $"ِDamaged Farm",
+            ProductionType = ResourceType.Lumber,
+            UpgradeDuration = new TimeSpan(0, 0, 0),
+            HourlyProduction = new Resource(0, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = true,
+            UpgradeInProgress = false,
+            UpgradeName = "Repair The Farm",
+            TargetId = null,
+            Level = 0
+        };
+        context.ResourceBuildings.Add(lumberMill);
+
+        var stoneMine = new ResourceBuilding()
+        {
+            Id = Guid.NewGuid(),
+            Name = $"ِDamaged Farm",
+            ProductionType = ResourceType.Stone,
+            UpgradeDuration = new TimeSpan(0, 0, 0),
+            HourlyProduction = new Resource(0, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = true,
+            UpgradeInProgress = false,
+            UpgradeName = "Repair The Farm",
+            TargetId = null,
+            Level = 0
+        };
+        context.ResourceBuildings.Add(stoneMine);
+
+        var metalMine = new ResourceBuilding()
+        {
+            Id = Guid.NewGuid(),
+            Name = $"ِDamaged Farm",
+            ProductionType = ResourceType.Metal,
+            UpgradeDuration = new TimeSpan(0, 0, 0),
+            HourlyProduction = new Resource(0, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = true,
+            UpgradeInProgress = false,
+            UpgradeName = "Repair The Farm",
+            TargetId = null,
+            Level = 0
+        };
+        context.ResourceBuildings.Add(metalMine);
+
+        await context.SaveChangesAsync();
+    }
+
+    private CreateVillageCommand CreateValidCreateVillageCommand(Player player, Faction faction)
     {
         var createVillageCommand = new CreateVillageCommand()
         {
@@ -82,8 +156,8 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         };
         return createVillageCommand;
     }
-    
-    private void AddAuthenticationHeader(string email,string password)
+
+    private void AddAuthenticationHeader(string email, string password)
     {
         var base64Credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{email}:{password}"));
         Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", base64Credentials);
@@ -107,10 +181,6 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
         var village = await context.Villages
             .AsNoTracking()
-            .Include(a=>a.Player)
-            .Include(a=>a.Faction)
-            .Include(a=>a.ResourceBuildings)
-            .Include(a=>a.Upgrades)
             .FirstAsync();
         return village;
     }
@@ -123,7 +193,7 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         context.Players.RemoveRange(context.Players);
         await context.SaveChangesAsync();
     }
-    
+
     [Fact]
     public async Task CreateVillage_UserNotAuthorized_ReturnsError()
     {
@@ -135,7 +205,7 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
-    
+
     [Fact]
     public async Task GetVillage_UserNotAuthorized_ReturnsError()
     {
@@ -146,20 +216,20 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
     }
-    
+
     [Fact]
     public async Task GetVillage_UserIsValid_ReturnsVillage()
     {
         //Arrange
-        var dbPlayer =await CreateAPlayerInDatabase(confirmed:true);
-        var dbFaction =await CreateAFactionInDatabase();
-        var dbVillage =await CreateAVillageInDatabase(dbFaction,dbPlayer);
+        var dbPlayer = await CreateAPlayerInDatabase(confirmed: true);
+        var dbFaction = await CreateAFactionInDatabase();
+        var dbVillage = await CreateAVillageInDatabase(dbFaction, dbPlayer);
         AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
 
         //Act
         var result = await Client.GetAsync(new Uri("api/villages", UriKind.Relative));
-        var village = await result.Content.ReadFromJsonAsync<Village>();
-        
+        var village = await result.Content.ReadFromJsonAsync<VillageDto>();
+
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
         village.ShouldNotBeNull();
@@ -167,82 +237,70 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         village.PlayerId.ShouldBe(dbPlayer.Id);
         village.Name.ShouldBe(dbVillage.Name);
         village.Resource.ShouldBeEquivalentTo(dbVillage.Resource);
-        village.Upgrades.Count.ShouldBe(dbVillage.Upgrades.Count);
         village.AvailableBuilders.ShouldBe(dbVillage.AvailableBuilders);
         village.ResourceBuildings.Count.ShouldBe(dbVillage.ResourceBuildings.Count);
     }
-    
-    private async Task<Village> CreateAVillageInDatabase(Faction faction,Player player)
+
+    private async Task<Village> CreateAVillageInDatabase(Faction faction, Player player,
+        bool initStartingResource = false)
     {
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        var village = new Village("name", faction.Id, player.Id);
+        var village = new Village()
+        {
+            Name = "name",
+            FactionId = faction.Id,
+            PlayerId = player.Id
+        };
+        if (initStartingResource)
+        {
+            village.Resource = new Resource(100, 100, 100, 100, 100);
+        }
+
         context.Villages.Add(village);
         await context.SaveChangesAsync();
         return village;
     }
-    
-    [Fact]
-    public async Task GetAvailableResourceBuildingUpgrades_UserNotAuthorized_ReturnsError()
-    {
-        //Act
-        Client.DefaultRequestHeaders.Authorization = null;
-        var result = await Client.GetAsync(new Uri("api/villages/AvailableResourceBuildingUpgrades", UriKind.Relative));
 
-        //Assert
-        result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
-    }
-    
-    [Fact]
-    public async Task GetAvailableResourceBuildingUpgrades_UserIsValid_ReturnsVillage()
-    {
-        //Arrange
-        var dbPlayer =await CreateAPlayerInDatabase(confirmed:true);
-        var dbFaction =await CreateAFactionInDatabase();
-        var dbVillage =await CreateAVillageInDatabase(dbFaction,dbPlayer);
-        var dbBuilding=await CreateAResourceBuildingInDatabase();
-        AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
-
-        //Act
-        var result = await Client.GetAsync(new Uri("api/villages/AvailableResourceBuildingUpgrades", UriKind.Relative));
-
-        var buildings = await result.Content.ReadFromJsonAsync<List<ResourceBuildingDto>>();
-        
-        //Assert
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        buildings.ShouldNotBeNull();
-        buildings.Count.ShouldBe(1);
-        buildings[0].Name.ShouldBe(dbBuilding.Name);
-    }
-
-    private async Task<ResourceBuilding> CreateAResourceBuildingInDatabase()
+    private async Task<ResourceBuilding> CreateAResourceBuildingInDatabase(Guid villageId)
     {
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        var resourceBuilding = new ResourceBuilding(
-            "Farm1", 
-            new Resource(3600, 3600, 3600, 3600, 3600), 
-            new Resource(0,0,0,0,0), 
-            ProductionType.Food,
-            new TimeSpan(0, 1, 0));
+        var village = context.Villages.Include(a=>a.ResourceBuildings).First();
+        var resourceBuilding = new ResourceBuilding()
+        {
+            Id = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+            Name = "Farm1",
+            ProductionType = ResourceType.Food,
+            UpgradeDuration = new TimeSpan(0, 2, 0),
+            HourlyProduction = new Resource(1200, 0, 0, 0, 0),
+            UpgradeCost = new Resource(0, 0, 0, 0, 0),
+            NeedBuilderForUpgrade = false,
+            UpgradeInProgress = false,
+            UpgradeName = "Upgrade To Farm2",
+           // TargetId = new Guid("0986a9a2-d235-4a62-8ae4-1eb1a31eab18")
+        };
         context.ResourceBuildings.Add(resourceBuilding);
+        await context.SaveChangesAsync();
+        village.ResourceBuildings.Add(resourceBuilding);
+      // context.Villages.Attach(village);
         await context.SaveChangesAsync();
         return resourceBuilding;
     }
-    
+
     [Fact]
     public async Task UpgradeResourceBuilding_CommandIsValid_UpgradeAdded()
     {
         //Arrange
-        var dbPlayer =await CreateAPlayerInDatabase(confirmed:true);
-        var dbFaction =await CreateAFactionInDatabase();
-        await CreateAVillageInDatabase(dbFaction,dbPlayer);
-        var dbBuilding=await CreateAResourceBuildingInDatabase();
+        var dbPlayer = await CreateAPlayerInDatabase(confirmed: true);
+        var dbFaction = await CreateAFactionInDatabase();
+        var village = await CreateAVillageInDatabase(dbFaction, dbPlayer);
+        var dbBuilding = await CreateAResourceBuildingInDatabase(village.Id);
         var upgradeResourceBuildingCommandDto = new UpgradeResourceBuildingCommandDto()
         {
-            ToId = dbBuilding.Id
+            ResourceBuildingId = dbBuilding.Id
         };
         AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
         var request = BuildUpdateResourceBuildingRequest(upgradeResourceBuildingCommandDto);
@@ -253,17 +311,11 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
 
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        databaseVillage.Upgrades.ShouldNotBeNull();
-        databaseVillage.Upgrades.Count.ShouldBe(1);
-        databaseVillage.Upgrades[0].Completed.ShouldBe(false);
-        databaseVillage.Upgrades[0].FromId.ShouldBeNull();
-        databaseVillage.Upgrades[0].ToId.ShouldBe(dbBuilding.Id);
-        databaseVillage.Upgrades[0].UpgradeType.ShouldBe(UpgradeType.ResourceBuilding);
-        
-        databaseVillage.Upgrades[0].EndTime.Millisecond.ShouldBe((databaseVillage.Upgrades[0].StartTime+dbBuilding.UpgradeDuration).Millisecond);
+        databaseVillage.ResourceBuildings.Count(a => a.UpgradeInProgress).ShouldBe(1);
     }
-    
-    private static HttpRequestMessage BuildUpdateResourceBuildingRequest(UpgradeResourceBuildingCommandDto upgradeResourceBuildingCommandDto)
+
+    private static HttpRequestMessage BuildUpdateResourceBuildingRequest(
+        UpgradeResourceBuildingCommandDto upgradeResourceBuildingCommandDto)
     {
         var request = new HttpRequestMessage
         {
@@ -273,46 +325,36 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         };
         return request;
     }
-    
+
     //TODO: Validator should prevent 2 same class upgrades at the same time
     [Fact]
     public async Task UpgradeResourceBuilding_CommandIsValid_BuildingGoesToNextLevel()
     {
         //Arrange
-        var dbPlayer =await CreateAPlayerInDatabase(confirmed:true);
-        var dbFaction =await CreateAFactionInDatabase();
-        await CreateAVillageInDatabase(dbFaction,dbPlayer);
-        var dbBuilding1=await CreateAResourceBuildingInDatabase();
-        var dbBuilding2=await CreateAResourceBuildingInDatabase();
+        var dbPlayer = await CreateAPlayerInDatabase(confirmed: true);
+        var dbFaction = await CreateAFactionInDatabase();
+        var village = await CreateAVillageInDatabase(dbFaction, dbPlayer);
+        var dbBuilding = await CreateAResourceBuildingInDatabase(village.Id);
         var upgradeResourceBuildingCommandDto = new UpgradeResourceBuildingCommandDto()
         {
-            ToId = dbBuilding1.Id
+            ResourceBuildingId = dbBuilding.Id
         };
         AddAuthenticationHeader(dbPlayer.Email, dbPlayer.Password);
         var request = BuildUpdateResourceBuildingRequest(upgradeResourceBuildingCommandDto);
 
         //Act
-        await Client.SendAsync(request);
-        
         upgradeResourceBuildingCommandDto = new UpgradeResourceBuildingCommandDto()
         {
-            ToId = dbBuilding2.Id
+            ResourceBuildingId = dbBuilding.Id
         };
         request = BuildUpdateResourceBuildingRequest(upgradeResourceBuildingCommandDto);
-        
+
         var result = await Client.SendAsync(request);
-        
+
         var databaseVillage = await GetCreatedVillageFromDatabase();
 
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        databaseVillage.Upgrades.ShouldNotBeNull();
-        databaseVillage.Upgrades.Count.ShouldBe(2);
-        databaseVillage.Upgrades[1].Completed.ShouldBe(false);
-        databaseVillage.Upgrades[1].FromId.ShouldBe(dbBuilding1.Id);
-        databaseVillage.Upgrades[1].ToId.ShouldBe(dbBuilding2.Id);
-        databaseVillage.Upgrades[1].UpgradeType.ShouldBe(UpgradeType.ResourceBuilding);
-        
-        databaseVillage.Upgrades[1].EndTime.Millisecond.ShouldBe((databaseVillage.Upgrades[1].StartTime+dbBuilding2.UpgradeDuration).Millisecond);
+        databaseVillage.ResourceBuildings.Count(a => a.UpgradeInProgress).ShouldBe(1);
     }
 }

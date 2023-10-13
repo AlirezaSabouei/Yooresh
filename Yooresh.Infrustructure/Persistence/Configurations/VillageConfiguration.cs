@@ -1,7 +1,6 @@
 using Yooresh.Domain.Entities.Villages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.Common;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Players;
@@ -31,9 +30,8 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
             .HasForeignKey(a=>a.FactionId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany(a => a.Upgrades)
-            .WithOne()
-            .OnDelete(DeleteBehavior.Cascade);
+        builder.HasMany(a => a.ResourceBuildings)
+            .WithMany();            
 
         builder.OwnsOne(a => a.Resource, ConfigureResource);
 
@@ -72,7 +70,6 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
     {
         builder.Navigation(a => a.Faction).AutoInclude();
         builder.Navigation(a => a.Player).AutoInclude();
-       // builder.Navigation(a => a.Upgrades).AutoInclude();
-        //builder.Navigation(a => a.ResourceBuildings).AutoInclude();
+        builder.Navigation(a => a.ResourceBuildings).AutoInclude();
     }
 }

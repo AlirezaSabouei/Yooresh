@@ -1,4 +1,4 @@
-namespace Yooresh.Domain.Entities.Villages;
+namespace Yooresh.Domain.Enums;
 
 public enum UpgradeType
 {

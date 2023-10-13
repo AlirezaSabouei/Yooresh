@@ -1,5 +1,3 @@
-using Yooresh.Domain.Common;
-
 namespace Yooresh.Domain.Events;
 
 public class UpgradeResourceBuildingRequestedEvent : BaseEvent

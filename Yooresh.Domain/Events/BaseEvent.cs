@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Yooresh.Domain.Common;
+namespace Yooresh.Domain.Events;
 
 public abstract class BaseEvent : INotification
 {

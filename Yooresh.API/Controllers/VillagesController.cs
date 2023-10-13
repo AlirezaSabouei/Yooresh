@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
 using Yooresh.Application.Villages.Commands;
-using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Entities.Villages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Yooresh.Application.ResourceBuildings.Dto;
+using Yooresh.Application.Villages.Dto;
 using Yooresh.Application.Villages.Queries;
-using Yooresh.Domain.Common;
-using Yooresh.Domain.Entities.Buildings;
+using Yooresh.Domain.Exceptions;
 
 namespace Yooresh.API.Controllers
 {
@@ -47,7 +45,7 @@ namespace Yooresh.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Village>> GetVillage()
+        public async Task<ActionResult<VillageDto>> GetVillage()
         {
             try
             {
@@ -55,7 +53,8 @@ namespace Yooresh.API.Controllers
                 {
                     PlayerId = PlayerId
                 };
-                return await Mediator.Send(query);
+                var result=await Mediator.Send(query);
+                return _mapper.Map<VillageDto>(result);
             }
             catch (FluentValidation.ValidationException ex)
             {
@@ -97,17 +96,6 @@ namespace Yooresh.API.Controllers
             }
         }
 
-        [HttpGet("AvailableResourceBuildingUpgrades")]
-        public async Task<ActionResult<List<ResourceBuildingDto>>> GetAvailableResourceBuildingUpgrades()
-        {
-            var query = new GetAvailableResourceBuildingUpgradesQuery()
-            {
-                PlayerId = PlayerId
-            };
-            var result= await Mediator.Send(query);
-            return _mapper.Map<List<ResourceBuildingDto>>(result);
-        }
-
         [HttpPost("UpgradeResourceBuilding")]
         public async Task<ActionResult<bool>> UpgradeResourceBuilding([FromBody] UpgradeResourceBuildingCommandDto startBuildingUpgradeCommandDto)
         {
@@ -125,6 +113,10 @@ namespace Yooresh.API.Controllers
                 }
 
                 return BadRequest(ModelState);
+            }
+            catch (DomainException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception e)
             {

@@ -1,6 +1,4 @@
-using Yooresh.Domain.Entities;
-
-namespace Yooresh.Domain.Common;
+namespace Yooresh.Domain.ValueObjects;
 
 public class Resource : ValueObject
 {

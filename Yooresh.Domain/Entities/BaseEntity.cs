@@ -1,15 +1,17 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Yooresh.Domain.Entities.Villages;
+using Yooresh.Domain.Events;
 
-namespace Yooresh.Domain.Common;
+namespace Yooresh.Domain.Entities;
 
 public abstract class BaseEntity
 {
-    public Guid Id { get; protected set; }
+    public Guid Id { get; set; }
     protected BaseEntity()
     {
         Id = Guid.NewGuid();
     }
-    
+
     private readonly List<BaseEvent> _domainEvents = new();
 
     [NotMapped]

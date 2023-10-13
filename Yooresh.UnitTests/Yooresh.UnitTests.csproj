@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Players\Queries" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
       <PackageReference Include="Moq" Version="4.20.69" />
       <PackageReference Include="Moq.EntityFrameworkCore" Version="7.0.0.2" />

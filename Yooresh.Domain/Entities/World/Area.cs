@@ -1,6 +1,4 @@
-﻿using Yooresh.Domain.Common;
-
-namespace Yooresh.Domain.Entities.World;
+﻿namespace Yooresh.Domain.Entities.World;
 
 public class Area : BaseEntity
 {

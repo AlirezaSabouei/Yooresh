@@ -4,9 +4,8 @@ using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Entities.Villages;
 using Microsoft.EntityFrameworkCore;
-using Yooresh.Domain.Common;
-using Yooresh.Domain.Entities.Buildings;
 using Yooresh.Domain.Entities.Factions;
+using Yooresh.Domain.Entities;
 
 namespace Yooresh.Infrastructure.Persistence;
 
@@ -17,7 +16,6 @@ public class Context : DbContext, IContext
     public DbSet<Village> Villages { get; set; }
     public DbSet<Faction> Factions { get; set; }
     public DbSet<ResourceBuilding> ResourceBuildings { get; set; }
-    public DbSet<VillageUpgradeQueue> ResourceBuildingUpgradeQueue { get; set; }
 
     public Context(DbContextOptions options, IMediator mediator) : base(options)
     {

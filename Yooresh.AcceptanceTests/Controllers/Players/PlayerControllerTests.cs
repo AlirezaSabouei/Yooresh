@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
+using Yooresh.Application.Players.Dto;
 using IServiceScopeFactory = Microsoft.Extensions.DependencyInjection.IServiceScopeFactory;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;
@@ -144,7 +145,7 @@ public class PlayersControllerTests : ControllerTests<PlayersController>
 
         //Act
         var result = await Client.GetAsync(new Uri("api/players", UriKind.Relative));
-        var player = await result.Content.ReadFromJsonAsync<Player>();
+        var player = await result.Content.ReadFromJsonAsync<PlayerDto>();
         
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -161,7 +162,7 @@ public class PlayersControllerTests : ControllerTests<PlayersController>
 
         //Act
         var result = await Client.GetAsync(new Uri("api/players", UriKind.Relative));
-        var player = await result.Content.ReadFromJsonAsync<Player>();
+        var player = await result.Content.ReadFromJsonAsync<PlayerDto>();
         
         //Assert
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
