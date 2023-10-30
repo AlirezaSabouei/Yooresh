@@ -3,6 +3,7 @@ using Yooresh.Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Yooresh.Application.Villages;
 
 namespace Yooresh.Application;
 
@@ -10,6 +11,8 @@ public static class ConfigureServices
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
+        services.AddTransient<VillageFactory, VillageFactory>();
+
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());

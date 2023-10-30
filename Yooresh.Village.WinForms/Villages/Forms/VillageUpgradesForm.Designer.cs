@@ -30,7 +30,6 @@
         {
             tabControl1 = new TabControl();
             tabPageResourceBuildings = new TabPage();
-            button1 = new Button();
             btnUpgradeResourceBuilding = new Button();
             listBoxResourceBuildings = new ListBox();
             tabPage2 = new TabPage();
@@ -51,7 +50,6 @@
             // 
             // tabPageResourceBuildings
             // 
-            tabPageResourceBuildings.Controls.Add(button1);
             tabPageResourceBuildings.Controls.Add(btnUpgradeResourceBuilding);
             tabPageResourceBuildings.Controls.Add(listBoxResourceBuildings);
             tabPageResourceBuildings.Location = new Point(4, 24);
@@ -61,16 +59,6 @@
             tabPageResourceBuildings.TabIndex = 0;
             tabPageResourceBuildings.Text = "Resource Buildings";
             tabPageResourceBuildings.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(421, 260);
-            button1.Name = "button1";
-            button1.Size = new Size(113, 48);
-            button1.TabIndex = 2;
-            button1.Text = "Upgrade";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // btnUpgradeResourceBuilding
             // 
@@ -84,7 +72,7 @@
             // 
             // listBoxResourceBuildings
             // 
-            listBoxResourceBuildings.DisplayMember = "Name";
+            listBoxResourceBuildings.DisplayMember = "UpgradeName";
             listBoxResourceBuildings.FormattingEnabled = true;
             listBoxResourceBuildings.ItemHeight = 15;
             listBoxResourceBuildings.Location = new Point(6, 6);
@@ -92,7 +80,6 @@
             listBoxResourceBuildings.Size = new Size(334, 514);
             listBoxResourceBuildings.TabIndex = 0;
             listBoxResourceBuildings.ValueMember = "Id";
-            listBoxResourceBuildings.SelectedIndexChanged += listBoxResourceBuildings_SelectedIndexChanged;
             // 
             // tabPage2
             // 
@@ -126,6 +113,5 @@
         private TabPage tabPage2;
         private ListBox listBoxResourceBuildings;
         private Button btnUpgradeResourceBuilding;
-        private Button button1;
     }
 }

@@ -4,6 +4,7 @@ using Yooresh.Application.Factions.Dto;
 using Yooresh.Application.Players.Dto;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.ValueObjects;
+using Village = Yooresh.Domain.Entities.Villages.Village;
 
 namespace Yooresh.Application.Villages.Dto;
 
@@ -17,8 +18,12 @@ public class VillageDto:IMapFrom<Village>
     public FactionDto Faction { get; set; }
     public Resource Resource { get; set; }
     public int AvailableBuilders { get; set; }
-    public List<ResourceBuildingDto> ResourceBuildings { get; set; }
-    
+    public DateTimeOffset LastResourceGatherDate { get; set; }
+    public List<VillageBuildingDto> VillageBuildings { get; set; }
+
+    public VillageWallDto VillageWall { get; set; }
+    public VillageTowerDto VillageTower { get; set; }
+
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Village, VillageDto>()

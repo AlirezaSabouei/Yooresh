@@ -9,7 +9,6 @@ public class Village
     public Faction Faction { get; set; }
     public Resource Resource { get; set; }
     public int AvailableBuilders { get; set; }
-    public DateTimeOffset LastResourceChangeTime { get; set; }
-    public List<VillageResourceBuilding> ResourceBuildings { get; set; }
+    public List<VillageResourceBuilding> VillageResourceBuildings { get; set; }
     public List<VillageUpgradeQueue> Upgrades { get; set; }
 }

@@ -29,12 +29,19 @@ namespace Yooresh.Client.WinForms.Villages.Forms
                 true,
                 DataSourceUpdateMode.OnPropertyChanged);
 
-            listBoxResourceBuildings.DataBindings.Add(
-                nameof(ListBox.SelectedValue),
-                _viewModel.UpdateResourceBuildingDto,
-                nameof(UpdateResourceBuildingDto.ToId),
-                true,
-                DataSourceUpdateMode.OnPropertyChanged);
+            listBoxResourceBuildings.DataBindings.Add(new Binding(nameof(ListBox.SelectedValue), _viewModel.UpdateResourceBuildingDto, nameof(UpdateResourceBuildingDto.ResourceBuildingId))
+            {
+                ControlUpdateMode = ControlUpdateMode.OnPropertyChanged,
+                DataSourceUpdateMode = DataSourceUpdateMode.Never
+            });
+
+            //        listBoxResourceBuildings.DataBindings.Add(
+            //nameof(ListBox.SelectedValue),
+            //_viewModel.UpdateResourceBuildingDto,
+            //nameof(UpdateResourceBuildingDto.ToId),
+            //true,
+            //DataSourceUpdateMode.OnValidation);
+
         }
 
         private async void VillageUpgradesForm_Load(object sender, EventArgs e)
@@ -68,7 +75,8 @@ namespace Yooresh.Client.WinForms.Villages.Forms
             try
             {
                 Loader(true);
-                await _viewModel.UpgradeResourceBuilding();
+                await _viewModel.UpgradeResourceBuilding((Guid)listBoxResourceBuildings.SelectedValue);
+                await _viewModel.GetAvailableResourceBuildingUpgrades();
             }
             catch (InformException informException)
             {
@@ -82,32 +90,6 @@ namespace Yooresh.Client.WinForms.Villages.Forms
             {
                 Loader(false);
             }
-        }
-
-        private async void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                Loader(true);
-                await _viewModel.UpgradeResourceBuilding();
-            }
-            catch (InformException informException)
-            {
-                ShowMessage(informException.Message, MessageType.Failure);
-            }
-            catch (Exception exception)
-            {
-                ShowMessage(exception.Message, MessageType.Failure);
-            }
-            finally
-            {
-                Loader(false);
-            }
-        }
-
-        private void listBoxResourceBuildings_SelectedIndexChanged(object sender, EventArgs e)
-        {
-           // this.Text = _viewModel.SelectedResourceBuildingUpgrade.ToString();
         }
     }
 }

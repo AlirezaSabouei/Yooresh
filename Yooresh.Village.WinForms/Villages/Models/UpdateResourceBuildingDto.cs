@@ -8,5 +8,5 @@ namespace Yooresh.Client.WinForms.Villages.Models;
 
 public class UpdateResourceBuildingDto
 {
-    public Guid ToId { get; set; }
+    public Guid ResourceBuildingId { get; set; }
 }

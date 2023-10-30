@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Villages;
 
 namespace Yooresh.Application.Villages.Queries;
 

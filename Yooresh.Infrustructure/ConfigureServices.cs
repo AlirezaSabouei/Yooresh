@@ -1,9 +1,12 @@
-﻿using Yooresh.Application.Common.Interfaces;
+﻿using Hangfire;
+using Yooresh.Application.Common.Interfaces;
 using Yooresh.Infrastructure.EmailTools;
 using Yooresh.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Yooresh.Domain.Interfaces;
+using Yooresh.Infrastructure.JobTools;
 
 namespace Yooresh.Infrastructure;
 
@@ -24,11 +27,11 @@ public static class ConfigureServices
         
         services.AddScoped<IEmail>(s=> new Email(senderEmail, senderPassword));
         
-        // Dependency injection setup
-      //  var eventBus = new RabbitMqEventBus("localhost", "guest", "guest");
-       // eventBus.Subscribe<VillageCreatedEvent, VillageCreatedEventHandler>(new VillageCreatedEventHandler());
+        services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+        services.AddHangfireServer();
+        
+        services.AddScoped<IJob, Job>();
 
-// Start consuming events
-       // eventBus.StartConsuming();
+
     }
 }

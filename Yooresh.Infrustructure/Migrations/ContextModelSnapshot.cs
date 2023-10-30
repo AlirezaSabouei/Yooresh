@@ -23,19 +23,33 @@ namespace Yooresh.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ResourceBuildingVillage", b =>
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Building", b =>
                 {
-                    b.Property<Guid>("ResourceBuildingsId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("VillageId")
+                    b.Property<string>("BuildingType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("TargetId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ResourceBuildingsId", "VillageId");
+                    b.Property<TimeSpan>("UpgradeDuration")
+                        .HasColumnType("time");
 
-                    b.HasIndex("VillageId");
+                    b.HasKey("Id");
 
-                    b.ToTable("ResourceBuildingVillage");
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("Building", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Yooresh.Domain.Entities.Factions.Faction", b =>
@@ -143,1293 +157,24 @@ namespace Yooresh.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.ResourceBuilding", b =>
+            modelBuilder.Entity("Yooresh.Domain.Entities.Troops.Troop", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("LastResourceGatherDate")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<int>("Level")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("NeedBuilderForUpgrade")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProductionType")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<Guid?>("TargetId")
+                    b.Property<Guid?>("VillageTowerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeSpan>("UpgradeDuration")
-                        .HasColumnType("time");
-
-                    b.Property<string>("UpgradeName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TargetId");
+                    b.HasIndex("VillageTowerId");
 
-                    b.ToTable("ResourceBuilding", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("57260432-ed1b-4201-abcf-c839f9df4d70"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(1957), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 25,
-                            Name = "Farm 25",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            UpgradeDuration = new TimeSpan(10, 20, 25, 0, 0),
-                            UpgradeName = "Upgrade To Farm 26"
-                        },
-                        new
-                        {
-                            Id = new Guid("e54a4227-1eed-4e7c-876c-e70b26bdb6e8"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(2256), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 24,
-                            Name = "Farm 24",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("57260432-ed1b-4201-abcf-c839f9df4d70"),
-                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
-                            UpgradeName = "Upgrade To Farm 25"
-                        },
-                        new
-                        {
-                            Id = new Guid("aa794fd8-7f9e-4e45-801c-882b1fb0ef44"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(2401), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 23,
-                            Name = "Farm 23",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("e54a4227-1eed-4e7c-876c-e70b26bdb6e8"),
-                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
-                            UpgradeName = "Upgrade To Farm 24"
-                        },
-                        new
-                        {
-                            Id = new Guid("155d409e-ef9f-4bfe-b54e-77f738c2448e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(2585), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 22,
-                            Name = "Farm 22",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("aa794fd8-7f9e-4e45-801c-882b1fb0ef44"),
-                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
-                            UpgradeName = "Upgrade To Farm 23"
-                        },
-                        new
-                        {
-                            Id = new Guid("10a3056c-050f-4f35-940d-0849fb6af2aa"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(2714), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 21,
-                            Name = "Farm 21",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("155d409e-ef9f-4bfe-b54e-77f738c2448e"),
-                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
-                            UpgradeName = "Upgrade To Farm 22"
-                        },
-                        new
-                        {
-                            Id = new Guid("8e313079-568b-4a46-9cce-572ace9bb7fb"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(2845), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 20,
-                            Name = "Farm 20",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("10a3056c-050f-4f35-940d-0849fb6af2aa"),
-                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
-                            UpgradeName = "Upgrade To Farm 21"
-                        },
-                        new
-                        {
-                            Id = new Guid("f78e5fb5-f801-4653-95bf-d8f9ca5b0a85"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3018), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 19,
-                            Name = "Farm 19",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("8e313079-568b-4a46-9cce-572ace9bb7fb"),
-                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
-                            UpgradeName = "Upgrade To Farm 20"
-                        },
-                        new
-                        {
-                            Id = new Guid("ea00a446-fdf5-43a8-93c5-d306f5f4c4cf"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3139), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 18,
-                            Name = "Farm 18",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("f78e5fb5-f801-4653-95bf-d8f9ca5b0a85"),
-                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
-                            UpgradeName = "Upgrade To Farm 19"
-                        },
-                        new
-                        {
-                            Id = new Guid("d3ede891-8210-4e43-bba5-dbf39dbfe29e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3297), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 17,
-                            Name = "Farm 17",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("ea00a446-fdf5-43a8-93c5-d306f5f4c4cf"),
-                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
-                            UpgradeName = "Upgrade To Farm 18"
-                        },
-                        new
-                        {
-                            Id = new Guid("87677a57-da1d-47a3-a55e-1b2caedadf87"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3428), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 16,
-                            Name = "Farm 16",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("d3ede891-8210-4e43-bba5-dbf39dbfe29e"),
-                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
-                            UpgradeName = "Upgrade To Farm 17"
-                        },
-                        new
-                        {
-                            Id = new Guid("a39e2f22-b50e-4b2a-a81c-fb1e07d68091"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3549), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 15,
-                            Name = "Farm 15",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("87677a57-da1d-47a3-a55e-1b2caedadf87"),
-                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
-                            UpgradeName = "Upgrade To Farm 16"
-                        },
-                        new
-                        {
-                            Id = new Guid("cc16c6d5-2306-4233-84ac-082670d6b017"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3712), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 14,
-                            Name = "Farm 14",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("a39e2f22-b50e-4b2a-a81c-fb1e07d68091"),
-                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
-                            UpgradeName = "Upgrade To Farm 15"
-                        },
-                        new
-                        {
-                            Id = new Guid("73be4381-0041-4c5b-827c-46e29ea473ef"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3830), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 13,
-                            Name = "Farm 13",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("cc16c6d5-2306-4233-84ac-082670d6b017"),
-                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
-                            UpgradeName = "Upgrade To Farm 14"
-                        },
-                        new
-                        {
-                            Id = new Guid("a1c18afc-4a19-452b-984d-b56365f3a470"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(3983), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 12,
-                            Name = "Farm 12",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("73be4381-0041-4c5b-827c-46e29ea473ef"),
-                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
-                            UpgradeName = "Upgrade To Farm 13"
-                        },
-                        new
-                        {
-                            Id = new Guid("05302df3-a0ab-4230-b02e-5b44ec924ca3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4114), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 11,
-                            Name = "Farm 11",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("a1c18afc-4a19-452b-984d-b56365f3a470"),
-                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
-                            UpgradeName = "Upgrade To Farm 12"
-                        },
-                        new
-                        {
-                            Id = new Guid("886769e1-88ff-4713-b090-8e2629028111"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4232), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 10,
-                            Name = "Farm 10",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("05302df3-a0ab-4230-b02e-5b44ec924ca3"),
-                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
-                            UpgradeName = "Upgrade To Farm 11"
-                        },
-                        new
-                        {
-                            Id = new Guid("764b7df4-708f-40fc-9c0f-ac8f83634955"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4389), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 9,
-                            Name = "Farm 9",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("886769e1-88ff-4713-b090-8e2629028111"),
-                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
-                            UpgradeName = "Upgrade To Farm 10"
-                        },
-                        new
-                        {
-                            Id = new Guid("426cf064-233d-4d60-9d4e-9c0de3688d42"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4515), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 8,
-                            Name = "Farm 8",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("764b7df4-708f-40fc-9c0f-ac8f83634955"),
-                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
-                            UpgradeName = "Upgrade To Farm 9"
-                        },
-                        new
-                        {
-                            Id = new Guid("e48b0661-ef7f-4bc0-8d24-fd63ec99bcc8"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4627), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 7,
-                            Name = "Farm 7",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("426cf064-233d-4d60-9d4e-9c0de3688d42"),
-                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
-                            UpgradeName = "Upgrade To Farm 8"
-                        },
-                        new
-                        {
-                            Id = new Guid("0e4234d3-36be-456b-b836-6b56ce78b768"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4791), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 6,
-                            Name = "Farm 6",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("e48b0661-ef7f-4bc0-8d24-fd63ec99bcc8"),
-                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
-                            UpgradeName = "Upgrade To Farm 7"
-                        },
-                        new
-                        {
-                            Id = new Guid("9f1adf51-5d4a-463f-9d0b-723ad6051ab4"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(4906), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 5,
-                            Name = "Farm 5",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("0e4234d3-36be-456b-b836-6b56ce78b768"),
-                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
-                            UpgradeName = "Upgrade To Farm 6"
-                        },
-                        new
-                        {
-                            Id = new Guid("80a09348-60c4-4a82-b6cf-4b32c4ee6357"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5091), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 4,
-                            Name = "Farm 4",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("9f1adf51-5d4a-463f-9d0b-723ad6051ab4"),
-                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
-                            UpgradeName = "Upgrade To Farm 5"
-                        },
-                        new
-                        {
-                            Id = new Guid("ed533989-2e40-4d98-9b77-c0f6c1ede089"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5231), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 3,
-                            Name = "Farm 3",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("80a09348-60c4-4a82-b6cf-4b32c4ee6357"),
-                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
-                            UpgradeName = "Upgrade To Farm 4"
-                        },
-                        new
-                        {
-                            Id = new Guid("2387540e-6f2f-4a2c-81e2-26d6d4802d10"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5347), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 2,
-                            Name = "Farm 2",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("ed533989-2e40-4d98-9b77-c0f6c1ede089"),
-                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
-                            UpgradeName = "Upgrade To Farm 3"
-                        },
-                        new
-                        {
-                            Id = new Guid("e597f13b-aeb6-4430-aa95-be948a4e063b"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5509), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 1,
-                            Name = "Farm 1",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("2387540e-6f2f-4a2c-81e2-26d6d4802d10"),
-                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
-                            UpgradeName = "Upgrade To Farm 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("9fb87b81-5f0a-4952-9930-396dd26f8f53"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5628), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 0,
-                            Name = "Damaged Farm",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Food",
-                            TargetId = new Guid("e597f13b-aeb6-4430-aa95-be948a4e063b"),
-                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
-                            UpgradeName = "Repair The Farm"
-                        },
-                        new
-                        {
-                            Id = new Guid("98330784-5fd6-42ee-89a2-8efb36f4c040"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5815), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 25,
-                            Name = "Lumber Mill 25",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            UpgradeDuration = new TimeSpan(10, 20, 25, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 26"
-                        },
-                        new
-                        {
-                            Id = new Guid("41207dd1-b529-4cca-b37a-38d0f0d5ebc7"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(5952), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 24,
-                            Name = "Lumber Mill 24",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("98330784-5fd6-42ee-89a2-8efb36f4c040"),
-                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 25"
-                        },
-                        new
-                        {
-                            Id = new Guid("b37d1706-6740-4be6-8920-5085cbb3a0dd"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6073), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 23,
-                            Name = "Lumber Mill 23",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("41207dd1-b529-4cca-b37a-38d0f0d5ebc7"),
-                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 24"
-                        },
-                        new
-                        {
-                            Id = new Guid("436acb3d-dcbc-4929-951a-e73dc87808cd"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6238), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 22,
-                            Name = "Lumber Mill 22",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("b37d1706-6740-4be6-8920-5085cbb3a0dd"),
-                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 23"
-                        },
-                        new
-                        {
-                            Id = new Guid("6dab033d-d597-492a-b0f3-91e854dd4317"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6359), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 21,
-                            Name = "Lumber Mill 21",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("436acb3d-dcbc-4929-951a-e73dc87808cd"),
-                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 22"
-                        },
-                        new
-                        {
-                            Id = new Guid("e071ed1d-65cf-4920-96b3-abc230f58a0e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6478), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 20,
-                            Name = "Lumber Mill 20",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("6dab033d-d597-492a-b0f3-91e854dd4317"),
-                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 21"
-                        },
-                        new
-                        {
-                            Id = new Guid("762af7ad-0d6c-488e-9b9f-8d3e2e6318d4"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6641), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 19,
-                            Name = "Lumber Mill 19",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("e071ed1d-65cf-4920-96b3-abc230f58a0e"),
-                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 20"
-                        },
-                        new
-                        {
-                            Id = new Guid("f4bc0110-1256-4386-8094-f9fc36b62f0f"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6763), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 18,
-                            Name = "Lumber Mill 18",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("762af7ad-0d6c-488e-9b9f-8d3e2e6318d4"),
-                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 19"
-                        },
-                        new
-                        {
-                            Id = new Guid("d9181a46-9c5f-4ff0-b41b-c0cb06c8cfb3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(6927), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 17,
-                            Name = "Lumber Mill 17",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("f4bc0110-1256-4386-8094-f9fc36b62f0f"),
-                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 18"
-                        },
-                        new
-                        {
-                            Id = new Guid("71fd0c56-fb7b-4808-9e02-407bfb00915d"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7047), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 16,
-                            Name = "Lumber Mill 16",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("d9181a46-9c5f-4ff0-b41b-c0cb06c8cfb3"),
-                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 17"
-                        },
-                        new
-                        {
-                            Id = new Guid("652639ee-a52e-418d-9f20-1cce64314542"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7201), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 15,
-                            Name = "Lumber Mill 15",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("71fd0c56-fb7b-4808-9e02-407bfb00915d"),
-                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 16"
-                        },
-                        new
-                        {
-                            Id = new Guid("411c5698-6c06-4711-b71d-5baa59198132"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7330), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 14,
-                            Name = "Lumber Mill 14",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("652639ee-a52e-418d-9f20-1cce64314542"),
-                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 15"
-                        },
-                        new
-                        {
-                            Id = new Guid("b6f53ce5-4bfe-47b2-9606-f3c1a3bf3cc5"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7447), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 13,
-                            Name = "Lumber Mill 13",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("411c5698-6c06-4711-b71d-5baa59198132"),
-                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 14"
-                        },
-                        new
-                        {
-                            Id = new Guid("39e84f7b-ff36-4b40-9fb0-b280a037994d"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7607), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 12,
-                            Name = "Lumber Mill 12",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("b6f53ce5-4bfe-47b2-9606-f3c1a3bf3cc5"),
-                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 13"
-                        },
-                        new
-                        {
-                            Id = new Guid("d9ded73e-adc1-405b-97b4-2792f0c7a39a"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7728), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 11,
-                            Name = "Lumber Mill 11",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("39e84f7b-ff36-4b40-9fb0-b280a037994d"),
-                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 12"
-                        },
-                        new
-                        {
-                            Id = new Guid("08826256-ba98-41f9-a378-86cd43360611"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(7842), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 10,
-                            Name = "Lumber Mill 10",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("d9ded73e-adc1-405b-97b4-2792f0c7a39a"),
-                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 11"
-                        },
-                        new
-                        {
-                            Id = new Guid("d3dd9933-b426-41c0-8e3f-35221819d665"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8039), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 9,
-                            Name = "Lumber Mill 9",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("08826256-ba98-41f9-a378-86cd43360611"),
-                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 10"
-                        },
-                        new
-                        {
-                            Id = new Guid("5d7d1c8f-ea32-4844-a6ba-e7d09a921e17"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8162), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 8,
-                            Name = "Lumber Mill 8",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("d3dd9933-b426-41c0-8e3f-35221819d665"),
-                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 9"
-                        },
-                        new
-                        {
-                            Id = new Guid("575486d3-eefd-4b09-bf77-f6a3a26309b0"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8321), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 7,
-                            Name = "Lumber Mill 7",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("5d7d1c8f-ea32-4844-a6ba-e7d09a921e17"),
-                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 8"
-                        },
-                        new
-                        {
-                            Id = new Guid("cd059a67-d44a-48ac-9952-b588b4e617df"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8453), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 6,
-                            Name = "Lumber Mill 6",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("575486d3-eefd-4b09-bf77-f6a3a26309b0"),
-                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 7"
-                        },
-                        new
-                        {
-                            Id = new Guid("9c772868-079a-4e07-a4de-889dfd596095"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8571), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 5,
-                            Name = "Lumber Mill 5",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("cd059a67-d44a-48ac-9952-b588b4e617df"),
-                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 6"
-                        },
-                        new
-                        {
-                            Id = new Guid("74d0ed00-acee-4bd1-9785-24f01c14807f"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8734), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 4,
-                            Name = "Lumber Mill 4",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("9c772868-079a-4e07-a4de-889dfd596095"),
-                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 5"
-                        },
-                        new
-                        {
-                            Id = new Guid("b54223e6-83fc-4552-a0cb-8e17602ae2d7"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8852), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 3,
-                            Name = "Lumber Mill 3",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("74d0ed00-acee-4bd1-9785-24f01c14807f"),
-                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 4"
-                        },
-                        new
-                        {
-                            Id = new Guid("5fd9bf3c-63be-444d-910b-a2305c4893b2"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(8967), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 2,
-                            Name = "Lumber Mill 2",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("b54223e6-83fc-4552-a0cb-8e17602ae2d7"),
-                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 3"
-                        },
-                        new
-                        {
-                            Id = new Guid("6c017d04-c259-4893-8dab-2538bc5f21f3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9130), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 1,
-                            Name = "Lumber Mill 1",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("5fd9bf3c-63be-444d-910b-a2305c4893b2"),
-                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
-                            UpgradeName = "Upgrade To Lumber Mill 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("3549935d-ee59-4190-a8b3-ba238fba4444"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9244), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 0,
-                            Name = "Damaged Lumber Mill",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Lumber",
-                            TargetId = new Guid("6c017d04-c259-4893-8dab-2538bc5f21f3"),
-                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
-                            UpgradeName = "Repair The Lumber Mill"
-                        },
-                        new
-                        {
-                            Id = new Guid("8d1e0859-0eaf-44c9-8062-585f0c5f53ec"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9430), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 25,
-                            Name = "Stone Mine 25",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            UpgradeDuration = new TimeSpan(10, 20, 25, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 26"
-                        },
-                        new
-                        {
-                            Id = new Guid("a39b1687-7e34-496b-910b-b009e08a9a0b"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9570), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 24,
-                            Name = "Stone Mine 24",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("8d1e0859-0eaf-44c9-8062-585f0c5f53ec"),
-                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 25"
-                        },
-                        new
-                        {
-                            Id = new Guid("4f829840-aee1-42e9-9656-f53cb6be09db"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9692), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 23,
-                            Name = "Stone Mine 23",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("a39b1687-7e34-496b-910b-b009e08a9a0b"),
-                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 24"
-                        },
-                        new
-                        {
-                            Id = new Guid("e753ffd0-cdd7-41a9-be27-0c69fce0e3aa"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9861), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 22,
-                            Name = "Stone Mine 22",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("4f829840-aee1-42e9-9656-f53cb6be09db"),
-                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 23"
-                        },
-                        new
-                        {
-                            Id = new Guid("0ab2f652-25f0-4761-8e6a-05fb6c70819f"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 36, DateTimeKind.Unspecified).AddTicks(9979), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 21,
-                            Name = "Stone Mine 21",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("e753ffd0-cdd7-41a9-be27-0c69fce0e3aa"),
-                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 22"
-                        },
-                        new
-                        {
-                            Id = new Guid("4634f611-a599-478a-af99-27bf3b57a399"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(134), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 20,
-                            Name = "Stone Mine 20",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("0ab2f652-25f0-4761-8e6a-05fb6c70819f"),
-                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 21"
-                        },
-                        new
-                        {
-                            Id = new Guid("e6457b56-4d1a-4e23-a913-9ec5386b33da"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(270), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 19,
-                            Name = "Stone Mine 19",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("4634f611-a599-478a-af99-27bf3b57a399"),
-                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 20"
-                        },
-                        new
-                        {
-                            Id = new Guid("cc936353-9ced-4af3-84d9-a78aa94d43ee"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(394), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 18,
-                            Name = "Stone Mine 18",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("e6457b56-4d1a-4e23-a913-9ec5386b33da"),
-                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 19"
-                        },
-                        new
-                        {
-                            Id = new Guid("320dad54-be62-4cf0-b013-63567ca9a57f"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(566), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 17,
-                            Name = "Stone Mine 17",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("cc936353-9ced-4af3-84d9-a78aa94d43ee"),
-                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 18"
-                        },
-                        new
-                        {
-                            Id = new Guid("7864e266-4bf8-4c3f-8c51-df9a64280b72"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(688), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 16,
-                            Name = "Stone Mine 16",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("320dad54-be62-4cf0-b013-63567ca9a57f"),
-                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 17"
-                        },
-                        new
-                        {
-                            Id = new Guid("4408100c-880d-4f77-8c03-181570784f85"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(805), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 15,
-                            Name = "Stone Mine 15",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("7864e266-4bf8-4c3f-8c51-df9a64280b72"),
-                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 16"
-                        },
-                        new
-                        {
-                            Id = new Guid("2fbc9eda-f6b5-4509-b8a6-97adf98564bb"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1003), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 14,
-                            Name = "Stone Mine 14",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("4408100c-880d-4f77-8c03-181570784f85"),
-                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 15"
-                        },
-                        new
-                        {
-                            Id = new Guid("655dc658-44d4-4b7e-8014-04b8fd5197ac"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1125), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 13,
-                            Name = "Stone Mine 13",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("2fbc9eda-f6b5-4509-b8a6-97adf98564bb"),
-                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 14"
-                        },
-                        new
-                        {
-                            Id = new Guid("a82c486d-fbc6-433e-9f62-1a8dbdbae5a8"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1296), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 12,
-                            Name = "Stone Mine 12",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("655dc658-44d4-4b7e-8014-04b8fd5197ac"),
-                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 13"
-                        },
-                        new
-                        {
-                            Id = new Guid("ce136123-90ce-44e4-a2a4-4e2b10b239ef"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1424), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 11,
-                            Name = "Stone Mine 11",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("a82c486d-fbc6-433e-9f62-1a8dbdbae5a8"),
-                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 12"
-                        },
-                        new
-                        {
-                            Id = new Guid("8f5a9b69-f11c-4292-8512-26e0d687a048"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1586), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 10,
-                            Name = "Stone Mine 10",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("ce136123-90ce-44e4-a2a4-4e2b10b239ef"),
-                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 11"
-                        },
-                        new
-                        {
-                            Id = new Guid("0f0ff134-026f-4029-97e6-bd225f74d2a3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1708), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 9,
-                            Name = "Stone Mine 9",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("8f5a9b69-f11c-4292-8512-26e0d687a048"),
-                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 10"
-                        },
-                        new
-                        {
-                            Id = new Guid("c8259f7e-177c-43c7-b199-5d4586517d1e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1824), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 8,
-                            Name = "Stone Mine 8",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("0f0ff134-026f-4029-97e6-bd225f74d2a3"),
-                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 9"
-                        },
-                        new
-                        {
-                            Id = new Guid("e117c61e-d469-4c85-850e-be7af91cace0"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(1988), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 7,
-                            Name = "Stone Mine 7",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("c8259f7e-177c-43c7-b199-5d4586517d1e"),
-                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 8"
-                        },
-                        new
-                        {
-                            Id = new Guid("87f980d0-1559-419f-b9ae-7f43d771748a"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2108), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 6,
-                            Name = "Stone Mine 6",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("e117c61e-d469-4c85-850e-be7af91cace0"),
-                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 7"
-                        },
-                        new
-                        {
-                            Id = new Guid("d4f2d6eb-f1f0-473b-9b2d-d8fccd4547f1"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2262), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 5,
-                            Name = "Stone Mine 5",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("87f980d0-1559-419f-b9ae-7f43d771748a"),
-                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 6"
-                        },
-                        new
-                        {
-                            Id = new Guid("ecb32f32-9909-40d4-87ff-5a125873f596"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2391), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 4,
-                            Name = "Stone Mine 4",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("d4f2d6eb-f1f0-473b-9b2d-d8fccd4547f1"),
-                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 5"
-                        },
-                        new
-                        {
-                            Id = new Guid("f6ee4eef-6131-4279-877d-4c87956ee9a8"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2514), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 3,
-                            Name = "Stone Mine 3",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("ecb32f32-9909-40d4-87ff-5a125873f596"),
-                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 4"
-                        },
-                        new
-                        {
-                            Id = new Guid("40352951-701f-4767-8ec9-77db079f6faf"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2676), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 2,
-                            Name = "Stone Mine 2",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("f6ee4eef-6131-4279-877d-4c87956ee9a8"),
-                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 3"
-                        },
-                        new
-                        {
-                            Id = new Guid("e2453bbb-d8f7-4743-a372-4f60e1b524fe"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2797), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 1,
-                            Name = "Stone Mine 1",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("40352951-701f-4767-8ec9-77db079f6faf"),
-                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
-                            UpgradeName = "Upgrade To Stone Mine 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("724e5d4b-d3d3-460f-8bd7-7fd201996f6b"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(2912), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 0,
-                            Name = "Damaged Stone Mine",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Stone",
-                            TargetId = new Guid("e2453bbb-d8f7-4743-a372-4f60e1b524fe"),
-                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
-                            UpgradeName = "Repair The Stone Mine"
-                        },
-                        new
-                        {
-                            Id = new Guid("3e881d35-3ac5-4caf-a6a7-23a0def3a0d6"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3111), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 25,
-                            Name = "Metal Mine 25",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            UpgradeDuration = new TimeSpan(10, 20, 25, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 26"
-                        },
-                        new
-                        {
-                            Id = new Guid("a95e7cd8-7a91-417f-98a8-2abe5a85f92c"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3239), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 24,
-                            Name = "Metal Mine 24",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("3e881d35-3ac5-4caf-a6a7-23a0def3a0d6"),
-                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 25"
-                        },
-                        new
-                        {
-                            Id = new Guid("fd48cfd7-e7f7-4afd-9f96-20203796e1ec"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3406), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 23,
-                            Name = "Metal Mine 23",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("a95e7cd8-7a91-417f-98a8-2abe5a85f92c"),
-                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 24"
-                        },
-                        new
-                        {
-                            Id = new Guid("e07b61e8-0dc4-45d0-8c85-49107d9271b3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3531), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 22,
-                            Name = "Metal Mine 22",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("fd48cfd7-e7f7-4afd-9f96-20203796e1ec"),
-                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 23"
-                        },
-                        new
-                        {
-                            Id = new Guid("f6eee8c8-08b5-4766-99f2-2f8bcac69699"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3649), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 21,
-                            Name = "Metal Mine 21",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("e07b61e8-0dc4-45d0-8c85-49107d9271b3"),
-                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 22"
-                        },
-                        new
-                        {
-                            Id = new Guid("9f63d511-2bdf-4234-b4fa-e2af7f7813aa"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3847), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 20,
-                            Name = "Metal Mine 20",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("f6eee8c8-08b5-4766-99f2-2f8bcac69699"),
-                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 21"
-                        },
-                        new
-                        {
-                            Id = new Guid("435e9a78-9048-45dc-bd05-76ed7bd0fc5e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(3967), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 19,
-                            Name = "Metal Mine 19",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("9f63d511-2bdf-4234-b4fa-e2af7f7813aa"),
-                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 20"
-                        },
-                        new
-                        {
-                            Id = new Guid("137c626c-1a36-471b-80b1-aef65a1ef30a"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4121), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 18,
-                            Name = "Metal Mine 18",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("435e9a78-9048-45dc-bd05-76ed7bd0fc5e"),
-                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 19"
-                        },
-                        new
-                        {
-                            Id = new Guid("40760dce-35cd-4fe9-b074-66adfe8136a1"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4253), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 17,
-                            Name = "Metal Mine 17",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("137c626c-1a36-471b-80b1-aef65a1ef30a"),
-                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 18"
-                        },
-                        new
-                        {
-                            Id = new Guid("074f1e6f-4c69-4b8c-b979-cf4b940463c8"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4371), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 16,
-                            Name = "Metal Mine 16",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("40760dce-35cd-4fe9-b074-66adfe8136a1"),
-                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 17"
-                        },
-                        new
-                        {
-                            Id = new Guid("243c2a72-3ed6-4c7a-9beb-2f80f09a080b"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4534), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 15,
-                            Name = "Metal Mine 15",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("074f1e6f-4c69-4b8c-b979-cf4b940463c8"),
-                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 16"
-                        },
-                        new
-                        {
-                            Id = new Guid("9c889bdd-7238-46a5-b570-d5e5c700198d"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4659), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 14,
-                            Name = "Metal Mine 14",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("243c2a72-3ed6-4c7a-9beb-2f80f09a080b"),
-                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 15"
-                        },
-                        new
-                        {
-                            Id = new Guid("12e8eb04-f95a-4ccf-8bc0-6d7af847f4e7"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4774), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 13,
-                            Name = "Metal Mine 13",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("9c889bdd-7238-46a5-b570-d5e5c700198d"),
-                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 14"
-                        },
-                        new
-                        {
-                            Id = new Guid("807c91ba-a0d6-43e5-ae69-c43eb4dcc292"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(4937), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 12,
-                            Name = "Metal Mine 12",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("12e8eb04-f95a-4ccf-8bc0-6d7af847f4e7"),
-                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 13"
-                        },
-                        new
-                        {
-                            Id = new Guid("1e278c1a-3d4a-490e-8b4c-cb1dfe2b4ea3"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5053), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 11,
-                            Name = "Metal Mine 11",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("807c91ba-a0d6-43e5-ae69-c43eb4dcc292"),
-                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 12"
-                        },
-                        new
-                        {
-                            Id = new Guid("b26668df-e411-4d20-9278-3973082df4bb"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5206), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 10,
-                            Name = "Metal Mine 10",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("1e278c1a-3d4a-490e-8b4c-cb1dfe2b4ea3"),
-                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 11"
-                        },
-                        new
-                        {
-                            Id = new Guid("4ba2ff5e-841d-4a26-ab3d-18694152ef71"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5332), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 9,
-                            Name = "Metal Mine 9",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("b26668df-e411-4d20-9278-3973082df4bb"),
-                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 10"
-                        },
-                        new
-                        {
-                            Id = new Guid("42041498-67d6-4515-ab05-941747067622"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5450), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 8,
-                            Name = "Metal Mine 8",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("4ba2ff5e-841d-4a26-ab3d-18694152ef71"),
-                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 9"
-                        },
-                        new
-                        {
-                            Id = new Guid("4e876d71-4f16-4b1f-b6d3-4af477625804"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5612), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 7,
-                            Name = "Metal Mine 7",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("42041498-67d6-4515-ab05-941747067622"),
-                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 8"
-                        },
-                        new
-                        {
-                            Id = new Guid("82dcc9a2-e80b-4196-b3c8-b8b55718a5d4"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5733), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 6,
-                            Name = "Metal Mine 6",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("4e876d71-4f16-4b1f-b6d3-4af477625804"),
-                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 7"
-                        },
-                        new
-                        {
-                            Id = new Guid("c4ccd62b-77c3-4e9a-baf4-cbbe26fd5aee"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(5952), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 5,
-                            Name = "Metal Mine 5",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("82dcc9a2-e80b-4196-b3c8-b8b55718a5d4"),
-                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 6"
-                        },
-                        new
-                        {
-                            Id = new Guid("f77998c4-61a7-4e98-9c24-c5b2b9796527"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(6271), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 4,
-                            Name = "Metal Mine 4",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("c4ccd62b-77c3-4e9a-baf4-cbbe26fd5aee"),
-                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 5"
-                        },
-                        new
-                        {
-                            Id = new Guid("1b090673-b9ca-42f4-b11a-8019885eb2da"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(6485), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 3,
-                            Name = "Metal Mine 3",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("f77998c4-61a7-4e98-9c24-c5b2b9796527"),
-                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 4"
-                        },
-                        new
-                        {
-                            Id = new Guid("1ab065c3-d009-481b-9d3a-6e3feacb5f86"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(6666), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 2,
-                            Name = "Metal Mine 2",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("1b090673-b9ca-42f4-b11a-8019885eb2da"),
-                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 3"
-                        },
-                        new
-                        {
-                            Id = new Guid("87fe1e8d-7040-42f6-9cc9-04ded83f1f0e"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(6806), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 1,
-                            Name = "Metal Mine 1",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("1ab065c3-d009-481b-9d3a-6e3feacb5f86"),
-                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
-                            UpgradeName = "Upgrade To Metal Mine 2"
-                        },
-                        new
-                        {
-                            Id = new Guid("f898f271-8def-472e-b1c6-52fa1f108842"),
-                            LastResourceGatherDate = new DateTimeOffset(new DateTime(2023, 10, 26, 21, 50, 20, 37, DateTimeKind.Unspecified).AddTicks(7012), new TimeSpan(0, 0, 0, 0, 0)),
-                            Level = 0,
-                            Name = "Damaged Metal Mine",
-                            NeedBuilderForUpgrade = true,
-                            ProductionType = "Metal",
-                            TargetId = new Guid("87fe1e8d-7040-42f6-9cc9-04ded83f1f0e"),
-                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
-                            UpgradeName = "Repair The Metal Mine"
-                        });
+                    b.ToTable("Troop");
                 });
 
             modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
@@ -1462,1002 +207,1624 @@ namespace Yooresh.Infrastructure.Migrations
                     b.ToTable("Village", (string)null);
                 });
 
-            modelBuilder.Entity("ResourceBuildingVillage", b =>
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageBuilding", b =>
                 {
-                    b.HasOne("Yooresh.Domain.Entities.Villages.ResourceBuilding", null)
-                        .WithMany()
-                        .HasForeignKey("ResourceBuildingsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", null)
-                        .WithMany()
-                        .HasForeignKey("VillageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<Guid>("BuildingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTimeOffset>("LastHarvestTime")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<Guid>("VillageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BuildingId");
+
+                    b.HasIndex("VillageId");
+
+                    b.ToTable("VillageBuilding", (string)null);
                 });
 
-            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.ResourceBuilding", b =>
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageTower", b =>
                 {
-                    b.HasOne("Yooresh.Domain.Entities.Villages.ResourceBuilding", "Target")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TowerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VillageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TowerId");
+
+                    b.HasIndex("VillageId")
+                        .IsUnique();
+
+                    b.ToTable("VillageTowers");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageWall", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("VillageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("WallId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VillageId")
+                        .IsUnique();
+
+                    b.HasIndex("WallId");
+
+                    b.ToTable("VillageWalls");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Farm", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.ToTable("Farm", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("d37e1071-c448-4ea4-a83c-5ef225281005"),
+                            BuildingType = "Farm",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("5ac05b39-04bb-4186-bbea-5b1aa5abbeb6"),
+                            BuildingType = "Farm",
+                            Level = 23,
+                            TargetId = new Guid("d37e1071-c448-4ea4-a83c-5ef225281005"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("864ae7f8-8262-415e-81c3-829a5659b040"),
+                            BuildingType = "Farm",
+                            Level = 22,
+                            TargetId = new Guid("5ac05b39-04bb-4186-bbea-5b1aa5abbeb6"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("e2986d7a-c2c0-4203-8b27-a72495b48732"),
+                            BuildingType = "Farm",
+                            Level = 21,
+                            TargetId = new Guid("864ae7f8-8262-415e-81c3-829a5659b040"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("3b5fbd6c-5646-43ae-a824-0c907aee804c"),
+                            BuildingType = "Farm",
+                            Level = 20,
+                            TargetId = new Guid("e2986d7a-c2c0-4203-8b27-a72495b48732"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("fc140b50-aaf7-4535-9de7-bb22a0d6e4d2"),
+                            BuildingType = "Farm",
+                            Level = 19,
+                            TargetId = new Guid("3b5fbd6c-5646-43ae-a824-0c907aee804c"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a5479db9-93e7-442d-8292-5bf69c02a1a5"),
+                            BuildingType = "Farm",
+                            Level = 18,
+                            TargetId = new Guid("fc140b50-aaf7-4535-9de7-bb22a0d6e4d2"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6e7d7738-cd20-4443-a957-6bdbdc6e1108"),
+                            BuildingType = "Farm",
+                            Level = 17,
+                            TargetId = new Guid("a5479db9-93e7-442d-8292-5bf69c02a1a5"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("d4ffd8e5-5ed4-49d3-a494-a4a0b69b68d5"),
+                            BuildingType = "Farm",
+                            Level = 16,
+                            TargetId = new Guid("6e7d7738-cd20-4443-a957-6bdbdc6e1108"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("dc6a35dd-4731-47b0-9090-b09777a76c15"),
+                            BuildingType = "Farm",
+                            Level = 15,
+                            TargetId = new Guid("d4ffd8e5-5ed4-49d3-a494-a4a0b69b68d5"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("406aa7aa-ad73-4c14-b144-6294607ecb6d"),
+                            BuildingType = "Farm",
+                            Level = 14,
+                            TargetId = new Guid("dc6a35dd-4731-47b0-9090-b09777a76c15"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("30a90be5-edef-4707-957b-606a985c0acc"),
+                            BuildingType = "Farm",
+                            Level = 13,
+                            TargetId = new Guid("406aa7aa-ad73-4c14-b144-6294607ecb6d"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("54ca1260-d4ec-4a95-951d-b158c110e535"),
+                            BuildingType = "Farm",
+                            Level = 12,
+                            TargetId = new Guid("30a90be5-edef-4707-957b-606a985c0acc"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ae191e6e-bd74-43b9-8c75-e32c948ea1ff"),
+                            BuildingType = "Farm",
+                            Level = 11,
+                            TargetId = new Guid("54ca1260-d4ec-4a95-951d-b158c110e535"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a6cf1133-7581-47ee-b3da-c9c724708aac"),
+                            BuildingType = "Farm",
+                            Level = 10,
+                            TargetId = new Guid("ae191e6e-bd74-43b9-8c75-e32c948ea1ff"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("b500aebc-c279-4f11-b6cd-e8cc78645e3a"),
+                            BuildingType = "Farm",
+                            Level = 9,
+                            TargetId = new Guid("a6cf1133-7581-47ee-b3da-c9c724708aac"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("3357a6dc-60a1-46e4-a046-01339f63ddb0"),
+                            BuildingType = "Farm",
+                            Level = 8,
+                            TargetId = new Guid("b500aebc-c279-4f11-b6cd-e8cc78645e3a"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("45512184-78ad-4d36-bd94-ab01bef6db7d"),
+                            BuildingType = "Farm",
+                            Level = 7,
+                            TargetId = new Guid("3357a6dc-60a1-46e4-a046-01339f63ddb0"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ae7ced42-d8db-43e4-8b68-819f2166fb7e"),
+                            BuildingType = "Farm",
+                            Level = 6,
+                            TargetId = new Guid("45512184-78ad-4d36-bd94-ab01bef6db7d"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("46d0d679-aa8a-441d-9508-8cd4344f26a8"),
+                            BuildingType = "Farm",
+                            Level = 5,
+                            TargetId = new Guid("ae7ced42-d8db-43e4-8b68-819f2166fb7e"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("4e2d47e5-cc3b-418e-a234-8f77a8986fc3"),
+                            BuildingType = "Farm",
+                            Level = 4,
+                            TargetId = new Guid("46d0d679-aa8a-441d-9508-8cd4344f26a8"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("e5e359aa-9dec-4979-bc0c-f2064da24997"),
+                            BuildingType = "Farm",
+                            Level = 3,
+                            TargetId = new Guid("4e2d47e5-cc3b-418e-a234-8f77a8986fc3"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c337d2b6-d34a-49f4-8db1-1cfebefef4dc"),
+                            BuildingType = "Farm",
+                            Level = 2,
+                            TargetId = new Guid("e5e359aa-9dec-4979-bc0c-f2064da24997"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("76d01316-e693-4a29-8164-1b3904371ac7"),
+                            BuildingType = "Farm",
+                            Level = 1,
+                            TargetId = new Guid("c337d2b6-d34a-49f4-8db1-1cfebefef4dc"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ce06429a-7b41-4437-b2f4-0c6a15a04225"),
+                            BuildingType = "Farm",
+                            Level = 0,
+                            TargetId = new Guid("76d01316-e693-4a29-8164-1b3904371ac7"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.GoldMine", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.ToTable("GoldMine", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("9e4bb5b6-90da-434d-837d-8b0d0d88b9c4"),
+                            BuildingType = "GoldMine",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a1e29d5f-2c37-4509-8a74-3f425227b8d9"),
+                            BuildingType = "GoldMine",
+                            Level = 23,
+                            TargetId = new Guid("9e4bb5b6-90da-434d-837d-8b0d0d88b9c4"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("aa702882-bdec-4e0d-b1c9-8851104c42cb"),
+                            BuildingType = "GoldMine",
+                            Level = 22,
+                            TargetId = new Guid("a1e29d5f-2c37-4509-8a74-3f425227b8d9"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("b6a59d14-ec22-4440-a81a-097716e691c4"),
+                            BuildingType = "GoldMine",
+                            Level = 21,
+                            TargetId = new Guid("aa702882-bdec-4e0d-b1c9-8851104c42cb"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("77612487-e9cf-43b5-bdf1-a6b2757f0b33"),
+                            BuildingType = "GoldMine",
+                            Level = 20,
+                            TargetId = new Guid("b6a59d14-ec22-4440-a81a-097716e691c4"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("53e73e6c-73df-4ff7-ab9c-f6bf9de5699c"),
+                            BuildingType = "GoldMine",
+                            Level = 19,
+                            TargetId = new Guid("77612487-e9cf-43b5-bdf1-a6b2757f0b33"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("21512b79-b532-4eb9-8c37-927bda5d1804"),
+                            BuildingType = "GoldMine",
+                            Level = 18,
+                            TargetId = new Guid("53e73e6c-73df-4ff7-ab9c-f6bf9de5699c"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("94411122-cd71-4109-bcdd-2b7cfe670cf6"),
+                            BuildingType = "GoldMine",
+                            Level = 17,
+                            TargetId = new Guid("21512b79-b532-4eb9-8c37-927bda5d1804"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("1e7c6a79-99c8-4b78-84f8-9f65e75444ba"),
+                            BuildingType = "GoldMine",
+                            Level = 16,
+                            TargetId = new Guid("94411122-cd71-4109-bcdd-2b7cfe670cf6"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9a44a6f0-8f79-4eff-9e9a-97ffb262804a"),
+                            BuildingType = "GoldMine",
+                            Level = 15,
+                            TargetId = new Guid("1e7c6a79-99c8-4b78-84f8-9f65e75444ba"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("8429bb7c-1673-4593-95e9-546838064bea"),
+                            BuildingType = "GoldMine",
+                            Level = 14,
+                            TargetId = new Guid("9a44a6f0-8f79-4eff-9e9a-97ffb262804a"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c1297f98-a911-4c2c-9eae-ab0892b1afe4"),
+                            BuildingType = "GoldMine",
+                            Level = 13,
+                            TargetId = new Guid("8429bb7c-1673-4593-95e9-546838064bea"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("cdfa96e2-eb80-4a71-9b07-d587d1141583"),
+                            BuildingType = "GoldMine",
+                            Level = 12,
+                            TargetId = new Guid("c1297f98-a911-4c2c-9eae-ab0892b1afe4"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("abfabe86-4d4a-4217-b056-c1828f506fd8"),
+                            BuildingType = "GoldMine",
+                            Level = 11,
+                            TargetId = new Guid("cdfa96e2-eb80-4a71-9b07-d587d1141583"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("69a7c55b-ff93-43ff-991b-28716bbb8eb2"),
+                            BuildingType = "GoldMine",
+                            Level = 10,
+                            TargetId = new Guid("abfabe86-4d4a-4217-b056-c1828f506fd8"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a0d0a6d4-cec8-4a3f-84b9-ff198e0a918f"),
+                            BuildingType = "GoldMine",
+                            Level = 9,
+                            TargetId = new Guid("69a7c55b-ff93-43ff-991b-28716bbb8eb2"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6d76dca7-19b1-4fb4-bfed-74d157959838"),
+                            BuildingType = "GoldMine",
+                            Level = 8,
+                            TargetId = new Guid("a0d0a6d4-cec8-4a3f-84b9-ff198e0a918f"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("aec0c807-e58c-4a5f-9c35-87fe6a4f537c"),
+                            BuildingType = "GoldMine",
+                            Level = 7,
+                            TargetId = new Guid("6d76dca7-19b1-4fb4-bfed-74d157959838"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("357b2c1a-4765-484e-ad35-82650482fbb6"),
+                            BuildingType = "GoldMine",
+                            Level = 6,
+                            TargetId = new Guid("aec0c807-e58c-4a5f-9c35-87fe6a4f537c"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a8a48170-db0b-4046-a7ac-fee0c99e7cfb"),
+                            BuildingType = "GoldMine",
+                            Level = 5,
+                            TargetId = new Guid("357b2c1a-4765-484e-ad35-82650482fbb6"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("f6e3833b-724f-4ce0-85ed-acbab08f428b"),
+                            BuildingType = "GoldMine",
+                            Level = 4,
+                            TargetId = new Guid("a8a48170-db0b-4046-a7ac-fee0c99e7cfb"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("eac9bb21-2f91-4406-b5bd-a2cb54b3c5c0"),
+                            BuildingType = "GoldMine",
+                            Level = 3,
+                            TargetId = new Guid("f6e3833b-724f-4ce0-85ed-acbab08f428b"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c1030dc7-314e-4292-8307-5d87e4ae7c55"),
+                            BuildingType = "GoldMine",
+                            Level = 2,
+                            TargetId = new Guid("eac9bb21-2f91-4406-b5bd-a2cb54b3c5c0"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("1cbe2263-2d1b-4c3a-8610-2327ae11d9d4"),
+                            BuildingType = "GoldMine",
+                            Level = 1,
+                            TargetId = new Guid("c1030dc7-314e-4292-8307-5d87e4ae7c55"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("1207c282-da8e-4ba9-8a7e-1f4f403a3fa9"),
+                            BuildingType = "GoldMine",
+                            Level = 0,
+                            TargetId = new Guid("1cbe2263-2d1b-4c3a-8610-2327ae11d9d4"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.LumberMill", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.ToTable("LumberMill", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f2c3ea31-09ee-4c0c-a528-e4a6f33cebf6"),
+                            BuildingType = "Lumbermill",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("b40529ca-90ce-4388-a53d-a9cb2ff8816e"),
+                            BuildingType = "Lumbermill",
+                            Level = 23,
+                            TargetId = new Guid("f2c3ea31-09ee-4c0c-a528-e4a6f33cebf6"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("937feb33-a2a3-4d12-846c-0e3bab45b277"),
+                            BuildingType = "Lumbermill",
+                            Level = 22,
+                            TargetId = new Guid("b40529ca-90ce-4388-a53d-a9cb2ff8816e"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9343cc5d-d692-428a-bb31-d400d089957b"),
+                            BuildingType = "Lumbermill",
+                            Level = 21,
+                            TargetId = new Guid("937feb33-a2a3-4d12-846c-0e3bab45b277"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("0a99fe94-cb60-4c53-be91-109ecd2c2518"),
+                            BuildingType = "Lumbermill",
+                            Level = 20,
+                            TargetId = new Guid("9343cc5d-d692-428a-bb31-d400d089957b"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("305ac3cb-2b6f-4bf3-a24e-64c3fe3bf13d"),
+                            BuildingType = "Lumbermill",
+                            Level = 19,
+                            TargetId = new Guid("0a99fe94-cb60-4c53-be91-109ecd2c2518"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6c21abe2-51f5-4d87-a528-923e49047317"),
+                            BuildingType = "Lumbermill",
+                            Level = 18,
+                            TargetId = new Guid("305ac3cb-2b6f-4bf3-a24e-64c3fe3bf13d"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("5e03bfc4-245c-4fae-8fb8-3529b1544140"),
+                            BuildingType = "Lumbermill",
+                            Level = 17,
+                            TargetId = new Guid("6c21abe2-51f5-4d87-a528-923e49047317"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a3ec3ad8-aeab-4d98-890f-b5bb49c2882a"),
+                            BuildingType = "Lumbermill",
+                            Level = 16,
+                            TargetId = new Guid("5e03bfc4-245c-4fae-8fb8-3529b1544140"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6a6d6df8-b869-42fb-bec9-b7b411fd2d4d"),
+                            BuildingType = "Lumbermill",
+                            Level = 15,
+                            TargetId = new Guid("a3ec3ad8-aeab-4d98-890f-b5bb49c2882a"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("f6d7e2f6-6f74-46d6-9ed7-ce31c944d198"),
+                            BuildingType = "Lumbermill",
+                            Level = 14,
+                            TargetId = new Guid("6a6d6df8-b869-42fb-bec9-b7b411fd2d4d"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c10c6337-a5e5-4f65-9b78-a008b3696744"),
+                            BuildingType = "Lumbermill",
+                            Level = 13,
+                            TargetId = new Guid("f6d7e2f6-6f74-46d6-9ed7-ce31c944d198"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("68351e6e-2831-47ae-aceb-c220002eb56c"),
+                            BuildingType = "Lumbermill",
+                            Level = 12,
+                            TargetId = new Guid("c10c6337-a5e5-4f65-9b78-a008b3696744"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("57ad6e92-278b-4834-925a-4487869bd3d5"),
+                            BuildingType = "Lumbermill",
+                            Level = 11,
+                            TargetId = new Guid("68351e6e-2831-47ae-aceb-c220002eb56c"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("544905d6-289a-4973-8aca-acd5625aa72e"),
+                            BuildingType = "Lumbermill",
+                            Level = 10,
+                            TargetId = new Guid("57ad6e92-278b-4834-925a-4487869bd3d5"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("eb9e83e4-fa9b-45de-a9b3-76a8729a7347"),
+                            BuildingType = "Lumbermill",
+                            Level = 9,
+                            TargetId = new Guid("544905d6-289a-4973-8aca-acd5625aa72e"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("b64a4404-4c25-405a-a447-e64ca8d98c50"),
+                            BuildingType = "Lumbermill",
+                            Level = 8,
+                            TargetId = new Guid("eb9e83e4-fa9b-45de-a9b3-76a8729a7347"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("3f5d975e-196a-48c9-9a4d-78a8c121008a"),
+                            BuildingType = "Lumbermill",
+                            Level = 7,
+                            TargetId = new Guid("b64a4404-4c25-405a-a447-e64ca8d98c50"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("b541c942-7c2d-452b-b6a8-5bb4dad009f2"),
+                            BuildingType = "Lumbermill",
+                            Level = 6,
+                            TargetId = new Guid("3f5d975e-196a-48c9-9a4d-78a8c121008a"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9207c336-02f6-4e63-8a48-bbba0d3dac0a"),
+                            BuildingType = "Lumbermill",
+                            Level = 5,
+                            TargetId = new Guid("b541c942-7c2d-452b-b6a8-5bb4dad009f2"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7e67e97f-6496-4df3-9af2-9e8e6ffb9280"),
+                            BuildingType = "Lumbermill",
+                            Level = 4,
+                            TargetId = new Guid("9207c336-02f6-4e63-8a48-bbba0d3dac0a"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("191f8d84-4a55-404b-b790-33e4dcd24077"),
+                            BuildingType = "Lumbermill",
+                            Level = 3,
+                            TargetId = new Guid("7e67e97f-6496-4df3-9af2-9e8e6ffb9280"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("99c663b4-b322-4493-b241-94fd9c45147c"),
+                            BuildingType = "Lumbermill",
+                            Level = 2,
+                            TargetId = new Guid("191f8d84-4a55-404b-b790-33e4dcd24077"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("1ac03dcf-e453-43e6-bc7b-c01a5ec82760"),
+                            BuildingType = "Lumbermill",
+                            Level = 1,
+                            TargetId = new Guid("99c663b4-b322-4493-b241-94fd9c45147c"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c122e004-7196-4f8f-8038-50a96097467b"),
+                            BuildingType = "Lumbermill",
+                            Level = 0,
+                            TargetId = new Guid("1ac03dcf-e453-43e6-bc7b-c01a5ec82760"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.MetalMine", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.ToTable("MetalMine", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e4d4395f-aa76-48d4-aabe-b4468e1bf9b5"),
+                            BuildingType = "MetalMine",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("3396bf28-f455-4f5b-8d38-0466c48d119a"),
+                            BuildingType = "MetalMine",
+                            Level = 23,
+                            TargetId = new Guid("e4d4395f-aa76-48d4-aabe-b4468e1bf9b5"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("94248d08-5c2d-4a77-9f17-402d1e8103f5"),
+                            BuildingType = "MetalMine",
+                            Level = 22,
+                            TargetId = new Guid("3396bf28-f455-4f5b-8d38-0466c48d119a"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("5b52be58-aa7d-404c-a45b-a334915457c5"),
+                            BuildingType = "MetalMine",
+                            Level = 21,
+                            TargetId = new Guid("94248d08-5c2d-4a77-9f17-402d1e8103f5"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("70bd92be-3fa1-42a6-9d00-efb5cfd40598"),
+                            BuildingType = "MetalMine",
+                            Level = 20,
+                            TargetId = new Guid("5b52be58-aa7d-404c-a45b-a334915457c5"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("3ba0ec84-b2be-413e-97b7-0470030c9148"),
+                            BuildingType = "MetalMine",
+                            Level = 19,
+                            TargetId = new Guid("70bd92be-3fa1-42a6-9d00-efb5cfd40598"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("93ab61fb-52b4-49bb-80cc-16bba25d062d"),
+                            BuildingType = "MetalMine",
+                            Level = 18,
+                            TargetId = new Guid("3ba0ec84-b2be-413e-97b7-0470030c9148"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ebff94c5-461d-4fd2-9eff-f4602105a1df"),
+                            BuildingType = "MetalMine",
+                            Level = 17,
+                            TargetId = new Guid("93ab61fb-52b4-49bb-80cc-16bba25d062d"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9f5a3744-9070-4a83-9fa6-821527bf3f9d"),
+                            BuildingType = "MetalMine",
+                            Level = 16,
+                            TargetId = new Guid("ebff94c5-461d-4fd2-9eff-f4602105a1df"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7a642e7e-c875-49ab-a5e4-48f13a038f04"),
+                            BuildingType = "MetalMine",
+                            Level = 15,
+                            TargetId = new Guid("9f5a3744-9070-4a83-9fa6-821527bf3f9d"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6629022e-fdaa-4026-a2d2-66c33297ca39"),
+                            BuildingType = "MetalMine",
+                            Level = 14,
+                            TargetId = new Guid("7a642e7e-c875-49ab-a5e4-48f13a038f04"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("32181e33-3c75-40d3-ae3c-720c52fad786"),
+                            BuildingType = "MetalMine",
+                            Level = 13,
+                            TargetId = new Guid("6629022e-fdaa-4026-a2d2-66c33297ca39"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("02f43c31-448e-4154-9625-5cd00f29ce8b"),
+                            BuildingType = "MetalMine",
+                            Level = 12,
+                            TargetId = new Guid("32181e33-3c75-40d3-ae3c-720c52fad786"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("52d3767a-f084-4e38-aa30-9dc6a52575c3"),
+                            BuildingType = "MetalMine",
+                            Level = 11,
+                            TargetId = new Guid("02f43c31-448e-4154-9625-5cd00f29ce8b"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("f345765d-b596-46a1-bbce-2224e0d6fa98"),
+                            BuildingType = "MetalMine",
+                            Level = 10,
+                            TargetId = new Guid("52d3767a-f084-4e38-aa30-9dc6a52575c3"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7ad72cd3-2821-4ced-b6bb-81e1809bc009"),
+                            BuildingType = "MetalMine",
+                            Level = 9,
+                            TargetId = new Guid("f345765d-b596-46a1-bbce-2224e0d6fa98"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("2ecb2335-eb9f-4e7d-9c7e-9cc0044bddd2"),
+                            BuildingType = "MetalMine",
+                            Level = 8,
+                            TargetId = new Guid("7ad72cd3-2821-4ced-b6bb-81e1809bc009"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7187e6b4-bccd-4eb6-8014-afd89d83d307"),
+                            BuildingType = "MetalMine",
+                            Level = 7,
+                            TargetId = new Guid("2ecb2335-eb9f-4e7d-9c7e-9cc0044bddd2"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("6360c3bc-5b68-4305-8339-43abf9a561f5"),
+                            BuildingType = "MetalMine",
+                            Level = 6,
+                            TargetId = new Guid("7187e6b4-bccd-4eb6-8014-afd89d83d307"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("648c25e6-c591-4006-abe0-e20581d7d553"),
+                            BuildingType = "MetalMine",
+                            Level = 5,
+                            TargetId = new Guid("6360c3bc-5b68-4305-8339-43abf9a561f5"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("00c44ffa-0a08-4a24-aa27-b49726b0b6b9"),
+                            BuildingType = "MetalMine",
+                            Level = 4,
+                            TargetId = new Guid("648c25e6-c591-4006-abe0-e20581d7d553"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a1ea1fc6-c08b-44a8-827f-f58b5ac8ef3d"),
+                            BuildingType = "MetalMine",
+                            Level = 3,
+                            TargetId = new Guid("00c44ffa-0a08-4a24-aa27-b49726b0b6b9"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a409d292-7cf4-48ed-9d9e-96f22b1acde5"),
+                            BuildingType = "MetalMine",
+                            Level = 2,
+                            TargetId = new Guid("a1ea1fc6-c08b-44a8-827f-f58b5ac8ef3d"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("0c09daa5-0a1a-42a5-9e4d-005a10610711"),
+                            BuildingType = "MetalMine",
+                            Level = 1,
+                            TargetId = new Guid("a409d292-7cf4-48ed-9d9e-96f22b1acde5"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("e56e4164-0149-4913-8ded-9e8b6b67b218"),
+                            BuildingType = "MetalMine",
+                            Level = 0,
+                            TargetId = new Guid("0c09daa5-0a1a-42a5-9e4d-005a10610711"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.StoneMine", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.ToTable("StoneMine", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ca2be18d-e1e0-4afa-9f97-1eda67a8a83b"),
+                            BuildingType = "StoneMine",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7ab049fc-227b-43a4-b539-1e97abf0993b"),
+                            BuildingType = "StoneMine",
+                            Level = 23,
+                            TargetId = new Guid("ca2be18d-e1e0-4afa-9f97-1eda67a8a83b"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("e7de480f-fdc8-46f2-8832-c5e02a895ce6"),
+                            BuildingType = "StoneMine",
+                            Level = 22,
+                            TargetId = new Guid("7ab049fc-227b-43a4-b539-1e97abf0993b"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("0474bad5-9cf8-4729-be0d-505819cb2590"),
+                            BuildingType = "StoneMine",
+                            Level = 21,
+                            TargetId = new Guid("e7de480f-fdc8-46f2-8832-c5e02a895ce6"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("8737a844-6be6-4f9d-8b4d-35afa8511a86"),
+                            BuildingType = "StoneMine",
+                            Level = 20,
+                            TargetId = new Guid("0474bad5-9cf8-4729-be0d-505819cb2590"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9e41a575-b042-4c91-b5ae-a1dc4e074501"),
+                            BuildingType = "StoneMine",
+                            Level = 19,
+                            TargetId = new Guid("8737a844-6be6-4f9d-8b4d-35afa8511a86"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("7ba85d05-d1b2-478e-bafa-ab1a698b079f"),
+                            BuildingType = "StoneMine",
+                            Level = 18,
+                            TargetId = new Guid("9e41a575-b042-4c91-b5ae-a1dc4e074501"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("25fd995d-96fd-41d6-b6be-900c82c391f8"),
+                            BuildingType = "StoneMine",
+                            Level = 17,
+                            TargetId = new Guid("7ba85d05-d1b2-478e-bafa-ab1a698b079f"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("169fc59e-fde7-43da-8926-c24977f1f520"),
+                            BuildingType = "StoneMine",
+                            Level = 16,
+                            TargetId = new Guid("25fd995d-96fd-41d6-b6be-900c82c391f8"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("add69fc0-caff-42f8-833f-ceea80f533a5"),
+                            BuildingType = "StoneMine",
+                            Level = 15,
+                            TargetId = new Guid("169fc59e-fde7-43da-8926-c24977f1f520"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("0a913428-2e16-4945-97ae-5715f2ce030e"),
+                            BuildingType = "StoneMine",
+                            Level = 14,
+                            TargetId = new Guid("add69fc0-caff-42f8-833f-ceea80f533a5"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("033ac0d1-fd86-4ea3-a160-49d05c896e3d"),
+                            BuildingType = "StoneMine",
+                            Level = 13,
+                            TargetId = new Guid("0a913428-2e16-4945-97ae-5715f2ce030e"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ba4359b9-965c-4e67-9ed3-d6df19dc3a6e"),
+                            BuildingType = "StoneMine",
+                            Level = 12,
+                            TargetId = new Guid("033ac0d1-fd86-4ea3-a160-49d05c896e3d"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("c0d9a43a-14c7-49f2-b11f-92cc83411f17"),
+                            BuildingType = "StoneMine",
+                            Level = 11,
+                            TargetId = new Guid("ba4359b9-965c-4e67-9ed3-d6df19dc3a6e"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("9a9d3b9a-1f3c-44cc-ac70-4086fd151469"),
+                            BuildingType = "StoneMine",
+                            Level = 10,
+                            TargetId = new Guid("c0d9a43a-14c7-49f2-b11f-92cc83411f17"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("f352c9fc-baaf-4a75-8030-32dffc9c9512"),
+                            BuildingType = "StoneMine",
+                            Level = 9,
+                            TargetId = new Guid("9a9d3b9a-1f3c-44cc-ac70-4086fd151469"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("1d67631c-a3d8-4548-a9f2-5405040c8e39"),
+                            BuildingType = "StoneMine",
+                            Level = 8,
+                            TargetId = new Guid("f352c9fc-baaf-4a75-8030-32dffc9c9512"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a44e3e2f-4f00-40d2-8be6-49637631e737"),
+                            BuildingType = "StoneMine",
+                            Level = 7,
+                            TargetId = new Guid("1d67631c-a3d8-4548-a9f2-5405040c8e39"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("cd105217-2857-4ec8-9502-de6456c88a03"),
+                            BuildingType = "StoneMine",
+                            Level = 6,
+                            TargetId = new Guid("a44e3e2f-4f00-40d2-8be6-49637631e737"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("709c0106-d06c-411a-9eec-352f42b3990c"),
+                            BuildingType = "StoneMine",
+                            Level = 5,
+                            TargetId = new Guid("cd105217-2857-4ec8-9502-de6456c88a03"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("ff6317c4-7ff1-48b9-8328-bbe36b3fb8d0"),
+                            BuildingType = "StoneMine",
+                            Level = 4,
+                            TargetId = new Guid("709c0106-d06c-411a-9eec-352f42b3990c"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("a6000121-008d-43e8-bd19-d2e63d24b81c"),
+                            BuildingType = "StoneMine",
+                            Level = 3,
+                            TargetId = new Guid("ff6317c4-7ff1-48b9-8328-bbe36b3fb8d0"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("5732eeec-f58f-4c46-8a9c-aee2e9b2ac7d"),
+                            BuildingType = "StoneMine",
+                            Level = 2,
+                            TargetId = new Guid("a6000121-008d-43e8-bd19-d2e63d24b81c"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("4b540e35-f77f-4684-989c-e10c42881956"),
+                            BuildingType = "StoneMine",
+                            Level = 1,
+                            TargetId = new Guid("5732eeec-f58f-4c46-8a9c-aee2e9b2ac7d"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0)
+                        },
+                        new
+                        {
+                            Id = new Guid("4586f813-4966-490a-803f-7e09128f34f0"),
+                            BuildingType = "StoneMine",
+                            Level = 0,
+                            TargetId = new Guid("4b540e35-f77f-4684-989c-e10c42881956"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0)
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Tower", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TroopCapacity")
+                        .HasColumnType("int");
+
+                    b.ToTable("Tower", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("71101885-0649-4714-a217-8db19374c3fc"),
+                            BuildingType = "Tower",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
+                            Health = 14400,
+                            TroopCapacity = 5760
+                        },
+                        new
+                        {
+                            Id = new Guid("ec40e968-5781-4c30-9370-c403e28b83ba"),
+                            BuildingType = "Tower",
+                            Level = 23,
+                            TargetId = new Guid("71101885-0649-4714-a217-8db19374c3fc"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
+                            Health = 13225,
+                            TroopCapacity = 5290
+                        },
+                        new
+                        {
+                            Id = new Guid("3eb817be-8a90-40b9-9de2-6637c3ea9611"),
+                            BuildingType = "Tower",
+                            Level = 22,
+                            TargetId = new Guid("ec40e968-5781-4c30-9370-c403e28b83ba"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
+                            Health = 12100,
+                            TroopCapacity = 4840
+                        },
+                        new
+                        {
+                            Id = new Guid("d796baf9-a221-4eed-928e-bef70413cb8b"),
+                            BuildingType = "Tower",
+                            Level = 21,
+                            TargetId = new Guid("3eb817be-8a90-40b9-9de2-6637c3ea9611"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
+                            Health = 11025,
+                            TroopCapacity = 4410
+                        },
+                        new
+                        {
+                            Id = new Guid("b916ea59-d230-43b5-bb0f-38ac43ca3e4b"),
+                            BuildingType = "Tower",
+                            Level = 20,
+                            TargetId = new Guid("d796baf9-a221-4eed-928e-bef70413cb8b"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
+                            Health = 10000,
+                            TroopCapacity = 4000
+                        },
+                        new
+                        {
+                            Id = new Guid("d54181e8-c026-4c67-89c4-f630b8976451"),
+                            BuildingType = "Tower",
+                            Level = 19,
+                            TargetId = new Guid("b916ea59-d230-43b5-bb0f-38ac43ca3e4b"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
+                            Health = 9025,
+                            TroopCapacity = 3610
+                        },
+                        new
+                        {
+                            Id = new Guid("af9e76f6-36d1-4fa4-9842-98d8d43ca36f"),
+                            BuildingType = "Tower",
+                            Level = 18,
+                            TargetId = new Guid("d54181e8-c026-4c67-89c4-f630b8976451"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
+                            Health = 8100,
+                            TroopCapacity = 3240
+                        },
+                        new
+                        {
+                            Id = new Guid("dbe552f8-63ec-4b8a-bdcf-0e6cbaf78ee3"),
+                            BuildingType = "Tower",
+                            Level = 17,
+                            TargetId = new Guid("af9e76f6-36d1-4fa4-9842-98d8d43ca36f"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
+                            Health = 7225,
+                            TroopCapacity = 2890
+                        },
+                        new
+                        {
+                            Id = new Guid("38063ae8-17c8-49af-8066-eb68d628ab51"),
+                            BuildingType = "Tower",
+                            Level = 16,
+                            TargetId = new Guid("dbe552f8-63ec-4b8a-bdcf-0e6cbaf78ee3"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
+                            Health = 6400,
+                            TroopCapacity = 2560
+                        },
+                        new
+                        {
+                            Id = new Guid("ebcbfd7b-53d6-4771-9917-622b71f43418"),
+                            BuildingType = "Tower",
+                            Level = 15,
+                            TargetId = new Guid("38063ae8-17c8-49af-8066-eb68d628ab51"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
+                            Health = 5625,
+                            TroopCapacity = 2250
+                        },
+                        new
+                        {
+                            Id = new Guid("379e5990-df49-4fe7-b4cd-156bb3f0716c"),
+                            BuildingType = "Tower",
+                            Level = 14,
+                            TargetId = new Guid("ebcbfd7b-53d6-4771-9917-622b71f43418"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
+                            Health = 4900,
+                            TroopCapacity = 1960
+                        },
+                        new
+                        {
+                            Id = new Guid("f8e06239-8d0e-4907-a90c-e40c5f6b5c34"),
+                            BuildingType = "Tower",
+                            Level = 13,
+                            TargetId = new Guid("379e5990-df49-4fe7-b4cd-156bb3f0716c"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
+                            Health = 4225,
+                            TroopCapacity = 1690
+                        },
+                        new
+                        {
+                            Id = new Guid("e287c59c-25cc-4af5-b5fe-15bea97f6b29"),
+                            BuildingType = "Tower",
+                            Level = 12,
+                            TargetId = new Guid("f8e06239-8d0e-4907-a90c-e40c5f6b5c34"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
+                            Health = 3600,
+                            TroopCapacity = 1440
+                        },
+                        new
+                        {
+                            Id = new Guid("00ec9baf-a4a3-43ee-8d2b-468dfdf367c9"),
+                            BuildingType = "Tower",
+                            Level = 11,
+                            TargetId = new Guid("e287c59c-25cc-4af5-b5fe-15bea97f6b29"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
+                            Health = 3025,
+                            TroopCapacity = 1210
+                        },
+                        new
+                        {
+                            Id = new Guid("47bcd37b-195e-4fa7-bcf5-7f2ec6f2b74c"),
+                            BuildingType = "Tower",
+                            Level = 10,
+                            TargetId = new Guid("00ec9baf-a4a3-43ee-8d2b-468dfdf367c9"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
+                            Health = 2500,
+                            TroopCapacity = 1000
+                        },
+                        new
+                        {
+                            Id = new Guid("df44ccbc-2831-4847-8d5c-741b7db4dcfc"),
+                            BuildingType = "Tower",
+                            Level = 9,
+                            TargetId = new Guid("47bcd37b-195e-4fa7-bcf5-7f2ec6f2b74c"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
+                            Health = 2025,
+                            TroopCapacity = 810
+                        },
+                        new
+                        {
+                            Id = new Guid("46d59fef-f121-42c4-9067-5e6c94cfd438"),
+                            BuildingType = "Tower",
+                            Level = 8,
+                            TargetId = new Guid("df44ccbc-2831-4847-8d5c-741b7db4dcfc"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
+                            Health = 1600,
+                            TroopCapacity = 640
+                        },
+                        new
+                        {
+                            Id = new Guid("79b78f71-c992-44c1-a51a-9c009c816f8a"),
+                            BuildingType = "Tower",
+                            Level = 7,
+                            TargetId = new Guid("46d59fef-f121-42c4-9067-5e6c94cfd438"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
+                            Health = 1225,
+                            TroopCapacity = 490
+                        },
+                        new
+                        {
+                            Id = new Guid("75d03d1f-59bd-4648-b739-944214869388"),
+                            BuildingType = "Tower",
+                            Level = 6,
+                            TargetId = new Guid("79b78f71-c992-44c1-a51a-9c009c816f8a"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
+                            Health = 900,
+                            TroopCapacity = 360
+                        },
+                        new
+                        {
+                            Id = new Guid("1c55b0ec-7610-4810-b5dc-c0c1daaafb6d"),
+                            BuildingType = "Tower",
+                            Level = 5,
+                            TargetId = new Guid("75d03d1f-59bd-4648-b739-944214869388"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
+                            Health = 625,
+                            TroopCapacity = 250
+                        },
+                        new
+                        {
+                            Id = new Guid("6d883cc5-8cea-4a89-aec9-ef3248d14b01"),
+                            BuildingType = "Tower",
+                            Level = 4,
+                            TargetId = new Guid("1c55b0ec-7610-4810-b5dc-c0c1daaafb6d"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
+                            Health = 400,
+                            TroopCapacity = 160
+                        },
+                        new
+                        {
+                            Id = new Guid("658d6d98-16ad-4102-91fa-d24c58def4d1"),
+                            BuildingType = "Tower",
+                            Level = 3,
+                            TargetId = new Guid("6d883cc5-8cea-4a89-aec9-ef3248d14b01"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
+                            Health = 225,
+                            TroopCapacity = 90
+                        },
+                        new
+                        {
+                            Id = new Guid("6f7bbf8a-4b95-4f41-aa92-1dd31e57014c"),
+                            BuildingType = "Tower",
+                            Level = 2,
+                            TargetId = new Guid("658d6d98-16ad-4102-91fa-d24c58def4d1"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
+                            Health = 100,
+                            TroopCapacity = 40
+                        },
+                        new
+                        {
+                            Id = new Guid("88e35b53-867f-4f49-917e-baf1e20fc341"),
+                            BuildingType = "Tower",
+                            Level = 1,
+                            TargetId = new Guid("6f7bbf8a-4b95-4f41-aa92-1dd31e57014c"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
+                            Health = 25,
+                            TroopCapacity = 10
+                        },
+                        new
+                        {
+                            Id = new Guid("e1dc0baf-6417-4734-bad7-ca471f5f3cdb"),
+                            BuildingType = "Tower",
+                            Level = 0,
+                            TargetId = new Guid("88e35b53-867f-4f49-917e-baf1e20fc341"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
+                            Health = 0,
+                            TroopCapacity = 0
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Wall", b =>
+                {
+                    b.HasBaseType("Yooresh.Domain.Entities.Buildings.Building");
+
+                    b.Property<int>("Health")
+                        .HasColumnType("int");
+
+                    b.ToTable("Wall", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f9927613-7d7f-47b0-b390-83fec5fd1c31"),
+                            BuildingType = "Wall",
+                            Level = 24,
+                            UpgradeDuration = new TimeSpan(9, 14, 24, 0, 0),
+                            Health = 14400
+                        },
+                        new
+                        {
+                            Id = new Guid("9c0b6a3b-a963-478b-98da-a250b8fd6c6f"),
+                            BuildingType = "Wall",
+                            Level = 23,
+                            TargetId = new Guid("f9927613-7d7f-47b0-b390-83fec5fd1c31"),
+                            UpgradeDuration = new TimeSpan(8, 10, 47, 0, 0),
+                            Health = 13225
+                        },
+                        new
+                        {
+                            Id = new Guid("26924f6f-efaa-4b42-80ee-3deb38558f22"),
+                            BuildingType = "Wall",
+                            Level = 22,
+                            TargetId = new Guid("9c0b6a3b-a963-478b-98da-a250b8fd6c6f"),
+                            UpgradeDuration = new TimeSpan(7, 9, 28, 0, 0),
+                            Health = 12100
+                        },
+                        new
+                        {
+                            Id = new Guid("8e1032b2-e9bd-489f-80ad-d6da1cf1112d"),
+                            BuildingType = "Wall",
+                            Level = 21,
+                            TargetId = new Guid("26924f6f-efaa-4b42-80ee-3deb38558f22"),
+                            UpgradeDuration = new TimeSpan(6, 10, 21, 0, 0),
+                            Health = 11025
+                        },
+                        new
+                        {
+                            Id = new Guid("809f3aa5-5426-4bcc-9f89-3f52ac0dcb90"),
+                            BuildingType = "Wall",
+                            Level = 20,
+                            TargetId = new Guid("8e1032b2-e9bd-489f-80ad-d6da1cf1112d"),
+                            UpgradeDuration = new TimeSpan(5, 13, 20, 0, 0),
+                            Health = 10000
+                        },
+                        new
+                        {
+                            Id = new Guid("07fdde50-b1e6-45fa-abd2-e752b566f6b5"),
+                            BuildingType = "Wall",
+                            Level = 19,
+                            TargetId = new Guid("809f3aa5-5426-4bcc-9f89-3f52ac0dcb90"),
+                            UpgradeDuration = new TimeSpan(4, 18, 19, 0, 0),
+                            Health = 9025
+                        },
+                        new
+                        {
+                            Id = new Guid("618eb24b-2370-44e4-aeaa-6addb7c1e0bb"),
+                            BuildingType = "Wall",
+                            Level = 18,
+                            TargetId = new Guid("07fdde50-b1e6-45fa-abd2-e752b566f6b5"),
+                            UpgradeDuration = new TimeSpan(4, 1, 12, 0, 0),
+                            Health = 8100
+                        },
+                        new
+                        {
+                            Id = new Guid("084ee031-3131-4289-9fbf-42216cd17fcd"),
+                            BuildingType = "Wall",
+                            Level = 17,
+                            TargetId = new Guid("618eb24b-2370-44e4-aeaa-6addb7c1e0bb"),
+                            UpgradeDuration = new TimeSpan(3, 9, 53, 0, 0),
+                            Health = 7225
+                        },
+                        new
+                        {
+                            Id = new Guid("89b68ea8-56f0-43b4-891a-f9fdc14ff5a1"),
+                            BuildingType = "Wall",
+                            Level = 16,
+                            TargetId = new Guid("084ee031-3131-4289-9fbf-42216cd17fcd"),
+                            UpgradeDuration = new TimeSpan(2, 20, 16, 0, 0),
+                            Health = 6400
+                        },
+                        new
+                        {
+                            Id = new Guid("1ec79ca5-f0cf-4996-8d5c-7045259e0ba5"),
+                            BuildingType = "Wall",
+                            Level = 15,
+                            TargetId = new Guid("89b68ea8-56f0-43b4-891a-f9fdc14ff5a1"),
+                            UpgradeDuration = new TimeSpan(2, 8, 15, 0, 0),
+                            Health = 5625
+                        },
+                        new
+                        {
+                            Id = new Guid("46bbe45a-3bef-4121-9220-b991bf378189"),
+                            BuildingType = "Wall",
+                            Level = 14,
+                            TargetId = new Guid("1ec79ca5-f0cf-4996-8d5c-7045259e0ba5"),
+                            UpgradeDuration = new TimeSpan(1, 21, 44, 0, 0),
+                            Health = 4900
+                        },
+                        new
+                        {
+                            Id = new Guid("a8b961d2-fe4f-4b8c-9578-8c0bb9b32a7d"),
+                            BuildingType = "Wall",
+                            Level = 13,
+                            TargetId = new Guid("46bbe45a-3bef-4121-9220-b991bf378189"),
+                            UpgradeDuration = new TimeSpan(1, 12, 37, 0, 0),
+                            Health = 4225
+                        },
+                        new
+                        {
+                            Id = new Guid("0259c4b3-bc36-4187-a793-2cecd88d0f75"),
+                            BuildingType = "Wall",
+                            Level = 12,
+                            TargetId = new Guid("a8b961d2-fe4f-4b8c-9578-8c0bb9b32a7d"),
+                            UpgradeDuration = new TimeSpan(1, 4, 48, 0, 0),
+                            Health = 3600
+                        },
+                        new
+                        {
+                            Id = new Guid("9c0d6e3d-1744-45b8-bc3e-cf6e15121ef9"),
+                            BuildingType = "Wall",
+                            Level = 11,
+                            TargetId = new Guid("0259c4b3-bc36-4187-a793-2cecd88d0f75"),
+                            UpgradeDuration = new TimeSpan(0, 22, 11, 0, 0),
+                            Health = 3025
+                        },
+                        new
+                        {
+                            Id = new Guid("9140f7bb-5bf9-4147-8cd6-1e8a467e3ab3"),
+                            BuildingType = "Wall",
+                            Level = 10,
+                            TargetId = new Guid("9c0d6e3d-1744-45b8-bc3e-cf6e15121ef9"),
+                            UpgradeDuration = new TimeSpan(0, 16, 40, 0, 0),
+                            Health = 2500
+                        },
+                        new
+                        {
+                            Id = new Guid("102744c5-27a6-4d23-a538-1a6f742b953b"),
+                            BuildingType = "Wall",
+                            Level = 9,
+                            TargetId = new Guid("9140f7bb-5bf9-4147-8cd6-1e8a467e3ab3"),
+                            UpgradeDuration = new TimeSpan(0, 12, 9, 0, 0),
+                            Health = 2025
+                        },
+                        new
+                        {
+                            Id = new Guid("3bdd802b-4d97-4558-8790-8033c7c37708"),
+                            BuildingType = "Wall",
+                            Level = 8,
+                            TargetId = new Guid("102744c5-27a6-4d23-a538-1a6f742b953b"),
+                            UpgradeDuration = new TimeSpan(0, 8, 32, 0, 0),
+                            Health = 1600
+                        },
+                        new
+                        {
+                            Id = new Guid("8ccadf79-bea7-4224-83d9-6336e54431ab"),
+                            BuildingType = "Wall",
+                            Level = 7,
+                            TargetId = new Guid("3bdd802b-4d97-4558-8790-8033c7c37708"),
+                            UpgradeDuration = new TimeSpan(0, 5, 43, 0, 0),
+                            Health = 1225
+                        },
+                        new
+                        {
+                            Id = new Guid("f34484d8-89ef-47a6-b004-3da8f1e7e44d"),
+                            BuildingType = "Wall",
+                            Level = 6,
+                            TargetId = new Guid("8ccadf79-bea7-4224-83d9-6336e54431ab"),
+                            UpgradeDuration = new TimeSpan(0, 3, 36, 0, 0),
+                            Health = 900
+                        },
+                        new
+                        {
+                            Id = new Guid("e12f9f9b-f633-4c01-b012-3a5ea226cd0b"),
+                            BuildingType = "Wall",
+                            Level = 5,
+                            TargetId = new Guid("f34484d8-89ef-47a6-b004-3da8f1e7e44d"),
+                            UpgradeDuration = new TimeSpan(0, 2, 5, 0, 0),
+                            Health = 625
+                        },
+                        new
+                        {
+                            Id = new Guid("166a72d9-2fff-4a58-845a-9ab4f0bcd06b"),
+                            BuildingType = "Wall",
+                            Level = 4,
+                            TargetId = new Guid("e12f9f9b-f633-4c01-b012-3a5ea226cd0b"),
+                            UpgradeDuration = new TimeSpan(0, 1, 4, 0, 0),
+                            Health = 400
+                        },
+                        new
+                        {
+                            Id = new Guid("08958648-1b1e-45ca-bd42-aa7ff32778b9"),
+                            BuildingType = "Wall",
+                            Level = 3,
+                            TargetId = new Guid("166a72d9-2fff-4a58-845a-9ab4f0bcd06b"),
+                            UpgradeDuration = new TimeSpan(0, 0, 27, 0, 0),
+                            Health = 225
+                        },
+                        new
+                        {
+                            Id = new Guid("2684a393-a8d3-4daf-8a5e-d7723dccd383"),
+                            BuildingType = "Wall",
+                            Level = 2,
+                            TargetId = new Guid("08958648-1b1e-45ca-bd42-aa7ff32778b9"),
+                            UpgradeDuration = new TimeSpan(0, 0, 8, 0, 0),
+                            Health = 100
+                        },
+                        new
+                        {
+                            Id = new Guid("52c0d87a-7fb3-48f7-88d5-1f9e5a06ac7d"),
+                            BuildingType = "Wall",
+                            Level = 1,
+                            TargetId = new Guid("2684a393-a8d3-4daf-8a5e-d7723dccd383"),
+                            UpgradeDuration = new TimeSpan(0, 0, 1, 0, 0),
+                            Health = 25
+                        },
+                        new
+                        {
+                            Id = new Guid("ea4df1fe-852e-4508-abd9-e39e7dffc713"),
+                            BuildingType = "Wall",
+                            Level = 0,
+                            TargetId = new Guid("52c0d87a-7fb3-48f7-88d5-1f9e5a06ac7d"),
+                            UpgradeDuration = new TimeSpan(0, 0, 0, 0, 0),
+                            Health = 0
+                        });
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Building", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", "Target")
                         .WithMany()
                         .HasForeignKey("TargetId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
-                        {
-                            b1.Property<Guid>("ResourceBuildingId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<int>("Food")
-                                .HasColumnType("int")
-                                .HasColumnName("HourlyProductionFood");
-
-                            b1.Property<int>("Gold")
-                                .HasColumnType("int")
-                                .HasColumnName("HourlyProductionGold");
-
-                            b1.Property<int>("Lumber")
-                                .HasColumnType("int")
-                                .HasColumnName("HourlyProductionLumber");
-
-                            b1.Property<int>("Metal")
-                                .HasColumnType("int")
-                                .HasColumnName("HourlyProductionMetal");
-
-                            b1.Property<int>("Stone")
-                                .HasColumnType("int")
-                                .HasColumnName("HourlyProductionStone");
-
-                            b1.HasKey("ResourceBuildingId");
-
-                            b1.ToTable("ResourceBuilding");
-
-                            b1.WithOwner()
-                                .HasForeignKey("ResourceBuildingId");
-
-                            b1.HasData(
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("57260432-ed1b-4201-abcf-c839f9df4d70"),
-                                    Food = 37500,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e54a4227-1eed-4e7c-876c-e70b26bdb6e8"),
-                                    Food = 34560,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("aa794fd8-7f9e-4e45-801c-882b1fb0ef44"),
-                                    Food = 31740,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("155d409e-ef9f-4bfe-b54e-77f738c2448e"),
-                                    Food = 29040,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("10a3056c-050f-4f35-940d-0849fb6af2aa"),
-                                    Food = 26460,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("8e313079-568b-4a46-9cce-572ace9bb7fb"),
-                                    Food = 24000,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f78e5fb5-f801-4653-95bf-d8f9ca5b0a85"),
-                                    Food = 21660,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("ea00a446-fdf5-43a8-93c5-d306f5f4c4cf"),
-                                    Food = 19440,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("d3ede891-8210-4e43-bba5-dbf39dbfe29e"),
-                                    Food = 17340,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("87677a57-da1d-47a3-a55e-1b2caedadf87"),
-                                    Food = 15360,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a39e2f22-b50e-4b2a-a81c-fb1e07d68091"),
-                                    Food = 13500,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("cc16c6d5-2306-4233-84ac-082670d6b017"),
-                                    Food = 11760,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("73be4381-0041-4c5b-827c-46e29ea473ef"),
-                                    Food = 10140,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a1c18afc-4a19-452b-984d-b56365f3a470"),
-                                    Food = 8640,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("05302df3-a0ab-4230-b02e-5b44ec924ca3"),
-                                    Food = 7260,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("886769e1-88ff-4713-b090-8e2629028111"),
-                                    Food = 6000,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("764b7df4-708f-40fc-9c0f-ac8f83634955"),
-                                    Food = 4860,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("426cf064-233d-4d60-9d4e-9c0de3688d42"),
-                                    Food = 3840,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e48b0661-ef7f-4bc0-8d24-fd63ec99bcc8"),
-                                    Food = 2940,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("0e4234d3-36be-456b-b836-6b56ce78b768"),
-                                    Food = 2160,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("9f1adf51-5d4a-463f-9d0b-723ad6051ab4"),
-                                    Food = 1500,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("80a09348-60c4-4a82-b6cf-4b32c4ee6357"),
-                                    Food = 960,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("ed533989-2e40-4d98-9b77-c0f6c1ede089"),
-                                    Food = 540,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("2387540e-6f2f-4a2c-81e2-26d6d4802d10"),
-                                    Food = 240,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e597f13b-aeb6-4430-aa95-be948a4e063b"),
-                                    Food = 60,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("9fb87b81-5f0a-4952-9930-396dd26f8f53"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("98330784-5fd6-42ee-89a2-8efb36f4c040"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 37500,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("41207dd1-b529-4cca-b37a-38d0f0d5ebc7"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 34560,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("b37d1706-6740-4be6-8920-5085cbb3a0dd"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 31740,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("436acb3d-dcbc-4929-951a-e73dc87808cd"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 29040,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("6dab033d-d597-492a-b0f3-91e854dd4317"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 26460,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e071ed1d-65cf-4920-96b3-abc230f58a0e"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 24000,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("762af7ad-0d6c-488e-9b9f-8d3e2e6318d4"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 21660,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f4bc0110-1256-4386-8094-f9fc36b62f0f"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 19440,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("d9181a46-9c5f-4ff0-b41b-c0cb06c8cfb3"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 17340,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("71fd0c56-fb7b-4808-9e02-407bfb00915d"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 15360,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("652639ee-a52e-418d-9f20-1cce64314542"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 13500,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("411c5698-6c06-4711-b71d-5baa59198132"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 11760,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("b6f53ce5-4bfe-47b2-9606-f3c1a3bf3cc5"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 10140,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("39e84f7b-ff36-4b40-9fb0-b280a037994d"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 8640,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("d9ded73e-adc1-405b-97b4-2792f0c7a39a"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 7260,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("08826256-ba98-41f9-a378-86cd43360611"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 6000,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("d3dd9933-b426-41c0-8e3f-35221819d665"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 4860,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("5d7d1c8f-ea32-4844-a6ba-e7d09a921e17"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 3840,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("575486d3-eefd-4b09-bf77-f6a3a26309b0"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 2940,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("cd059a67-d44a-48ac-9952-b588b4e617df"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 2160,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("9c772868-079a-4e07-a4de-889dfd596095"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 1500,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("74d0ed00-acee-4bd1-9785-24f01c14807f"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 960,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("b54223e6-83fc-4552-a0cb-8e17602ae2d7"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 540,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("5fd9bf3c-63be-444d-910b-a2305c4893b2"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 240,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("6c017d04-c259-4893-8dab-2538bc5f21f3"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 60,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("3549935d-ee59-4190-a8b3-ba238fba4444"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("8d1e0859-0eaf-44c9-8062-585f0c5f53ec"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 37500
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a39b1687-7e34-496b-910b-b009e08a9a0b"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 34560
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("4f829840-aee1-42e9-9656-f53cb6be09db"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 31740
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e753ffd0-cdd7-41a9-be27-0c69fce0e3aa"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 29040
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("0ab2f652-25f0-4761-8e6a-05fb6c70819f"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 26460
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("4634f611-a599-478a-af99-27bf3b57a399"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 24000
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e6457b56-4d1a-4e23-a913-9ec5386b33da"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 21660
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("cc936353-9ced-4af3-84d9-a78aa94d43ee"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 19440
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("320dad54-be62-4cf0-b013-63567ca9a57f"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 17340
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("7864e266-4bf8-4c3f-8c51-df9a64280b72"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 15360
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("4408100c-880d-4f77-8c03-181570784f85"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 13500
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("2fbc9eda-f6b5-4509-b8a6-97adf98564bb"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 11760
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("655dc658-44d4-4b7e-8014-04b8fd5197ac"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 10140
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a82c486d-fbc6-433e-9f62-1a8dbdbae5a8"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 8640
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("ce136123-90ce-44e4-a2a4-4e2b10b239ef"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 7260
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("8f5a9b69-f11c-4292-8512-26e0d687a048"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 6000
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("0f0ff134-026f-4029-97e6-bd225f74d2a3"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 4860
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("c8259f7e-177c-43c7-b199-5d4586517d1e"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 3840
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e117c61e-d469-4c85-850e-be7af91cace0"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 2940
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("87f980d0-1559-419f-b9ae-7f43d771748a"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 2160
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("d4f2d6eb-f1f0-473b-9b2d-d8fccd4547f1"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 1500
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("ecb32f32-9909-40d4-87ff-5a125873f596"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 960
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f6ee4eef-6131-4279-877d-4c87956ee9a8"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 540
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("40352951-701f-4767-8ec9-77db079f6faf"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 240
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e2453bbb-d8f7-4743-a372-4f60e1b524fe"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 60
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("724e5d4b-d3d3-460f-8bd7-7fd201996f6b"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("3e881d35-3ac5-4caf-a6a7-23a0def3a0d6"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 37500,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a95e7cd8-7a91-417f-98a8-2abe5a85f92c"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 34560,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("fd48cfd7-e7f7-4afd-9f96-20203796e1ec"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 31740,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e07b61e8-0dc4-45d0-8c85-49107d9271b3"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 29040,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f6eee8c8-08b5-4766-99f2-2f8bcac69699"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 26460,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("9f63d511-2bdf-4234-b4fa-e2af7f7813aa"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 24000,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("435e9a78-9048-45dc-bd05-76ed7bd0fc5e"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 21660,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("137c626c-1a36-471b-80b1-aef65a1ef30a"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 19440,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("40760dce-35cd-4fe9-b074-66adfe8136a1"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 17340,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("074f1e6f-4c69-4b8c-b979-cf4b940463c8"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 15360,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("243c2a72-3ed6-4c7a-9beb-2f80f09a080b"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 13500,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("9c889bdd-7238-46a5-b570-d5e5c700198d"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 11760,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("12e8eb04-f95a-4ccf-8bc0-6d7af847f4e7"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 10140,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("807c91ba-a0d6-43e5-ae69-c43eb4dcc292"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 8640,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("1e278c1a-3d4a-490e-8b4c-cb1dfe2b4ea3"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 7260,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("b26668df-e411-4d20-9278-3973082df4bb"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 6000,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("4ba2ff5e-841d-4a26-ab3d-18694152ef71"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 4860,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("42041498-67d6-4515-ab05-941747067622"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 3840,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("4e876d71-4f16-4b1f-b6d3-4af477625804"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 2940,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("82dcc9a2-e80b-4196-b3c8-b8b55718a5d4"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 2160,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("c4ccd62b-77c3-4e9a-baf4-cbbe26fd5aee"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 1500,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f77998c4-61a7-4e98-9c24-c5b2b9796527"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 960,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("1b090673-b9ca-42f4-b11a-8019885eb2da"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 540,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("1ab065c3-d009-481b-9d3a-6e3feacb5f86"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 240,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("87fe1e8d-7040-42f6-9cc9-04ded83f1f0e"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 60,
-                                    Stone = 0
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("f898f271-8def-472e-b1c6-52fa1f108842"),
-                                    Food = 0,
-                                    Gold = 0,
-                                    Lumber = 0,
-                                    Metal = 0,
-                                    Stone = 0
-                                });
-                        });
-
                     b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "UpgradeCost", b1 =>
                         {
-                            b1.Property<Guid>("ResourceBuildingId")
+                            b1.Property<Guid>("BuildingId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<int>("Food")
@@ -2480,26 +1847,17 @@ namespace Yooresh.Infrastructure.Migrations
                                 .HasColumnType("int")
                                 .HasColumnName("UpgradeCostStone");
 
-                            b1.HasKey("ResourceBuildingId");
+                            b1.HasKey("BuildingId");
 
-                            b1.ToTable("ResourceBuilding");
+                            b1.ToTable("Building");
 
                             b1.WithOwner()
-                                .HasForeignKey("ResourceBuildingId");
+                                .HasForeignKey("BuildingId");
 
                             b1.HasData(
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("57260432-ed1b-4201-abcf-c839f9df4d70"),
-                                    Food = 13,
-                                    Gold = 13,
-                                    Lumber = 13,
-                                    Metal = 13,
-                                    Stone = 13
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("e54a4227-1eed-4e7c-876c-e70b26bdb6e8"),
+                                    BuildingId = new Guid("d37e1071-c448-4ea4-a83c-5ef225281005"),
                                     Food = 12,
                                     Gold = 12,
                                     Lumber = 12,
@@ -2508,7 +1866,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("aa794fd8-7f9e-4e45-801c-882b1fb0ef44"),
+                                    BuildingId = new Guid("5ac05b39-04bb-4186-bbea-5b1aa5abbeb6"),
                                     Food = 3,
                                     Gold = 3,
                                     Lumber = 3,
@@ -2517,7 +1875,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("155d409e-ef9f-4bfe-b54e-77f738c2448e"),
+                                    BuildingId = new Guid("864ae7f8-8262-415e-81c3-829a5659b040"),
                                     Food = 2,
                                     Gold = 2,
                                     Lumber = 2,
@@ -2526,7 +1884,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("10a3056c-050f-4f35-940d-0849fb6af2aa"),
+                                    BuildingId = new Guid("e2986d7a-c2c0-4203-8b27-a72495b48732"),
                                     Food = 1,
                                     Gold = 1,
                                     Lumber = 1,
@@ -2535,7 +1893,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("8e313079-568b-4a46-9cce-572ace9bb7fb"),
+                                    BuildingId = new Guid("3b5fbd6c-5646-43ae-a824-0c907aee804c"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -2544,7 +1902,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f78e5fb5-f801-4653-95bf-d8f9ca5b0a85"),
+                                    BuildingId = new Guid("fc140b50-aaf7-4535-9de7-bb22a0d6e4d2"),
                                     Food = 7,
                                     Gold = 7,
                                     Lumber = 7,
@@ -2553,7 +1911,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("ea00a446-fdf5-43a8-93c5-d306f5f4c4cf"),
+                                    BuildingId = new Guid("a5479db9-93e7-442d-8292-5bf69c02a1a5"),
                                     Food = 6,
                                     Gold = 6,
                                     Lumber = 6,
@@ -2562,7 +1920,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("d3ede891-8210-4e43-bba5-dbf39dbfe29e"),
+                                    BuildingId = new Guid("6e7d7738-cd20-4443-a957-6bdbdc6e1108"),
                                     Food = 5,
                                     Gold = 5,
                                     Lumber = 5,
@@ -2571,7 +1929,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("87677a57-da1d-47a3-a55e-1b2caedadf87"),
+                                    BuildingId = new Guid("d4ffd8e5-5ed4-49d3-a494-a4a0b69b68d5"),
                                     Food = 4,
                                     Gold = 4,
                                     Lumber = 4,
@@ -2580,7 +1938,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("a39e2f22-b50e-4b2a-a81c-fb1e07d68091"),
+                                    BuildingId = new Guid("dc6a35dd-4731-47b0-9090-b09777a76c15"),
                                     Food = 27,
                                     Gold = 27,
                                     Lumber = 27,
@@ -2589,7 +1947,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("cc16c6d5-2306-4233-84ac-082670d6b017"),
+                                    BuildingId = new Guid("406aa7aa-ad73-4c14-b144-6294607ecb6d"),
                                     Food = 26,
                                     Gold = 26,
                                     Lumber = 26,
@@ -2598,7 +1956,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("73be4381-0041-4c5b-827c-46e29ea473ef"),
+                                    BuildingId = new Guid("30a90be5-edef-4707-957b-606a985c0acc"),
                                     Food = 25,
                                     Gold = 25,
                                     Lumber = 25,
@@ -2607,7 +1965,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("a1c18afc-4a19-452b-984d-b56365f3a470"),
+                                    BuildingId = new Guid("54ca1260-d4ec-4a95-951d-b158c110e535"),
                                     Food = 24,
                                     Gold = 24,
                                     Lumber = 24,
@@ -2616,7 +1974,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("05302df3-a0ab-4230-b02e-5b44ec924ca3"),
+                                    BuildingId = new Guid("ae191e6e-bd74-43b9-8c75-e32c948ea1ff"),
                                     Food = 31,
                                     Gold = 31,
                                     Lumber = 31,
@@ -2625,7 +1983,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("886769e1-88ff-4713-b090-8e2629028111"),
+                                    BuildingId = new Guid("a6cf1133-7581-47ee-b3da-c9c724708aac"),
                                     Food = 30,
                                     Gold = 30,
                                     Lumber = 30,
@@ -2634,7 +1992,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("764b7df4-708f-40fc-9c0f-ac8f83634955"),
+                                    BuildingId = new Guid("b500aebc-c279-4f11-b6cd-e8cc78645e3a"),
                                     Food = 29,
                                     Gold = 29,
                                     Lumber = 29,
@@ -2643,7 +2001,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("426cf064-233d-4d60-9d4e-9c0de3688d42"),
+                                    BuildingId = new Guid("3357a6dc-60a1-46e4-a046-01339f63ddb0"),
                                     Food = 28,
                                     Gold = 28,
                                     Lumber = 28,
@@ -2652,7 +2010,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e48b0661-ef7f-4bc0-8d24-fd63ec99bcc8"),
+                                    BuildingId = new Guid("45512184-78ad-4d36-bd94-ab01bef6db7d"),
                                     Food = 19,
                                     Gold = 19,
                                     Lumber = 19,
@@ -2661,7 +2019,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("0e4234d3-36be-456b-b836-6b56ce78b768"),
+                                    BuildingId = new Guid("ae7ced42-d8db-43e4-8b68-819f2166fb7e"),
                                     Food = 18,
                                     Gold = 18,
                                     Lumber = 18,
@@ -2670,7 +2028,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("9f1adf51-5d4a-463f-9d0b-723ad6051ab4"),
+                                    BuildingId = new Guid("46d0d679-aa8a-441d-9508-8cd4344f26a8"),
                                     Food = 17,
                                     Gold = 17,
                                     Lumber = 17,
@@ -2679,7 +2037,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("80a09348-60c4-4a82-b6cf-4b32c4ee6357"),
+                                    BuildingId = new Guid("4e2d47e5-cc3b-418e-a234-8f77a8986fc3"),
                                     Food = 16,
                                     Gold = 16,
                                     Lumber = 16,
@@ -2688,7 +2046,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("ed533989-2e40-4d98-9b77-c0f6c1ede089"),
+                                    BuildingId = new Guid("e5e359aa-9dec-4979-bc0c-f2064da24997"),
                                     Food = 23,
                                     Gold = 23,
                                     Lumber = 23,
@@ -2697,7 +2055,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("2387540e-6f2f-4a2c-81e2-26d6d4802d10"),
+                                    BuildingId = new Guid("c337d2b6-d34a-49f4-8db1-1cfebefef4dc"),
                                     Food = 22,
                                     Gold = 22,
                                     Lumber = 22,
@@ -2706,7 +2064,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e597f13b-aeb6-4430-aa95-be948a4e063b"),
+                                    BuildingId = new Guid("76d01316-e693-4a29-8164-1b3904371ac7"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -2715,7 +2073,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("9fb87b81-5f0a-4952-9930-396dd26f8f53"),
+                                    BuildingId = new Guid("ce06429a-7b41-4437-b2f4-0c6a15a04225"),
                                     Food = 20,
                                     Gold = 20,
                                     Lumber = 20,
@@ -2724,16 +2082,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("98330784-5fd6-42ee-89a2-8efb36f4c040"),
-                                    Food = 13,
-                                    Gold = 13,
-                                    Lumber = 13,
-                                    Metal = 13,
-                                    Stone = 13
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("41207dd1-b529-4cca-b37a-38d0f0d5ebc7"),
+                                    BuildingId = new Guid("9e4bb5b6-90da-434d-837d-8b0d0d88b9c4"),
                                     Food = 12,
                                     Gold = 12,
                                     Lumber = 12,
@@ -2742,7 +2091,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("b37d1706-6740-4be6-8920-5085cbb3a0dd"),
+                                    BuildingId = new Guid("a1e29d5f-2c37-4509-8a74-3f425227b8d9"),
                                     Food = 3,
                                     Gold = 3,
                                     Lumber = 3,
@@ -2751,7 +2100,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("436acb3d-dcbc-4929-951a-e73dc87808cd"),
+                                    BuildingId = new Guid("aa702882-bdec-4e0d-b1c9-8851104c42cb"),
                                     Food = 2,
                                     Gold = 2,
                                     Lumber = 2,
@@ -2760,7 +2109,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("6dab033d-d597-492a-b0f3-91e854dd4317"),
+                                    BuildingId = new Guid("b6a59d14-ec22-4440-a81a-097716e691c4"),
                                     Food = 1,
                                     Gold = 1,
                                     Lumber = 1,
@@ -2769,7 +2118,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e071ed1d-65cf-4920-96b3-abc230f58a0e"),
+                                    BuildingId = new Guid("77612487-e9cf-43b5-bdf1-a6b2757f0b33"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -2778,7 +2127,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("762af7ad-0d6c-488e-9b9f-8d3e2e6318d4"),
+                                    BuildingId = new Guid("53e73e6c-73df-4ff7-ab9c-f6bf9de5699c"),
                                     Food = 7,
                                     Gold = 7,
                                     Lumber = 7,
@@ -2787,7 +2136,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f4bc0110-1256-4386-8094-f9fc36b62f0f"),
+                                    BuildingId = new Guid("21512b79-b532-4eb9-8c37-927bda5d1804"),
                                     Food = 6,
                                     Gold = 6,
                                     Lumber = 6,
@@ -2796,7 +2145,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("d9181a46-9c5f-4ff0-b41b-c0cb06c8cfb3"),
+                                    BuildingId = new Guid("94411122-cd71-4109-bcdd-2b7cfe670cf6"),
                                     Food = 5,
                                     Gold = 5,
                                     Lumber = 5,
@@ -2805,7 +2154,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("71fd0c56-fb7b-4808-9e02-407bfb00915d"),
+                                    BuildingId = new Guid("1e7c6a79-99c8-4b78-84f8-9f65e75444ba"),
                                     Food = 4,
                                     Gold = 4,
                                     Lumber = 4,
@@ -2814,7 +2163,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("652639ee-a52e-418d-9f20-1cce64314542"),
+                                    BuildingId = new Guid("9a44a6f0-8f79-4eff-9e9a-97ffb262804a"),
                                     Food = 27,
                                     Gold = 27,
                                     Lumber = 27,
@@ -2823,7 +2172,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("411c5698-6c06-4711-b71d-5baa59198132"),
+                                    BuildingId = new Guid("8429bb7c-1673-4593-95e9-546838064bea"),
                                     Food = 26,
                                     Gold = 26,
                                     Lumber = 26,
@@ -2832,7 +2181,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("b6f53ce5-4bfe-47b2-9606-f3c1a3bf3cc5"),
+                                    BuildingId = new Guid("c1297f98-a911-4c2c-9eae-ab0892b1afe4"),
                                     Food = 25,
                                     Gold = 25,
                                     Lumber = 25,
@@ -2841,7 +2190,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("39e84f7b-ff36-4b40-9fb0-b280a037994d"),
+                                    BuildingId = new Guid("cdfa96e2-eb80-4a71-9b07-d587d1141583"),
                                     Food = 24,
                                     Gold = 24,
                                     Lumber = 24,
@@ -2850,7 +2199,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("d9ded73e-adc1-405b-97b4-2792f0c7a39a"),
+                                    BuildingId = new Guid("abfabe86-4d4a-4217-b056-c1828f506fd8"),
                                     Food = 31,
                                     Gold = 31,
                                     Lumber = 31,
@@ -2859,7 +2208,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("08826256-ba98-41f9-a378-86cd43360611"),
+                                    BuildingId = new Guid("69a7c55b-ff93-43ff-991b-28716bbb8eb2"),
                                     Food = 30,
                                     Gold = 30,
                                     Lumber = 30,
@@ -2868,7 +2217,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("d3dd9933-b426-41c0-8e3f-35221819d665"),
+                                    BuildingId = new Guid("a0d0a6d4-cec8-4a3f-84b9-ff198e0a918f"),
                                     Food = 29,
                                     Gold = 29,
                                     Lumber = 29,
@@ -2877,7 +2226,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("5d7d1c8f-ea32-4844-a6ba-e7d09a921e17"),
+                                    BuildingId = new Guid("6d76dca7-19b1-4fb4-bfed-74d157959838"),
                                     Food = 28,
                                     Gold = 28,
                                     Lumber = 28,
@@ -2886,7 +2235,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("575486d3-eefd-4b09-bf77-f6a3a26309b0"),
+                                    BuildingId = new Guid("aec0c807-e58c-4a5f-9c35-87fe6a4f537c"),
                                     Food = 19,
                                     Gold = 19,
                                     Lumber = 19,
@@ -2895,7 +2244,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("cd059a67-d44a-48ac-9952-b588b4e617df"),
+                                    BuildingId = new Guid("357b2c1a-4765-484e-ad35-82650482fbb6"),
                                     Food = 18,
                                     Gold = 18,
                                     Lumber = 18,
@@ -2904,7 +2253,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("9c772868-079a-4e07-a4de-889dfd596095"),
+                                    BuildingId = new Guid("a8a48170-db0b-4046-a7ac-fee0c99e7cfb"),
                                     Food = 17,
                                     Gold = 17,
                                     Lumber = 17,
@@ -2913,7 +2262,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("74d0ed00-acee-4bd1-9785-24f01c14807f"),
+                                    BuildingId = new Guid("f6e3833b-724f-4ce0-85ed-acbab08f428b"),
                                     Food = 16,
                                     Gold = 16,
                                     Lumber = 16,
@@ -2922,7 +2271,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("b54223e6-83fc-4552-a0cb-8e17602ae2d7"),
+                                    BuildingId = new Guid("eac9bb21-2f91-4406-b5bd-a2cb54b3c5c0"),
                                     Food = 23,
                                     Gold = 23,
                                     Lumber = 23,
@@ -2931,7 +2280,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("5fd9bf3c-63be-444d-910b-a2305c4893b2"),
+                                    BuildingId = new Guid("c1030dc7-314e-4292-8307-5d87e4ae7c55"),
                                     Food = 22,
                                     Gold = 22,
                                     Lumber = 22,
@@ -2940,7 +2289,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("6c017d04-c259-4893-8dab-2538bc5f21f3"),
+                                    BuildingId = new Guid("1cbe2263-2d1b-4c3a-8610-2327ae11d9d4"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -2949,7 +2298,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("3549935d-ee59-4190-a8b3-ba238fba4444"),
+                                    BuildingId = new Guid("1207c282-da8e-4ba9-8a7e-1f4f403a3fa9"),
                                     Food = 20,
                                     Gold = 20,
                                     Lumber = 20,
@@ -2958,16 +2307,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("8d1e0859-0eaf-44c9-8062-585f0c5f53ec"),
-                                    Food = 13,
-                                    Gold = 13,
-                                    Lumber = 13,
-                                    Metal = 13,
-                                    Stone = 13
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a39b1687-7e34-496b-910b-b009e08a9a0b"),
+                                    BuildingId = new Guid("f2c3ea31-09ee-4c0c-a528-e4a6f33cebf6"),
                                     Food = 12,
                                     Gold = 12,
                                     Lumber = 12,
@@ -2976,7 +2316,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("4f829840-aee1-42e9-9656-f53cb6be09db"),
+                                    BuildingId = new Guid("b40529ca-90ce-4388-a53d-a9cb2ff8816e"),
                                     Food = 3,
                                     Gold = 3,
                                     Lumber = 3,
@@ -2985,7 +2325,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e753ffd0-cdd7-41a9-be27-0c69fce0e3aa"),
+                                    BuildingId = new Guid("937feb33-a2a3-4d12-846c-0e3bab45b277"),
                                     Food = 2,
                                     Gold = 2,
                                     Lumber = 2,
@@ -2994,7 +2334,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("0ab2f652-25f0-4761-8e6a-05fb6c70819f"),
+                                    BuildingId = new Guid("9343cc5d-d692-428a-bb31-d400d089957b"),
                                     Food = 1,
                                     Gold = 1,
                                     Lumber = 1,
@@ -3003,7 +2343,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("4634f611-a599-478a-af99-27bf3b57a399"),
+                                    BuildingId = new Guid("0a99fe94-cb60-4c53-be91-109ecd2c2518"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -3012,7 +2352,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e6457b56-4d1a-4e23-a913-9ec5386b33da"),
+                                    BuildingId = new Guid("305ac3cb-2b6f-4bf3-a24e-64c3fe3bf13d"),
                                     Food = 7,
                                     Gold = 7,
                                     Lumber = 7,
@@ -3021,7 +2361,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("cc936353-9ced-4af3-84d9-a78aa94d43ee"),
+                                    BuildingId = new Guid("6c21abe2-51f5-4d87-a528-923e49047317"),
                                     Food = 6,
                                     Gold = 6,
                                     Lumber = 6,
@@ -3030,7 +2370,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("320dad54-be62-4cf0-b013-63567ca9a57f"),
+                                    BuildingId = new Guid("5e03bfc4-245c-4fae-8fb8-3529b1544140"),
                                     Food = 5,
                                     Gold = 5,
                                     Lumber = 5,
@@ -3039,7 +2379,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("7864e266-4bf8-4c3f-8c51-df9a64280b72"),
+                                    BuildingId = new Guid("a3ec3ad8-aeab-4d98-890f-b5bb49c2882a"),
                                     Food = 4,
                                     Gold = 4,
                                     Lumber = 4,
@@ -3048,7 +2388,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("4408100c-880d-4f77-8c03-181570784f85"),
+                                    BuildingId = new Guid("6a6d6df8-b869-42fb-bec9-b7b411fd2d4d"),
                                     Food = 27,
                                     Gold = 27,
                                     Lumber = 27,
@@ -3057,7 +2397,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("2fbc9eda-f6b5-4509-b8a6-97adf98564bb"),
+                                    BuildingId = new Guid("f6d7e2f6-6f74-46d6-9ed7-ce31c944d198"),
                                     Food = 26,
                                     Gold = 26,
                                     Lumber = 26,
@@ -3066,7 +2406,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("655dc658-44d4-4b7e-8014-04b8fd5197ac"),
+                                    BuildingId = new Guid("c10c6337-a5e5-4f65-9b78-a008b3696744"),
                                     Food = 25,
                                     Gold = 25,
                                     Lumber = 25,
@@ -3075,7 +2415,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("a82c486d-fbc6-433e-9f62-1a8dbdbae5a8"),
+                                    BuildingId = new Guid("68351e6e-2831-47ae-aceb-c220002eb56c"),
                                     Food = 24,
                                     Gold = 24,
                                     Lumber = 24,
@@ -3084,7 +2424,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("ce136123-90ce-44e4-a2a4-4e2b10b239ef"),
+                                    BuildingId = new Guid("57ad6e92-278b-4834-925a-4487869bd3d5"),
                                     Food = 31,
                                     Gold = 31,
                                     Lumber = 31,
@@ -3093,7 +2433,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("8f5a9b69-f11c-4292-8512-26e0d687a048"),
+                                    BuildingId = new Guid("544905d6-289a-4973-8aca-acd5625aa72e"),
                                     Food = 30,
                                     Gold = 30,
                                     Lumber = 30,
@@ -3102,7 +2442,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("0f0ff134-026f-4029-97e6-bd225f74d2a3"),
+                                    BuildingId = new Guid("eb9e83e4-fa9b-45de-a9b3-76a8729a7347"),
                                     Food = 29,
                                     Gold = 29,
                                     Lumber = 29,
@@ -3111,7 +2451,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("c8259f7e-177c-43c7-b199-5d4586517d1e"),
+                                    BuildingId = new Guid("b64a4404-4c25-405a-a447-e64ca8d98c50"),
                                     Food = 28,
                                     Gold = 28,
                                     Lumber = 28,
@@ -3120,7 +2460,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e117c61e-d469-4c85-850e-be7af91cace0"),
+                                    BuildingId = new Guid("3f5d975e-196a-48c9-9a4d-78a8c121008a"),
                                     Food = 19,
                                     Gold = 19,
                                     Lumber = 19,
@@ -3129,7 +2469,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("87f980d0-1559-419f-b9ae-7f43d771748a"),
+                                    BuildingId = new Guid("b541c942-7c2d-452b-b6a8-5bb4dad009f2"),
                                     Food = 18,
                                     Gold = 18,
                                     Lumber = 18,
@@ -3138,7 +2478,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("d4f2d6eb-f1f0-473b-9b2d-d8fccd4547f1"),
+                                    BuildingId = new Guid("9207c336-02f6-4e63-8a48-bbba0d3dac0a"),
                                     Food = 17,
                                     Gold = 17,
                                     Lumber = 17,
@@ -3147,7 +2487,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("ecb32f32-9909-40d4-87ff-5a125873f596"),
+                                    BuildingId = new Guid("7e67e97f-6496-4df3-9af2-9e8e6ffb9280"),
                                     Food = 16,
                                     Gold = 16,
                                     Lumber = 16,
@@ -3156,7 +2496,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f6ee4eef-6131-4279-877d-4c87956ee9a8"),
+                                    BuildingId = new Guid("191f8d84-4a55-404b-b790-33e4dcd24077"),
                                     Food = 23,
                                     Gold = 23,
                                     Lumber = 23,
@@ -3165,7 +2505,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("40352951-701f-4767-8ec9-77db079f6faf"),
+                                    BuildingId = new Guid("99c663b4-b322-4493-b241-94fd9c45147c"),
                                     Food = 22,
                                     Gold = 22,
                                     Lumber = 22,
@@ -3174,7 +2514,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e2453bbb-d8f7-4743-a372-4f60e1b524fe"),
+                                    BuildingId = new Guid("1ac03dcf-e453-43e6-bc7b-c01a5ec82760"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -3183,7 +2523,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("724e5d4b-d3d3-460f-8bd7-7fd201996f6b"),
+                                    BuildingId = new Guid("c122e004-7196-4f8f-8038-50a96097467b"),
                                     Food = 20,
                                     Gold = 20,
                                     Lumber = 20,
@@ -3192,16 +2532,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("3e881d35-3ac5-4caf-a6a7-23a0def3a0d6"),
-                                    Food = 13,
-                                    Gold = 13,
-                                    Lumber = 13,
-                                    Metal = 13,
-                                    Stone = 13
-                                },
-                                new
-                                {
-                                    ResourceBuildingId = new Guid("a95e7cd8-7a91-417f-98a8-2abe5a85f92c"),
+                                    BuildingId = new Guid("e4d4395f-aa76-48d4-aabe-b4468e1bf9b5"),
                                     Food = 12,
                                     Gold = 12,
                                     Lumber = 12,
@@ -3210,7 +2541,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("fd48cfd7-e7f7-4afd-9f96-20203796e1ec"),
+                                    BuildingId = new Guid("3396bf28-f455-4f5b-8d38-0466c48d119a"),
                                     Food = 3,
                                     Gold = 3,
                                     Lumber = 3,
@@ -3219,7 +2550,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("e07b61e8-0dc4-45d0-8c85-49107d9271b3"),
+                                    BuildingId = new Guid("94248d08-5c2d-4a77-9f17-402d1e8103f5"),
                                     Food = 2,
                                     Gold = 2,
                                     Lumber = 2,
@@ -3228,7 +2559,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f6eee8c8-08b5-4766-99f2-2f8bcac69699"),
+                                    BuildingId = new Guid("5b52be58-aa7d-404c-a45b-a334915457c5"),
                                     Food = 1,
                                     Gold = 1,
                                     Lumber = 1,
@@ -3237,7 +2568,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("9f63d511-2bdf-4234-b4fa-e2af7f7813aa"),
+                                    BuildingId = new Guid("70bd92be-3fa1-42a6-9d00-efb5cfd40598"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -3246,7 +2577,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("435e9a78-9048-45dc-bd05-76ed7bd0fc5e"),
+                                    BuildingId = new Guid("3ba0ec84-b2be-413e-97b7-0470030c9148"),
                                     Food = 7,
                                     Gold = 7,
                                     Lumber = 7,
@@ -3255,7 +2586,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("137c626c-1a36-471b-80b1-aef65a1ef30a"),
+                                    BuildingId = new Guid("93ab61fb-52b4-49bb-80cc-16bba25d062d"),
                                     Food = 6,
                                     Gold = 6,
                                     Lumber = 6,
@@ -3264,7 +2595,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("40760dce-35cd-4fe9-b074-66adfe8136a1"),
+                                    BuildingId = new Guid("ebff94c5-461d-4fd2-9eff-f4602105a1df"),
                                     Food = 5,
                                     Gold = 5,
                                     Lumber = 5,
@@ -3273,7 +2604,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("074f1e6f-4c69-4b8c-b979-cf4b940463c8"),
+                                    BuildingId = new Guid("9f5a3744-9070-4a83-9fa6-821527bf3f9d"),
                                     Food = 4,
                                     Gold = 4,
                                     Lumber = 4,
@@ -3282,7 +2613,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("243c2a72-3ed6-4c7a-9beb-2f80f09a080b"),
+                                    BuildingId = new Guid("7a642e7e-c875-49ab-a5e4-48f13a038f04"),
                                     Food = 27,
                                     Gold = 27,
                                     Lumber = 27,
@@ -3291,7 +2622,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("9c889bdd-7238-46a5-b570-d5e5c700198d"),
+                                    BuildingId = new Guid("6629022e-fdaa-4026-a2d2-66c33297ca39"),
                                     Food = 26,
                                     Gold = 26,
                                     Lumber = 26,
@@ -3300,7 +2631,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("12e8eb04-f95a-4ccf-8bc0-6d7af847f4e7"),
+                                    BuildingId = new Guid("32181e33-3c75-40d3-ae3c-720c52fad786"),
                                     Food = 25,
                                     Gold = 25,
                                     Lumber = 25,
@@ -3309,7 +2640,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("807c91ba-a0d6-43e5-ae69-c43eb4dcc292"),
+                                    BuildingId = new Guid("02f43c31-448e-4154-9625-5cd00f29ce8b"),
                                     Food = 24,
                                     Gold = 24,
                                     Lumber = 24,
@@ -3318,7 +2649,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("1e278c1a-3d4a-490e-8b4c-cb1dfe2b4ea3"),
+                                    BuildingId = new Guid("52d3767a-f084-4e38-aa30-9dc6a52575c3"),
                                     Food = 31,
                                     Gold = 31,
                                     Lumber = 31,
@@ -3327,7 +2658,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("b26668df-e411-4d20-9278-3973082df4bb"),
+                                    BuildingId = new Guid("f345765d-b596-46a1-bbce-2224e0d6fa98"),
                                     Food = 30,
                                     Gold = 30,
                                     Lumber = 30,
@@ -3336,7 +2667,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("4ba2ff5e-841d-4a26-ab3d-18694152ef71"),
+                                    BuildingId = new Guid("7ad72cd3-2821-4ced-b6bb-81e1809bc009"),
                                     Food = 29,
                                     Gold = 29,
                                     Lumber = 29,
@@ -3345,7 +2676,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("42041498-67d6-4515-ab05-941747067622"),
+                                    BuildingId = new Guid("2ecb2335-eb9f-4e7d-9c7e-9cc0044bddd2"),
                                     Food = 28,
                                     Gold = 28,
                                     Lumber = 28,
@@ -3354,7 +2685,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("4e876d71-4f16-4b1f-b6d3-4af477625804"),
+                                    BuildingId = new Guid("7187e6b4-bccd-4eb6-8014-afd89d83d307"),
                                     Food = 19,
                                     Gold = 19,
                                     Lumber = 19,
@@ -3363,7 +2694,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("82dcc9a2-e80b-4196-b3c8-b8b55718a5d4"),
+                                    BuildingId = new Guid("6360c3bc-5b68-4305-8339-43abf9a561f5"),
                                     Food = 18,
                                     Gold = 18,
                                     Lumber = 18,
@@ -3372,7 +2703,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("c4ccd62b-77c3-4e9a-baf4-cbbe26fd5aee"),
+                                    BuildingId = new Guid("648c25e6-c591-4006-abe0-e20581d7d553"),
                                     Food = 17,
                                     Gold = 17,
                                     Lumber = 17,
@@ -3381,7 +2712,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f77998c4-61a7-4e98-9c24-c5b2b9796527"),
+                                    BuildingId = new Guid("00c44ffa-0a08-4a24-aa27-b49726b0b6b9"),
                                     Food = 16,
                                     Gold = 16,
                                     Lumber = 16,
@@ -3390,7 +2721,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("1b090673-b9ca-42f4-b11a-8019885eb2da"),
+                                    BuildingId = new Guid("a1ea1fc6-c08b-44a8-827f-f58b5ac8ef3d"),
                                     Food = 23,
                                     Gold = 23,
                                     Lumber = 23,
@@ -3399,7 +2730,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("1ab065c3-d009-481b-9d3a-6e3feacb5f86"),
+                                    BuildingId = new Guid("a409d292-7cf4-48ed-9d9e-96f22b1acde5"),
                                     Food = 22,
                                     Gold = 22,
                                     Lumber = 22,
@@ -3408,7 +2739,7 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("87fe1e8d-7040-42f6-9cc9-04ded83f1f0e"),
+                                    BuildingId = new Guid("0c09daa5-0a1a-42a5-9e4d-005a10610711"),
                                     Food = 0,
                                     Gold = 0,
                                     Lumber = 0,
@@ -3417,7 +2748,682 @@ namespace Yooresh.Infrastructure.Migrations
                                 },
                                 new
                                 {
-                                    ResourceBuildingId = new Guid("f898f271-8def-472e-b1c6-52fa1f108842"),
+                                    BuildingId = new Guid("e56e4164-0149-4913-8ded-9e8b6b67b218"),
+                                    Food = 20,
+                                    Gold = 20,
+                                    Lumber = 20,
+                                    Metal = 20,
+                                    Stone = 20
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ca2be18d-e1e0-4afa-9f97-1eda67a8a83b"),
+                                    Food = 12,
+                                    Gold = 12,
+                                    Lumber = 12,
+                                    Metal = 12,
+                                    Stone = 12
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("7ab049fc-227b-43a4-b539-1e97abf0993b"),
+                                    Food = 3,
+                                    Gold = 3,
+                                    Lumber = 3,
+                                    Metal = 3,
+                                    Stone = 3
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("e7de480f-fdc8-46f2-8832-c5e02a895ce6"),
+                                    Food = 2,
+                                    Gold = 2,
+                                    Lumber = 2,
+                                    Metal = 2,
+                                    Stone = 2
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("0474bad5-9cf8-4729-be0d-505819cb2590"),
+                                    Food = 1,
+                                    Gold = 1,
+                                    Lumber = 1,
+                                    Metal = 1,
+                                    Stone = 1
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("8737a844-6be6-4f9d-8b4d-35afa8511a86"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("9e41a575-b042-4c91-b5ae-a1dc4e074501"),
+                                    Food = 7,
+                                    Gold = 7,
+                                    Lumber = 7,
+                                    Metal = 7,
+                                    Stone = 7
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("7ba85d05-d1b2-478e-bafa-ab1a698b079f"),
+                                    Food = 6,
+                                    Gold = 6,
+                                    Lumber = 6,
+                                    Metal = 6,
+                                    Stone = 6
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("25fd995d-96fd-41d6-b6be-900c82c391f8"),
+                                    Food = 5,
+                                    Gold = 5,
+                                    Lumber = 5,
+                                    Metal = 5,
+                                    Stone = 5
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("169fc59e-fde7-43da-8926-c24977f1f520"),
+                                    Food = 4,
+                                    Gold = 4,
+                                    Lumber = 4,
+                                    Metal = 4,
+                                    Stone = 4
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("add69fc0-caff-42f8-833f-ceea80f533a5"),
+                                    Food = 27,
+                                    Gold = 27,
+                                    Lumber = 27,
+                                    Metal = 27,
+                                    Stone = 27
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("0a913428-2e16-4945-97ae-5715f2ce030e"),
+                                    Food = 26,
+                                    Gold = 26,
+                                    Lumber = 26,
+                                    Metal = 26,
+                                    Stone = 26
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("033ac0d1-fd86-4ea3-a160-49d05c896e3d"),
+                                    Food = 25,
+                                    Gold = 25,
+                                    Lumber = 25,
+                                    Metal = 25,
+                                    Stone = 25
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ba4359b9-965c-4e67-9ed3-d6df19dc3a6e"),
+                                    Food = 24,
+                                    Gold = 24,
+                                    Lumber = 24,
+                                    Metal = 24,
+                                    Stone = 24
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("c0d9a43a-14c7-49f2-b11f-92cc83411f17"),
+                                    Food = 31,
+                                    Gold = 31,
+                                    Lumber = 31,
+                                    Metal = 31,
+                                    Stone = 31
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("9a9d3b9a-1f3c-44cc-ac70-4086fd151469"),
+                                    Food = 30,
+                                    Gold = 30,
+                                    Lumber = 30,
+                                    Metal = 30,
+                                    Stone = 30
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("f352c9fc-baaf-4a75-8030-32dffc9c9512"),
+                                    Food = 29,
+                                    Gold = 29,
+                                    Lumber = 29,
+                                    Metal = 29,
+                                    Stone = 29
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("1d67631c-a3d8-4548-a9f2-5405040c8e39"),
+                                    Food = 28,
+                                    Gold = 28,
+                                    Lumber = 28,
+                                    Metal = 28,
+                                    Stone = 28
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("a44e3e2f-4f00-40d2-8be6-49637631e737"),
+                                    Food = 19,
+                                    Gold = 19,
+                                    Lumber = 19,
+                                    Metal = 19,
+                                    Stone = 19
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("cd105217-2857-4ec8-9502-de6456c88a03"),
+                                    Food = 18,
+                                    Gold = 18,
+                                    Lumber = 18,
+                                    Metal = 18,
+                                    Stone = 18
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("709c0106-d06c-411a-9eec-352f42b3990c"),
+                                    Food = 17,
+                                    Gold = 17,
+                                    Lumber = 17,
+                                    Metal = 17,
+                                    Stone = 17
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ff6317c4-7ff1-48b9-8328-bbe36b3fb8d0"),
+                                    Food = 16,
+                                    Gold = 16,
+                                    Lumber = 16,
+                                    Metal = 16,
+                                    Stone = 16
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("a6000121-008d-43e8-bd19-d2e63d24b81c"),
+                                    Food = 23,
+                                    Gold = 23,
+                                    Lumber = 23,
+                                    Metal = 23,
+                                    Stone = 23
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("5732eeec-f58f-4c46-8a9c-aee2e9b2ac7d"),
+                                    Food = 22,
+                                    Gold = 22,
+                                    Lumber = 22,
+                                    Metal = 22,
+                                    Stone = 22
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("4b540e35-f77f-4684-989c-e10c42881956"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("4586f813-4966-490a-803f-7e09128f34f0"),
+                                    Food = 20,
+                                    Gold = 20,
+                                    Lumber = 20,
+                                    Metal = 20,
+                                    Stone = 20
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("71101885-0649-4714-a217-8db19374c3fc"),
+                                    Food = 12,
+                                    Gold = 12,
+                                    Lumber = 12,
+                                    Metal = 12,
+                                    Stone = 12
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ec40e968-5781-4c30-9370-c403e28b83ba"),
+                                    Food = 3,
+                                    Gold = 3,
+                                    Lumber = 3,
+                                    Metal = 3,
+                                    Stone = 3
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("3eb817be-8a90-40b9-9de2-6637c3ea9611"),
+                                    Food = 2,
+                                    Gold = 2,
+                                    Lumber = 2,
+                                    Metal = 2,
+                                    Stone = 2
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("d796baf9-a221-4eed-928e-bef70413cb8b"),
+                                    Food = 1,
+                                    Gold = 1,
+                                    Lumber = 1,
+                                    Metal = 1,
+                                    Stone = 1
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("b916ea59-d230-43b5-bb0f-38ac43ca3e4b"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("d54181e8-c026-4c67-89c4-f630b8976451"),
+                                    Food = 7,
+                                    Gold = 7,
+                                    Lumber = 7,
+                                    Metal = 7,
+                                    Stone = 7
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("af9e76f6-36d1-4fa4-9842-98d8d43ca36f"),
+                                    Food = 6,
+                                    Gold = 6,
+                                    Lumber = 6,
+                                    Metal = 6,
+                                    Stone = 6
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("dbe552f8-63ec-4b8a-bdcf-0e6cbaf78ee3"),
+                                    Food = 5,
+                                    Gold = 5,
+                                    Lumber = 5,
+                                    Metal = 5,
+                                    Stone = 5
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("38063ae8-17c8-49af-8066-eb68d628ab51"),
+                                    Food = 4,
+                                    Gold = 4,
+                                    Lumber = 4,
+                                    Metal = 4,
+                                    Stone = 4
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ebcbfd7b-53d6-4771-9917-622b71f43418"),
+                                    Food = 27,
+                                    Gold = 27,
+                                    Lumber = 27,
+                                    Metal = 27,
+                                    Stone = 27
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("379e5990-df49-4fe7-b4cd-156bb3f0716c"),
+                                    Food = 26,
+                                    Gold = 26,
+                                    Lumber = 26,
+                                    Metal = 26,
+                                    Stone = 26
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("f8e06239-8d0e-4907-a90c-e40c5f6b5c34"),
+                                    Food = 25,
+                                    Gold = 25,
+                                    Lumber = 25,
+                                    Metal = 25,
+                                    Stone = 25
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("e287c59c-25cc-4af5-b5fe-15bea97f6b29"),
+                                    Food = 24,
+                                    Gold = 24,
+                                    Lumber = 24,
+                                    Metal = 24,
+                                    Stone = 24
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("00ec9baf-a4a3-43ee-8d2b-468dfdf367c9"),
+                                    Food = 31,
+                                    Gold = 31,
+                                    Lumber = 31,
+                                    Metal = 31,
+                                    Stone = 31
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("47bcd37b-195e-4fa7-bcf5-7f2ec6f2b74c"),
+                                    Food = 30,
+                                    Gold = 30,
+                                    Lumber = 30,
+                                    Metal = 30,
+                                    Stone = 30
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("df44ccbc-2831-4847-8d5c-741b7db4dcfc"),
+                                    Food = 29,
+                                    Gold = 29,
+                                    Lumber = 29,
+                                    Metal = 29,
+                                    Stone = 29
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("46d59fef-f121-42c4-9067-5e6c94cfd438"),
+                                    Food = 28,
+                                    Gold = 28,
+                                    Lumber = 28,
+                                    Metal = 28,
+                                    Stone = 28
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("79b78f71-c992-44c1-a51a-9c009c816f8a"),
+                                    Food = 19,
+                                    Gold = 19,
+                                    Lumber = 19,
+                                    Metal = 19,
+                                    Stone = 19
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("75d03d1f-59bd-4648-b739-944214869388"),
+                                    Food = 18,
+                                    Gold = 18,
+                                    Lumber = 18,
+                                    Metal = 18,
+                                    Stone = 18
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("1c55b0ec-7610-4810-b5dc-c0c1daaafb6d"),
+                                    Food = 17,
+                                    Gold = 17,
+                                    Lumber = 17,
+                                    Metal = 17,
+                                    Stone = 17
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("6d883cc5-8cea-4a89-aec9-ef3248d14b01"),
+                                    Food = 16,
+                                    Gold = 16,
+                                    Lumber = 16,
+                                    Metal = 16,
+                                    Stone = 16
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("658d6d98-16ad-4102-91fa-d24c58def4d1"),
+                                    Food = 23,
+                                    Gold = 23,
+                                    Lumber = 23,
+                                    Metal = 23,
+                                    Stone = 23
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("6f7bbf8a-4b95-4f41-aa92-1dd31e57014c"),
+                                    Food = 22,
+                                    Gold = 22,
+                                    Lumber = 22,
+                                    Metal = 22,
+                                    Stone = 22
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("88e35b53-867f-4f49-917e-baf1e20fc341"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("e1dc0baf-6417-4734-bad7-ca471f5f3cdb"),
+                                    Food = 20,
+                                    Gold = 20,
+                                    Lumber = 20,
+                                    Metal = 20,
+                                    Stone = 20
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("f9927613-7d7f-47b0-b390-83fec5fd1c31"),
+                                    Food = 12,
+                                    Gold = 12,
+                                    Lumber = 12,
+                                    Metal = 12,
+                                    Stone = 12
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("9c0b6a3b-a963-478b-98da-a250b8fd6c6f"),
+                                    Food = 3,
+                                    Gold = 3,
+                                    Lumber = 3,
+                                    Metal = 3,
+                                    Stone = 3
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("26924f6f-efaa-4b42-80ee-3deb38558f22"),
+                                    Food = 2,
+                                    Gold = 2,
+                                    Lumber = 2,
+                                    Metal = 2,
+                                    Stone = 2
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("8e1032b2-e9bd-489f-80ad-d6da1cf1112d"),
+                                    Food = 1,
+                                    Gold = 1,
+                                    Lumber = 1,
+                                    Metal = 1,
+                                    Stone = 1
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("809f3aa5-5426-4bcc-9f89-3f52ac0dcb90"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("07fdde50-b1e6-45fa-abd2-e752b566f6b5"),
+                                    Food = 7,
+                                    Gold = 7,
+                                    Lumber = 7,
+                                    Metal = 7,
+                                    Stone = 7
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("618eb24b-2370-44e4-aeaa-6addb7c1e0bb"),
+                                    Food = 6,
+                                    Gold = 6,
+                                    Lumber = 6,
+                                    Metal = 6,
+                                    Stone = 6
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("084ee031-3131-4289-9fbf-42216cd17fcd"),
+                                    Food = 5,
+                                    Gold = 5,
+                                    Lumber = 5,
+                                    Metal = 5,
+                                    Stone = 5
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("89b68ea8-56f0-43b4-891a-f9fdc14ff5a1"),
+                                    Food = 4,
+                                    Gold = 4,
+                                    Lumber = 4,
+                                    Metal = 4,
+                                    Stone = 4
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("1ec79ca5-f0cf-4996-8d5c-7045259e0ba5"),
+                                    Food = 27,
+                                    Gold = 27,
+                                    Lumber = 27,
+                                    Metal = 27,
+                                    Stone = 27
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("46bbe45a-3bef-4121-9220-b991bf378189"),
+                                    Food = 26,
+                                    Gold = 26,
+                                    Lumber = 26,
+                                    Metal = 26,
+                                    Stone = 26
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("a8b961d2-fe4f-4b8c-9578-8c0bb9b32a7d"),
+                                    Food = 25,
+                                    Gold = 25,
+                                    Lumber = 25,
+                                    Metal = 25,
+                                    Stone = 25
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("0259c4b3-bc36-4187-a793-2cecd88d0f75"),
+                                    Food = 24,
+                                    Gold = 24,
+                                    Lumber = 24,
+                                    Metal = 24,
+                                    Stone = 24
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("9c0d6e3d-1744-45b8-bc3e-cf6e15121ef9"),
+                                    Food = 31,
+                                    Gold = 31,
+                                    Lumber = 31,
+                                    Metal = 31,
+                                    Stone = 31
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("9140f7bb-5bf9-4147-8cd6-1e8a467e3ab3"),
+                                    Food = 30,
+                                    Gold = 30,
+                                    Lumber = 30,
+                                    Metal = 30,
+                                    Stone = 30
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("102744c5-27a6-4d23-a538-1a6f742b953b"),
+                                    Food = 29,
+                                    Gold = 29,
+                                    Lumber = 29,
+                                    Metal = 29,
+                                    Stone = 29
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("3bdd802b-4d97-4558-8790-8033c7c37708"),
+                                    Food = 28,
+                                    Gold = 28,
+                                    Lumber = 28,
+                                    Metal = 28,
+                                    Stone = 28
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("8ccadf79-bea7-4224-83d9-6336e54431ab"),
+                                    Food = 19,
+                                    Gold = 19,
+                                    Lumber = 19,
+                                    Metal = 19,
+                                    Stone = 19
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("f34484d8-89ef-47a6-b004-3da8f1e7e44d"),
+                                    Food = 18,
+                                    Gold = 18,
+                                    Lumber = 18,
+                                    Metal = 18,
+                                    Stone = 18
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("e12f9f9b-f633-4c01-b012-3a5ea226cd0b"),
+                                    Food = 17,
+                                    Gold = 17,
+                                    Lumber = 17,
+                                    Metal = 17,
+                                    Stone = 17
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("166a72d9-2fff-4a58-845a-9ab4f0bcd06b"),
+                                    Food = 16,
+                                    Gold = 16,
+                                    Lumber = 16,
+                                    Metal = 16,
+                                    Stone = 16
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("08958648-1b1e-45ca-bd42-aa7ff32778b9"),
+                                    Food = 23,
+                                    Gold = 23,
+                                    Lumber = 23,
+                                    Metal = 23,
+                                    Stone = 23
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("2684a393-a8d3-4daf-8a5e-d7723dccd383"),
+                                    Food = 22,
+                                    Gold = 22,
+                                    Lumber = 22,
+                                    Metal = 22,
+                                    Stone = 22
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("52c0d87a-7fb3-48f7-88d5-1f9e5a06ac7d"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    BuildingId = new Guid("ea4df1fe-852e-4508-abd9-e39e7dffc713"),
                                     Food = 20,
                                     Gold = 20,
                                     Lumber = 20,
@@ -3426,13 +3432,17 @@ namespace Yooresh.Infrastructure.Migrations
                                 });
                         });
 
-                    b.Navigation("HourlyProduction")
-                        .IsRequired();
-
                     b.Navigation("Target");
 
                     b.Navigation("UpgradeCost")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Troops.Troop", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Villages.VillageTower", null)
+                        .WithMany("LoadedTroops")
+                        .HasForeignKey("VillageTowerId");
                 });
 
             modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
@@ -3488,6 +3498,2567 @@ namespace Yooresh.Infrastructure.Migrations
 
                     b.Navigation("Resource")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageBuilding", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", "Building")
+                        .WithMany()
+                        .HasForeignKey("BuildingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", "Village")
+                        .WithMany("VillageResourceBuildings")
+                        .HasForeignKey("VillageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Building");
+
+                    b.Navigation("Village");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageTower", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Tower", "Tower")
+                        .WithMany()
+                        .HasForeignKey("TowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", "Village")
+                        .WithOne("VillageTower")
+                        .HasForeignKey("Yooresh.Domain.Entities.Villages.VillageTower", "VillageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tower");
+
+                    b.Navigation("Village");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageWall", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Villages.Village", "Village")
+                        .WithOne("VillageWall")
+                        .HasForeignKey("Yooresh.Domain.Entities.Villages.VillageWall", "VillageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Wall", "Wall")
+                        .WithMany()
+                        .HasForeignKey("WallId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Village");
+
+                    b.Navigation("Wall");
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Farm", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.Farm", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("FarmId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("FarmId");
+
+                            b1.ToTable("Farm");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FarmId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    FarmId = new Guid("d37e1071-c448-4ea4-a83c-5ef225281005"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("5ac05b39-04bb-4186-bbea-5b1aa5abbeb6"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("864ae7f8-8262-415e-81c3-829a5659b040"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("e2986d7a-c2c0-4203-8b27-a72495b48732"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("3b5fbd6c-5646-43ae-a824-0c907aee804c"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("fc140b50-aaf7-4535-9de7-bb22a0d6e4d2"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("a5479db9-93e7-442d-8292-5bf69c02a1a5"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("6e7d7738-cd20-4443-a957-6bdbdc6e1108"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("d4ffd8e5-5ed4-49d3-a494-a4a0b69b68d5"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("dc6a35dd-4731-47b0-9090-b09777a76c15"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("406aa7aa-ad73-4c14-b144-6294607ecb6d"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("30a90be5-edef-4707-957b-606a985c0acc"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("54ca1260-d4ec-4a95-951d-b158c110e535"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("ae191e6e-bd74-43b9-8c75-e32c948ea1ff"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("a6cf1133-7581-47ee-b3da-c9c724708aac"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("b500aebc-c279-4f11-b6cd-e8cc78645e3a"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("3357a6dc-60a1-46e4-a046-01339f63ddb0"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("45512184-78ad-4d36-bd94-ab01bef6db7d"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("ae7ced42-d8db-43e4-8b68-819f2166fb7e"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("46d0d679-aa8a-441d-9508-8cd4344f26a8"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("4e2d47e5-cc3b-418e-a234-8f77a8986fc3"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("e5e359aa-9dec-4979-bc0c-f2064da24997"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("c337d2b6-d34a-49f4-8db1-1cfebefef4dc"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("76d01316-e693-4a29-8164-1b3904371ac7"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    FarmId = new Guid("ce06429a-7b41-4437-b2f4-0c6a15a04225"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.GoldMine", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.GoldMine", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("GoldMineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("GoldMineId");
+
+                            b1.ToTable("GoldMine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("GoldMineId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    GoldMineId = new Guid("9e4bb5b6-90da-434d-837d-8b0d0d88b9c4"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("a1e29d5f-2c37-4509-8a74-3f425227b8d9"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("aa702882-bdec-4e0d-b1c9-8851104c42cb"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("b6a59d14-ec22-4440-a81a-097716e691c4"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("77612487-e9cf-43b5-bdf1-a6b2757f0b33"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("53e73e6c-73df-4ff7-ab9c-f6bf9de5699c"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("21512b79-b532-4eb9-8c37-927bda5d1804"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("94411122-cd71-4109-bcdd-2b7cfe670cf6"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("1e7c6a79-99c8-4b78-84f8-9f65e75444ba"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("9a44a6f0-8f79-4eff-9e9a-97ffb262804a"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("8429bb7c-1673-4593-95e9-546838064bea"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("c1297f98-a911-4c2c-9eae-ab0892b1afe4"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("cdfa96e2-eb80-4a71-9b07-d587d1141583"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("abfabe86-4d4a-4217-b056-c1828f506fd8"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("69a7c55b-ff93-43ff-991b-28716bbb8eb2"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("a0d0a6d4-cec8-4a3f-84b9-ff198e0a918f"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("6d76dca7-19b1-4fb4-bfed-74d157959838"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("aec0c807-e58c-4a5f-9c35-87fe6a4f537c"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("357b2c1a-4765-484e-ad35-82650482fbb6"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("a8a48170-db0b-4046-a7ac-fee0c99e7cfb"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("f6e3833b-724f-4ce0-85ed-acbab08f428b"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("eac9bb21-2f91-4406-b5bd-a2cb54b3c5c0"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("c1030dc7-314e-4292-8307-5d87e4ae7c55"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("1cbe2263-2d1b-4c3a-8610-2327ae11d9d4"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    GoldMineId = new Guid("1207c282-da8e-4ba9-8a7e-1f4f403a3fa9"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.LumberMill", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.LumberMill", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("LumberMillId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("LumberMillId");
+
+                            b1.ToTable("LumberMill");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LumberMillId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    LumberMillId = new Guid("f2c3ea31-09ee-4c0c-a528-e4a6f33cebf6"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("b40529ca-90ce-4388-a53d-a9cb2ff8816e"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("937feb33-a2a3-4d12-846c-0e3bab45b277"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("9343cc5d-d692-428a-bb31-d400d089957b"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("0a99fe94-cb60-4c53-be91-109ecd2c2518"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("305ac3cb-2b6f-4bf3-a24e-64c3fe3bf13d"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("6c21abe2-51f5-4d87-a528-923e49047317"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("5e03bfc4-245c-4fae-8fb8-3529b1544140"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("a3ec3ad8-aeab-4d98-890f-b5bb49c2882a"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("6a6d6df8-b869-42fb-bec9-b7b411fd2d4d"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("f6d7e2f6-6f74-46d6-9ed7-ce31c944d198"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("c10c6337-a5e5-4f65-9b78-a008b3696744"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("68351e6e-2831-47ae-aceb-c220002eb56c"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("57ad6e92-278b-4834-925a-4487869bd3d5"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("544905d6-289a-4973-8aca-acd5625aa72e"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("eb9e83e4-fa9b-45de-a9b3-76a8729a7347"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("b64a4404-4c25-405a-a447-e64ca8d98c50"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("3f5d975e-196a-48c9-9a4d-78a8c121008a"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("b541c942-7c2d-452b-b6a8-5bb4dad009f2"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("9207c336-02f6-4e63-8a48-bbba0d3dac0a"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("7e67e97f-6496-4df3-9af2-9e8e6ffb9280"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("191f8d84-4a55-404b-b790-33e4dcd24077"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("99c663b4-b322-4493-b241-94fd9c45147c"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("1ac03dcf-e453-43e6-bc7b-c01a5ec82760"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    LumberMillId = new Guid("c122e004-7196-4f8f-8038-50a96097467b"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.MetalMine", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.MetalMine", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("MetalMineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("MetalMineId");
+
+                            b1.ToTable("MetalMine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MetalMineId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    MetalMineId = new Guid("e4d4395f-aa76-48d4-aabe-b4468e1bf9b5"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("3396bf28-f455-4f5b-8d38-0466c48d119a"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("94248d08-5c2d-4a77-9f17-402d1e8103f5"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("5b52be58-aa7d-404c-a45b-a334915457c5"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("70bd92be-3fa1-42a6-9d00-efb5cfd40598"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("3ba0ec84-b2be-413e-97b7-0470030c9148"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("93ab61fb-52b4-49bb-80cc-16bba25d062d"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("ebff94c5-461d-4fd2-9eff-f4602105a1df"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("9f5a3744-9070-4a83-9fa6-821527bf3f9d"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("7a642e7e-c875-49ab-a5e4-48f13a038f04"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("6629022e-fdaa-4026-a2d2-66c33297ca39"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("32181e33-3c75-40d3-ae3c-720c52fad786"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("02f43c31-448e-4154-9625-5cd00f29ce8b"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("52d3767a-f084-4e38-aa30-9dc6a52575c3"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("f345765d-b596-46a1-bbce-2224e0d6fa98"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("7ad72cd3-2821-4ced-b6bb-81e1809bc009"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("2ecb2335-eb9f-4e7d-9c7e-9cc0044bddd2"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("7187e6b4-bccd-4eb6-8014-afd89d83d307"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("6360c3bc-5b68-4305-8339-43abf9a561f5"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("648c25e6-c591-4006-abe0-e20581d7d553"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("00c44ffa-0a08-4a24-aa27-b49726b0b6b9"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("a1ea1fc6-c08b-44a8-827f-f58b5ac8ef3d"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("a409d292-7cf4-48ed-9d9e-96f22b1acde5"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("0c09daa5-0a1a-42a5-9e4d-005a10610711"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    MetalMineId = new Guid("e56e4164-0149-4913-8ded-9e8b6b67b218"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.StoneMine", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.StoneMine", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "HourlyProduction", b1 =>
+                        {
+                            b1.Property<Guid>("StoneMineId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("HourlyProductionStone");
+
+                            b1.HasKey("StoneMineId");
+
+                            b1.ToTable("StoneMine");
+
+                            b1.WithOwner()
+                                .HasForeignKey("StoneMineId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    StoneMineId = new Guid("ca2be18d-e1e0-4afa-9f97-1eda67a8a83b"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("7ab049fc-227b-43a4-b539-1e97abf0993b"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("e7de480f-fdc8-46f2-8832-c5e02a895ce6"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("0474bad5-9cf8-4729-be0d-505819cb2590"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("8737a844-6be6-4f9d-8b4d-35afa8511a86"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("9e41a575-b042-4c91-b5ae-a1dc4e074501"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("7ba85d05-d1b2-478e-bafa-ab1a698b079f"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("25fd995d-96fd-41d6-b6be-900c82c391f8"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("169fc59e-fde7-43da-8926-c24977f1f520"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("add69fc0-caff-42f8-833f-ceea80f533a5"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("0a913428-2e16-4945-97ae-5715f2ce030e"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("033ac0d1-fd86-4ea3-a160-49d05c896e3d"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("ba4359b9-965c-4e67-9ed3-d6df19dc3a6e"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("c0d9a43a-14c7-49f2-b11f-92cc83411f17"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("9a9d3b9a-1f3c-44cc-ac70-4086fd151469"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("f352c9fc-baaf-4a75-8030-32dffc9c9512"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("1d67631c-a3d8-4548-a9f2-5405040c8e39"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("a44e3e2f-4f00-40d2-8be6-49637631e737"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("cd105217-2857-4ec8-9502-de6456c88a03"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("709c0106-d06c-411a-9eec-352f42b3990c"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("ff6317c4-7ff1-48b9-8328-bbe36b3fb8d0"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("a6000121-008d-43e8-bd19-d2e63d24b81c"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("5732eeec-f58f-4c46-8a9c-aee2e9b2ac7d"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("4b540e35-f77f-4684-989c-e10c42881956"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    StoneMineId = new Guid("4586f813-4966-490a-803f-7e09128f34f0"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("HourlyProduction")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Tower", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.Tower", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Defense", "Defense", b1 =>
+                        {
+                            b1.Property<Guid>("TowerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("AgainstCavalry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstCavalry");
+
+                            b1.Property<int>("AgainstFlyingCavalry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstFlyingCavalry");
+
+                            b1.Property<int>("AgainstMage")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstMage");
+
+                            b1.Property<int>("AgainstMeleeInfantry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstMeleeInfantry");
+
+                            b1.Property<int>("AgainstRangeInfantry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstRangeInfantry");
+
+                            b1.Property<int>("AgainstSiegeUnit")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstSiegeUnit");
+
+                            b1.HasKey("TowerId");
+
+                            b1.ToTable("Tower");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TowerId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    TowerId = new Guid("71101885-0649-4714-a217-8db19374c3fc"),
+                                    AgainstCavalry = 2880,
+                                    AgainstFlyingCavalry = 2880,
+                                    AgainstMage = 2880,
+                                    AgainstMeleeInfantry = 2880,
+                                    AgainstRangeInfantry = 2880,
+                                    AgainstSiegeUnit = 576
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("ec40e968-5781-4c30-9370-c403e28b83ba"),
+                                    AgainstCavalry = 2645,
+                                    AgainstFlyingCavalry = 2645,
+                                    AgainstMage = 2645,
+                                    AgainstMeleeInfantry = 2645,
+                                    AgainstRangeInfantry = 2645,
+                                    AgainstSiegeUnit = 529
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("3eb817be-8a90-40b9-9de2-6637c3ea9611"),
+                                    AgainstCavalry = 2420,
+                                    AgainstFlyingCavalry = 2420,
+                                    AgainstMage = 2420,
+                                    AgainstMeleeInfantry = 2420,
+                                    AgainstRangeInfantry = 2420,
+                                    AgainstSiegeUnit = 484
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("d796baf9-a221-4eed-928e-bef70413cb8b"),
+                                    AgainstCavalry = 2205,
+                                    AgainstFlyingCavalry = 2205,
+                                    AgainstMage = 2205,
+                                    AgainstMeleeInfantry = 2205,
+                                    AgainstRangeInfantry = 2205,
+                                    AgainstSiegeUnit = 441
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("b916ea59-d230-43b5-bb0f-38ac43ca3e4b"),
+                                    AgainstCavalry = 2000,
+                                    AgainstFlyingCavalry = 2000,
+                                    AgainstMage = 2000,
+                                    AgainstMeleeInfantry = 2000,
+                                    AgainstRangeInfantry = 2000,
+                                    AgainstSiegeUnit = 400
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("d54181e8-c026-4c67-89c4-f630b8976451"),
+                                    AgainstCavalry = 1805,
+                                    AgainstFlyingCavalry = 1805,
+                                    AgainstMage = 1805,
+                                    AgainstMeleeInfantry = 1805,
+                                    AgainstRangeInfantry = 1805,
+                                    AgainstSiegeUnit = 361
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("af9e76f6-36d1-4fa4-9842-98d8d43ca36f"),
+                                    AgainstCavalry = 1620,
+                                    AgainstFlyingCavalry = 1620,
+                                    AgainstMage = 1620,
+                                    AgainstMeleeInfantry = 1620,
+                                    AgainstRangeInfantry = 1620,
+                                    AgainstSiegeUnit = 324
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("dbe552f8-63ec-4b8a-bdcf-0e6cbaf78ee3"),
+                                    AgainstCavalry = 1445,
+                                    AgainstFlyingCavalry = 1445,
+                                    AgainstMage = 1445,
+                                    AgainstMeleeInfantry = 1445,
+                                    AgainstRangeInfantry = 1445,
+                                    AgainstSiegeUnit = 289
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("38063ae8-17c8-49af-8066-eb68d628ab51"),
+                                    AgainstCavalry = 1280,
+                                    AgainstFlyingCavalry = 1280,
+                                    AgainstMage = 1280,
+                                    AgainstMeleeInfantry = 1280,
+                                    AgainstRangeInfantry = 1280,
+                                    AgainstSiegeUnit = 256
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("ebcbfd7b-53d6-4771-9917-622b71f43418"),
+                                    AgainstCavalry = 1125,
+                                    AgainstFlyingCavalry = 1125,
+                                    AgainstMage = 1125,
+                                    AgainstMeleeInfantry = 1125,
+                                    AgainstRangeInfantry = 1125,
+                                    AgainstSiegeUnit = 225
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("379e5990-df49-4fe7-b4cd-156bb3f0716c"),
+                                    AgainstCavalry = 980,
+                                    AgainstFlyingCavalry = 980,
+                                    AgainstMage = 980,
+                                    AgainstMeleeInfantry = 980,
+                                    AgainstRangeInfantry = 980,
+                                    AgainstSiegeUnit = 196
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("f8e06239-8d0e-4907-a90c-e40c5f6b5c34"),
+                                    AgainstCavalry = 845,
+                                    AgainstFlyingCavalry = 845,
+                                    AgainstMage = 845,
+                                    AgainstMeleeInfantry = 845,
+                                    AgainstRangeInfantry = 845,
+                                    AgainstSiegeUnit = 169
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("e287c59c-25cc-4af5-b5fe-15bea97f6b29"),
+                                    AgainstCavalry = 720,
+                                    AgainstFlyingCavalry = 720,
+                                    AgainstMage = 720,
+                                    AgainstMeleeInfantry = 720,
+                                    AgainstRangeInfantry = 720,
+                                    AgainstSiegeUnit = 144
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("00ec9baf-a4a3-43ee-8d2b-468dfdf367c9"),
+                                    AgainstCavalry = 605,
+                                    AgainstFlyingCavalry = 605,
+                                    AgainstMage = 605,
+                                    AgainstMeleeInfantry = 605,
+                                    AgainstRangeInfantry = 605,
+                                    AgainstSiegeUnit = 121
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("47bcd37b-195e-4fa7-bcf5-7f2ec6f2b74c"),
+                                    AgainstCavalry = 500,
+                                    AgainstFlyingCavalry = 500,
+                                    AgainstMage = 500,
+                                    AgainstMeleeInfantry = 500,
+                                    AgainstRangeInfantry = 500,
+                                    AgainstSiegeUnit = 100
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("df44ccbc-2831-4847-8d5c-741b7db4dcfc"),
+                                    AgainstCavalry = 405,
+                                    AgainstFlyingCavalry = 405,
+                                    AgainstMage = 405,
+                                    AgainstMeleeInfantry = 405,
+                                    AgainstRangeInfantry = 405,
+                                    AgainstSiegeUnit = 81
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("46d59fef-f121-42c4-9067-5e6c94cfd438"),
+                                    AgainstCavalry = 320,
+                                    AgainstFlyingCavalry = 320,
+                                    AgainstMage = 320,
+                                    AgainstMeleeInfantry = 320,
+                                    AgainstRangeInfantry = 320,
+                                    AgainstSiegeUnit = 64
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("79b78f71-c992-44c1-a51a-9c009c816f8a"),
+                                    AgainstCavalry = 245,
+                                    AgainstFlyingCavalry = 245,
+                                    AgainstMage = 245,
+                                    AgainstMeleeInfantry = 245,
+                                    AgainstRangeInfantry = 245,
+                                    AgainstSiegeUnit = 49
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("75d03d1f-59bd-4648-b739-944214869388"),
+                                    AgainstCavalry = 180,
+                                    AgainstFlyingCavalry = 180,
+                                    AgainstMage = 180,
+                                    AgainstMeleeInfantry = 180,
+                                    AgainstRangeInfantry = 180,
+                                    AgainstSiegeUnit = 36
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("1c55b0ec-7610-4810-b5dc-c0c1daaafb6d"),
+                                    AgainstCavalry = 125,
+                                    AgainstFlyingCavalry = 125,
+                                    AgainstMage = 125,
+                                    AgainstMeleeInfantry = 125,
+                                    AgainstRangeInfantry = 125,
+                                    AgainstSiegeUnit = 25
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("6d883cc5-8cea-4a89-aec9-ef3248d14b01"),
+                                    AgainstCavalry = 80,
+                                    AgainstFlyingCavalry = 80,
+                                    AgainstMage = 80,
+                                    AgainstMeleeInfantry = 80,
+                                    AgainstRangeInfantry = 80,
+                                    AgainstSiegeUnit = 16
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("658d6d98-16ad-4102-91fa-d24c58def4d1"),
+                                    AgainstCavalry = 45,
+                                    AgainstFlyingCavalry = 45,
+                                    AgainstMage = 45,
+                                    AgainstMeleeInfantry = 45,
+                                    AgainstRangeInfantry = 45,
+                                    AgainstSiegeUnit = 9
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("6f7bbf8a-4b95-4f41-aa92-1dd31e57014c"),
+                                    AgainstCavalry = 20,
+                                    AgainstFlyingCavalry = 20,
+                                    AgainstMage = 20,
+                                    AgainstMeleeInfantry = 20,
+                                    AgainstRangeInfantry = 20,
+                                    AgainstSiegeUnit = 4
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("88e35b53-867f-4f49-917e-baf1e20fc341"),
+                                    AgainstCavalry = 5,
+                                    AgainstFlyingCavalry = 5,
+                                    AgainstMage = 5,
+                                    AgainstMeleeInfantry = 5,
+                                    AgainstRangeInfantry = 5,
+                                    AgainstSiegeUnit = 1
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("e1dc0baf-6417-4734-bad7-ca471f5f3cdb"),
+                                    AgainstCavalry = 0,
+                                    AgainstFlyingCavalry = 0,
+                                    AgainstMage = 0,
+                                    AgainstMeleeInfantry = 0,
+                                    AgainstRangeInfantry = 0,
+                                    AgainstSiegeUnit = 0
+                                });
+                        });
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "RepairCost", b1 =>
+                        {
+                            b1.Property<Guid>("TowerId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostStone");
+
+                            b1.HasKey("TowerId");
+
+                            b1.ToTable("Tower");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TowerId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    TowerId = new Guid("71101885-0649-4714-a217-8db19374c3fc"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("ec40e968-5781-4c30-9370-c403e28b83ba"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("3eb817be-8a90-40b9-9de2-6637c3ea9611"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("d796baf9-a221-4eed-928e-bef70413cb8b"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("b916ea59-d230-43b5-bb0f-38ac43ca3e4b"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("d54181e8-c026-4c67-89c4-f630b8976451"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("af9e76f6-36d1-4fa4-9842-98d8d43ca36f"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("dbe552f8-63ec-4b8a-bdcf-0e6cbaf78ee3"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("38063ae8-17c8-49af-8066-eb68d628ab51"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("ebcbfd7b-53d6-4771-9917-622b71f43418"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("379e5990-df49-4fe7-b4cd-156bb3f0716c"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("f8e06239-8d0e-4907-a90c-e40c5f6b5c34"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("e287c59c-25cc-4af5-b5fe-15bea97f6b29"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("00ec9baf-a4a3-43ee-8d2b-468dfdf367c9"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("47bcd37b-195e-4fa7-bcf5-7f2ec6f2b74c"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("df44ccbc-2831-4847-8d5c-741b7db4dcfc"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("46d59fef-f121-42c4-9067-5e6c94cfd438"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("79b78f71-c992-44c1-a51a-9c009c816f8a"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("75d03d1f-59bd-4648-b739-944214869388"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("1c55b0ec-7610-4810-b5dc-c0c1daaafb6d"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("6d883cc5-8cea-4a89-aec9-ef3248d14b01"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("658d6d98-16ad-4102-91fa-d24c58def4d1"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("6f7bbf8a-4b95-4f41-aa92-1dd31e57014c"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("88e35b53-867f-4f49-917e-baf1e20fc341"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    TowerId = new Guid("e1dc0baf-6417-4734-bad7-ca471f5f3cdb"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("Defense")
+                        .IsRequired();
+
+                    b.Navigation("RepairCost")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Buildings.Wall", b =>
+                {
+                    b.HasOne("Yooresh.Domain.Entities.Buildings.Building", null)
+                        .WithOne()
+                        .HasForeignKey("Yooresh.Domain.Entities.Buildings.Wall", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Defense", "Defense", b1 =>
+                        {
+                            b1.Property<Guid>("WallId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("AgainstCavalry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstCavalry");
+
+                            b1.Property<int>("AgainstFlyingCavalry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstFlyingCavalry");
+
+                            b1.Property<int>("AgainstMage")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstMage");
+
+                            b1.Property<int>("AgainstMeleeInfantry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstMeleeInfantry");
+
+                            b1.Property<int>("AgainstRangeInfantry")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstRangeInfantry");
+
+                            b1.Property<int>("AgainstSiegeUnit")
+                                .HasColumnType("int")
+                                .HasColumnName("DefenseAgainstSiegeUnit");
+
+                            b1.HasKey("WallId");
+
+                            b1.ToTable("Wall");
+
+                            b1.WithOwner()
+                                .HasForeignKey("WallId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    WallId = new Guid("f9927613-7d7f-47b0-b390-83fec5fd1c31"),
+                                    AgainstCavalry = 2880,
+                                    AgainstFlyingCavalry = 2880,
+                                    AgainstMage = 2880,
+                                    AgainstMeleeInfantry = 2880,
+                                    AgainstRangeInfantry = 2880,
+                                    AgainstSiegeUnit = 576
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9c0b6a3b-a963-478b-98da-a250b8fd6c6f"),
+                                    AgainstCavalry = 2645,
+                                    AgainstFlyingCavalry = 2645,
+                                    AgainstMage = 2645,
+                                    AgainstMeleeInfantry = 2645,
+                                    AgainstRangeInfantry = 2645,
+                                    AgainstSiegeUnit = 529
+                                },
+                                new
+                                {
+                                    WallId = new Guid("26924f6f-efaa-4b42-80ee-3deb38558f22"),
+                                    AgainstCavalry = 2420,
+                                    AgainstFlyingCavalry = 2420,
+                                    AgainstMage = 2420,
+                                    AgainstMeleeInfantry = 2420,
+                                    AgainstRangeInfantry = 2420,
+                                    AgainstSiegeUnit = 484
+                                },
+                                new
+                                {
+                                    WallId = new Guid("8e1032b2-e9bd-489f-80ad-d6da1cf1112d"),
+                                    AgainstCavalry = 2205,
+                                    AgainstFlyingCavalry = 2205,
+                                    AgainstMage = 2205,
+                                    AgainstMeleeInfantry = 2205,
+                                    AgainstRangeInfantry = 2205,
+                                    AgainstSiegeUnit = 441
+                                },
+                                new
+                                {
+                                    WallId = new Guid("809f3aa5-5426-4bcc-9f89-3f52ac0dcb90"),
+                                    AgainstCavalry = 2000,
+                                    AgainstFlyingCavalry = 2000,
+                                    AgainstMage = 2000,
+                                    AgainstMeleeInfantry = 2000,
+                                    AgainstRangeInfantry = 2000,
+                                    AgainstSiegeUnit = 400
+                                },
+                                new
+                                {
+                                    WallId = new Guid("07fdde50-b1e6-45fa-abd2-e752b566f6b5"),
+                                    AgainstCavalry = 1805,
+                                    AgainstFlyingCavalry = 1805,
+                                    AgainstMage = 1805,
+                                    AgainstMeleeInfantry = 1805,
+                                    AgainstRangeInfantry = 1805,
+                                    AgainstSiegeUnit = 361
+                                },
+                                new
+                                {
+                                    WallId = new Guid("618eb24b-2370-44e4-aeaa-6addb7c1e0bb"),
+                                    AgainstCavalry = 1620,
+                                    AgainstFlyingCavalry = 1620,
+                                    AgainstMage = 1620,
+                                    AgainstMeleeInfantry = 1620,
+                                    AgainstRangeInfantry = 1620,
+                                    AgainstSiegeUnit = 324
+                                },
+                                new
+                                {
+                                    WallId = new Guid("084ee031-3131-4289-9fbf-42216cd17fcd"),
+                                    AgainstCavalry = 1445,
+                                    AgainstFlyingCavalry = 1445,
+                                    AgainstMage = 1445,
+                                    AgainstMeleeInfantry = 1445,
+                                    AgainstRangeInfantry = 1445,
+                                    AgainstSiegeUnit = 289
+                                },
+                                new
+                                {
+                                    WallId = new Guid("89b68ea8-56f0-43b4-891a-f9fdc14ff5a1"),
+                                    AgainstCavalry = 1280,
+                                    AgainstFlyingCavalry = 1280,
+                                    AgainstMage = 1280,
+                                    AgainstMeleeInfantry = 1280,
+                                    AgainstRangeInfantry = 1280,
+                                    AgainstSiegeUnit = 256
+                                },
+                                new
+                                {
+                                    WallId = new Guid("1ec79ca5-f0cf-4996-8d5c-7045259e0ba5"),
+                                    AgainstCavalry = 1125,
+                                    AgainstFlyingCavalry = 1125,
+                                    AgainstMage = 1125,
+                                    AgainstMeleeInfantry = 1125,
+                                    AgainstRangeInfantry = 1125,
+                                    AgainstSiegeUnit = 225
+                                },
+                                new
+                                {
+                                    WallId = new Guid("46bbe45a-3bef-4121-9220-b991bf378189"),
+                                    AgainstCavalry = 980,
+                                    AgainstFlyingCavalry = 980,
+                                    AgainstMage = 980,
+                                    AgainstMeleeInfantry = 980,
+                                    AgainstRangeInfantry = 980,
+                                    AgainstSiegeUnit = 196
+                                },
+                                new
+                                {
+                                    WallId = new Guid("a8b961d2-fe4f-4b8c-9578-8c0bb9b32a7d"),
+                                    AgainstCavalry = 845,
+                                    AgainstFlyingCavalry = 845,
+                                    AgainstMage = 845,
+                                    AgainstMeleeInfantry = 845,
+                                    AgainstRangeInfantry = 845,
+                                    AgainstSiegeUnit = 169
+                                },
+                                new
+                                {
+                                    WallId = new Guid("0259c4b3-bc36-4187-a793-2cecd88d0f75"),
+                                    AgainstCavalry = 720,
+                                    AgainstFlyingCavalry = 720,
+                                    AgainstMage = 720,
+                                    AgainstMeleeInfantry = 720,
+                                    AgainstRangeInfantry = 720,
+                                    AgainstSiegeUnit = 144
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9c0d6e3d-1744-45b8-bc3e-cf6e15121ef9"),
+                                    AgainstCavalry = 605,
+                                    AgainstFlyingCavalry = 605,
+                                    AgainstMage = 605,
+                                    AgainstMeleeInfantry = 605,
+                                    AgainstRangeInfantry = 605,
+                                    AgainstSiegeUnit = 121
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9140f7bb-5bf9-4147-8cd6-1e8a467e3ab3"),
+                                    AgainstCavalry = 500,
+                                    AgainstFlyingCavalry = 500,
+                                    AgainstMage = 500,
+                                    AgainstMeleeInfantry = 500,
+                                    AgainstRangeInfantry = 500,
+                                    AgainstSiegeUnit = 100
+                                },
+                                new
+                                {
+                                    WallId = new Guid("102744c5-27a6-4d23-a538-1a6f742b953b"),
+                                    AgainstCavalry = 405,
+                                    AgainstFlyingCavalry = 405,
+                                    AgainstMage = 405,
+                                    AgainstMeleeInfantry = 405,
+                                    AgainstRangeInfantry = 405,
+                                    AgainstSiegeUnit = 81
+                                },
+                                new
+                                {
+                                    WallId = new Guid("3bdd802b-4d97-4558-8790-8033c7c37708"),
+                                    AgainstCavalry = 320,
+                                    AgainstFlyingCavalry = 320,
+                                    AgainstMage = 320,
+                                    AgainstMeleeInfantry = 320,
+                                    AgainstRangeInfantry = 320,
+                                    AgainstSiegeUnit = 64
+                                },
+                                new
+                                {
+                                    WallId = new Guid("8ccadf79-bea7-4224-83d9-6336e54431ab"),
+                                    AgainstCavalry = 245,
+                                    AgainstFlyingCavalry = 245,
+                                    AgainstMage = 245,
+                                    AgainstMeleeInfantry = 245,
+                                    AgainstRangeInfantry = 245,
+                                    AgainstSiegeUnit = 49
+                                },
+                                new
+                                {
+                                    WallId = new Guid("f34484d8-89ef-47a6-b004-3da8f1e7e44d"),
+                                    AgainstCavalry = 180,
+                                    AgainstFlyingCavalry = 180,
+                                    AgainstMage = 180,
+                                    AgainstMeleeInfantry = 180,
+                                    AgainstRangeInfantry = 180,
+                                    AgainstSiegeUnit = 36
+                                },
+                                new
+                                {
+                                    WallId = new Guid("e12f9f9b-f633-4c01-b012-3a5ea226cd0b"),
+                                    AgainstCavalry = 125,
+                                    AgainstFlyingCavalry = 125,
+                                    AgainstMage = 125,
+                                    AgainstMeleeInfantry = 125,
+                                    AgainstRangeInfantry = 125,
+                                    AgainstSiegeUnit = 25
+                                },
+                                new
+                                {
+                                    WallId = new Guid("166a72d9-2fff-4a58-845a-9ab4f0bcd06b"),
+                                    AgainstCavalry = 80,
+                                    AgainstFlyingCavalry = 80,
+                                    AgainstMage = 80,
+                                    AgainstMeleeInfantry = 80,
+                                    AgainstRangeInfantry = 80,
+                                    AgainstSiegeUnit = 16
+                                },
+                                new
+                                {
+                                    WallId = new Guid("08958648-1b1e-45ca-bd42-aa7ff32778b9"),
+                                    AgainstCavalry = 45,
+                                    AgainstFlyingCavalry = 45,
+                                    AgainstMage = 45,
+                                    AgainstMeleeInfantry = 45,
+                                    AgainstRangeInfantry = 45,
+                                    AgainstSiegeUnit = 9
+                                },
+                                new
+                                {
+                                    WallId = new Guid("2684a393-a8d3-4daf-8a5e-d7723dccd383"),
+                                    AgainstCavalry = 20,
+                                    AgainstFlyingCavalry = 20,
+                                    AgainstMage = 20,
+                                    AgainstMeleeInfantry = 20,
+                                    AgainstRangeInfantry = 20,
+                                    AgainstSiegeUnit = 4
+                                },
+                                new
+                                {
+                                    WallId = new Guid("52c0d87a-7fb3-48f7-88d5-1f9e5a06ac7d"),
+                                    AgainstCavalry = 5,
+                                    AgainstFlyingCavalry = 5,
+                                    AgainstMage = 5,
+                                    AgainstMeleeInfantry = 5,
+                                    AgainstRangeInfantry = 5,
+                                    AgainstSiegeUnit = 1
+                                },
+                                new
+                                {
+                                    WallId = new Guid("ea4df1fe-852e-4508-abd9-e39e7dffc713"),
+                                    AgainstCavalry = 0,
+                                    AgainstFlyingCavalry = 0,
+                                    AgainstMage = 0,
+                                    AgainstMeleeInfantry = 0,
+                                    AgainstRangeInfantry = 0,
+                                    AgainstSiegeUnit = 0
+                                });
+                        });
+
+                    b.OwnsOne("Yooresh.Domain.ValueObjects.Resource", "RepairCost", b1 =>
+                        {
+                            b1.Property<Guid>("WallId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Food")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostFood");
+
+                            b1.Property<int>("Gold")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostGold");
+
+                            b1.Property<int>("Lumber")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostLumber");
+
+                            b1.Property<int>("Metal")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostMetal");
+
+                            b1.Property<int>("Stone")
+                                .HasColumnType("int")
+                                .HasColumnName("RepairCostStone");
+
+                            b1.HasKey("WallId");
+
+                            b1.ToTable("Wall");
+
+                            b1.WithOwner()
+                                .HasForeignKey("WallId");
+
+                            b1.HasData(
+                                new
+                                {
+                                    WallId = new Guid("f9927613-7d7f-47b0-b390-83fec5fd1c31"),
+                                    Food = 34560,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9c0b6a3b-a963-478b-98da-a250b8fd6c6f"),
+                                    Food = 31740,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("26924f6f-efaa-4b42-80ee-3deb38558f22"),
+                                    Food = 29040,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("8e1032b2-e9bd-489f-80ad-d6da1cf1112d"),
+                                    Food = 26460,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("809f3aa5-5426-4bcc-9f89-3f52ac0dcb90"),
+                                    Food = 24000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("07fdde50-b1e6-45fa-abd2-e752b566f6b5"),
+                                    Food = 21660,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("618eb24b-2370-44e4-aeaa-6addb7c1e0bb"),
+                                    Food = 19440,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("084ee031-3131-4289-9fbf-42216cd17fcd"),
+                                    Food = 17340,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("89b68ea8-56f0-43b4-891a-f9fdc14ff5a1"),
+                                    Food = 15360,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("1ec79ca5-f0cf-4996-8d5c-7045259e0ba5"),
+                                    Food = 13500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("46bbe45a-3bef-4121-9220-b991bf378189"),
+                                    Food = 11760,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("a8b961d2-fe4f-4b8c-9578-8c0bb9b32a7d"),
+                                    Food = 10140,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("0259c4b3-bc36-4187-a793-2cecd88d0f75"),
+                                    Food = 8640,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9c0d6e3d-1744-45b8-bc3e-cf6e15121ef9"),
+                                    Food = 7260,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("9140f7bb-5bf9-4147-8cd6-1e8a467e3ab3"),
+                                    Food = 6000,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("102744c5-27a6-4d23-a538-1a6f742b953b"),
+                                    Food = 4860,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("3bdd802b-4d97-4558-8790-8033c7c37708"),
+                                    Food = 3840,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("8ccadf79-bea7-4224-83d9-6336e54431ab"),
+                                    Food = 2940,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("f34484d8-89ef-47a6-b004-3da8f1e7e44d"),
+                                    Food = 2160,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("e12f9f9b-f633-4c01-b012-3a5ea226cd0b"),
+                                    Food = 1500,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("166a72d9-2fff-4a58-845a-9ab4f0bcd06b"),
+                                    Food = 960,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("08958648-1b1e-45ca-bd42-aa7ff32778b9"),
+                                    Food = 540,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("2684a393-a8d3-4daf-8a5e-d7723dccd383"),
+                                    Food = 240,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("52c0d87a-7fb3-48f7-88d5-1f9e5a06ac7d"),
+                                    Food = 60,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                },
+                                new
+                                {
+                                    WallId = new Guid("ea4df1fe-852e-4508-abd9-e39e7dffc713"),
+                                    Food = 0,
+                                    Gold = 0,
+                                    Lumber = 0,
+                                    Metal = 0,
+                                    Stone = 0
+                                });
+                        });
+
+                    b.Navigation("Defense")
+                        .IsRequired();
+
+                    b.Navigation("RepairCost")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.Village", b =>
+                {
+                    b.Navigation("VillageResourceBuildings");
+
+                    b.Navigation("VillageTower")
+                        .IsRequired();
+
+                    b.Navigation("VillageWall")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Yooresh.Domain.Entities.Villages.VillageTower", b =>
+                {
+                    b.Navigation("LoadedTroops");
                 });
 #pragma warning restore 612, 618
         }

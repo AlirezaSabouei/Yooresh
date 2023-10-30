@@ -1,6 +1,7 @@
 ﻿using Yooresh.Client.WinForms.Common.Forms;
 using Yooresh.Client.WinForms.Common;
 using Yooresh.Client.WinForms.Villages.ViewModels;
+using Yooresh.Client.WinForms.Common.Controls;
 
 namespace Yooresh.Client.WinForms.Villages.Forms
 {
@@ -8,6 +9,11 @@ namespace Yooresh.Client.WinForms.Villages.Forms
     {
         private readonly VillageFormViewModel _viewModel;
         private readonly VillageUpgradesForm _villageUpgradesForm;
+
+        protected override void AddDataBindings()
+        {
+            //  resourceControl1.DataBindings.Add(nameof(ResourceControl.Village), _viewModel, nameof(VillageFormViewModel.Village));
+        }
 
         public VillageForm(
             VillageFormViewModel villageFormViewModel,
@@ -24,11 +30,18 @@ namespace Yooresh.Client.WinForms.Villages.Forms
         }
 
         private async void VillageForm_Shown(object sender, EventArgs e)
+        {            
+            await LoadVillage();
+        }
+
+        private async Task LoadVillage()
         {
             try
             {
                 Loader(true);
                 await _viewModel.GetVillage();
+                resourceControl1.Village = _viewModel.Village;
+                resourceControl1.StartCounter();
             }
             catch (InformException informException)
             {
@@ -44,9 +57,10 @@ namespace Yooresh.Client.WinForms.Villages.Forms
             }
         }
 
-        private void btnUpgrades_Click(object sender, EventArgs e)
+        private async void btnUpgrades_Click(object sender, EventArgs e)
         {
             _villageUpgradesForm.ShowDialog();
+            await LoadVillage();
         }
     }
 }

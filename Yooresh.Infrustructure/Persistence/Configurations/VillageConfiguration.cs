@@ -1,10 +1,9 @@
-using Yooresh.Domain.Entities.Villages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Factions;
-using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.ValueObjects;
+using System.Reflection.Emit;
+using Village = Yooresh.Domain.Entities.Villages.Village;
+using Yooresh.Domain.Entities.Troops;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -27,11 +26,13 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
 
         builder.HasOne(a => a.Faction)
             .WithMany()
-            .HasForeignKey(a=>a.FactionId)
+            .HasForeignKey(a => a.FactionId)
             .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany(a => a.ResourceBuildings)
-            .WithMany();            
+        builder
+            .HasMany(a => a.VillageResourceBuildings)
+            .WithOne(b=>b.Village)
+            .HasForeignKey(c=>c.VillageId);
 
         builder.OwnsOne(a => a.Resource, ConfigureResource);
 
@@ -70,7 +71,7 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
     {
         builder.Navigation(a => a.Faction).AutoInclude();
         builder.Navigation(a => a.Player).AutoInclude();
-        builder.Navigation(a => a.ResourceBuildings).AutoInclude();
-        builder.Navigation(a => a.ResourceBuildings).AutoInclude();
+        builder.Navigation(a => a.VillageResourceBuildings).AutoInclude();
+        builder.Navigation(a => a.Resource).AutoInclude();
     }
 }

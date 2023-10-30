@@ -43,6 +43,8 @@
             button1 = new Button();
             button2 = new Button();
             button3 = new Button();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // blacksmith1
@@ -141,6 +143,7 @@
             resourceControl1.Name = "resourceControl1";
             resourceControl1.Size = new Size(133, 160);
             resourceControl1.TabIndex = 22;
+            resourceControl1.Village = null;
             // 
             // btnUpgrades
             // 
@@ -195,6 +198,17 @@
             button3.TextImageRelation = TextImageRelation.ImageBeforeText;
             button3.UseVisualStyleBackColor = true;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.BackColor = Color.Transparent;
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(949, 598);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(61, 75);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 30;
+            pictureBox1.TabStop = false;
+            // 
             // VillageForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -202,6 +216,7 @@
             BackgroundImage = Properties.Resources.VillageBackground;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1008, 768);
+            Controls.Add(pictureBox1);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -220,6 +235,7 @@
             Text = "Village";
             Load += VillageForm_Load;
             Shown += VillageForm_Shown;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
 
@@ -239,5 +255,6 @@
         private Button button1;
         private Button button2;
         private Button button3;
+        private PictureBox pictureBox1;
     }
 }

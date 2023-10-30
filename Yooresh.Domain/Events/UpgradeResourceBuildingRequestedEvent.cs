@@ -1,5 +1,3 @@
-using Yooresh.Domain.Entities.Villages;
-
 namespace Yooresh.Domain.Events;
 
 public class UpgradeResourceBuildingRequestedEvent : BaseEvent

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.Events;
 
 namespace Yooresh.Domain.Entities;

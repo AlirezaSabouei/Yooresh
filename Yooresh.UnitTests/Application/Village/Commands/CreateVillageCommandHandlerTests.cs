@@ -4,7 +4,6 @@ using Moq;
 using Xunit;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Villages.Commands;
-using Yooresh.Domain.Entities.Villages;
 using Yooresh.UnitTests.Application.Base;
 
 namespace Yooresh.UnitTests.Application.Village.Commands;

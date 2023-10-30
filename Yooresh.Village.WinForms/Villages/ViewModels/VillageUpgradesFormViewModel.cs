@@ -13,39 +13,46 @@ public class VillageUpgradesFormViewModel : BaseViewModel
 {
     public List<ResourceBuilding> AvailableResourceBuildingUpgrades { get; set; }
     public UpdateResourceBuildingDto UpdateResourceBuildingDto { get; set; }
+    public Village Village { get; set; }
 
     public VillageUpgradesFormViewModel(IRestClient restClient)
         : base(restClient)
     {
         AvailableResourceBuildingUpgrades = new List<ResourceBuilding>();
-        UpdateResourceBuildingDto=new UpdateResourceBuildingDto();
+        UpdateResourceBuildingDto = new UpdateResourceBuildingDto();
     }
 
     public async Task GetAvailableResourceBuildingUpgrades()
     {
+        await GetVillage();
+
+        AvailableResourceBuildingUpgrades = Village
+            .VillageResourceBuildings.Select(a=>a.ResourceBuilding)
+            .ToList();
+    }
+
+    private async Task<Village> GetVillage()
+    {
         var request = new RestRequest
         {
             Method = Method.Get,
-            Resource = "/api/Villages/AvailableResourceBuildingUpgrades",
+            Resource = "/api/Villages",
             Authenticator = new HttpBasicAuthenticator(Statics.Email, Statics.Password)
         };
 
         var response = await RestClient.ExecuteAsync(request);
 
-        if (response.StatusCode == HttpStatusCode.OK)
+        if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            AvailableResourceBuildingUpgrades = JsonConvert.DeserializeObject<List<ResourceBuilding>>(response.Content);
-            return;
-        }
-        else if (response.StatusCode != HttpStatusCode.OK && response.Content != null)
-        {
-            throw new InformException(response.Content);
+            var village = JsonConvert.DeserializeObject<Village>(response.Content);
+            Village = village;
+            return village;
         }
 
         throw new Exception($"Login failed for unknown reason.{Environment.NewLine}Make sure you are connected to the Internet");
     }
 
-    public async Task UpgradeResourceBuilding()
+    public async Task UpgradeResourceBuilding(Guid selectedValue)
     {
         var request = new RestRequest
         {
@@ -54,7 +61,10 @@ public class VillageUpgradesFormViewModel : BaseViewModel
             Authenticator = new HttpBasicAuthenticator(Statics.Email, Statics.Password)
         };
 
-        request.AddBody(UpdateResourceBuildingDto);
+        request.AddBody(new UpdateResourceBuildingDto()
+        {
+            ResourceBuildingId = selectedValue
+        });
 
         var response = await RestClient.ExecuteAsync(request);
 

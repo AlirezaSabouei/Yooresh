@@ -1,127 +1,126 @@
 ﻿using AutoMapper;
+using Hangfire;
 using Yooresh.Application.Villages.Commands;
-using Yooresh.Domain.Entities.Villages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yooresh.Application.Villages.Dto;
 using Yooresh.Application.Villages.Queries;
 using Yooresh.Domain.Exceptions;
 
-namespace Yooresh.API.Controllers
+namespace Yooresh.API.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize(Roles = "SimplePlayer,SuperAdmin,Admin")]
+public class VillagesController : BaseApiController
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize(Roles = "SimplePlayer,SuperAdmin,Admin")]
-    public class VillagesController : BaseApiController
+    public VillagesController(IMapper mapper) : base(mapper)
     {
-        public VillagesController(IMapper mapper) : base(mapper)
+    }
+
+    [HttpGet("exists")]
+    public async Task<ActionResult<bool>> VillageExists()
+    {
+        try
         {
+            var query = new VillageExistsQuery()
+            {
+                PlayerId = PlayerId
+            };
+            return await Mediator.Send(query);
         }
-
-        [HttpGet("exists")]
-        public async Task<ActionResult<bool>> VillageExists()
+        catch (FluentValidation.ValidationException ex)
         {
-            try
+            foreach (var error in ex.Errors)
             {
-                var query = new VillageExistsQuery()
-                {
-                    PlayerId = PlayerId
-                };
-                return await Mediator.Send(query);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            catch (FluentValidation.ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
 
-                return BadRequest(ModelState);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest(ModelState);
         }
-
-        [HttpGet]
-        public async Task<ActionResult<VillageDto>> GetVillage()
+        catch (Exception e)
         {
-            try
-            {
-                var query = new GetVillageQuery()
-                {
-                    PlayerId = PlayerId
-                };
-                var result=await Mediator.Send(query);
-                return _mapper.Map<VillageDto>(result);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-
-                return BadRequest(ModelState);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest(e.Message);
         }
+    }
 
-        [HttpPost]
-        public async Task<ActionResult<bool>> CreateVillage([FromBody] CreateVillageCommandDto createVillageCommandDto)
+    [HttpGet]
+    public async Task<ActionResult<VillageDto>> GetVillage()
+    {
+        try
         {
-            try
+            var query = new GetVillageQuery()
             {
-                var command = _mapper.Map<CreateVillageCommand>(createVillageCommandDto);
-                command.PlayerId = PlayerId;
-
-                return await Mediator.Send(command);
-            }
-            catch (FluentValidation.ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
-
-                return BadRequest(ModelState);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+                PlayerId = PlayerId
+            };
+            var result=await Mediator.Send(query);
+            return _mapper.Map<VillageDto>(result);
         }
-
-        [HttpPost("UpgradeResourceBuilding")]
-        public async Task<ActionResult<bool>> UpgradeResourceBuilding([FromBody] UpgradeResourceBuildingCommandDto startBuildingUpgradeCommandDto)
+        catch (FluentValidation.ValidationException ex)
         {
-            try
+            foreach (var error in ex.Errors)
             {
-                var command = _mapper.Map<UpdateResourceBuildingCommand>(startBuildingUpgradeCommandDto);
-                command.PlayerId = PlayerId;
-                return await Mediator.Send(command);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            catch (FluentValidation.ValidationException ex)
-            {
-                foreach (var error in ex.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-                }
 
-                return BadRequest(ModelState);
-            }
-            catch (DomainException ex)
+            return BadRequest(ModelState);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<bool>> CreateVillage([FromBody] CreateVillageCommandDto createVillageCommandDto)
+    {
+        try
+        {
+            var command = _mapper.Map<CreateVillageCommand>(createVillageCommandDto);
+            command.PlayerId = PlayerId;
+
+            return await Mediator.Send(command);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            foreach (var error in ex.Errors)
             {
-                return BadRequest(ex.Message);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-            catch (Exception e)
+
+            return BadRequest(ModelState);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
+    [HttpPost("UpgradeResourceBuilding")]
+    public async Task<ActionResult<bool>> UpgradeResourceBuilding([FromBody] UpgradeResourceBuildingCommandDto startBuildingUpgradeCommandDto)
+    {
+        try
+        {
+            var command = _mapper.Map<UpdateResourceBuildingCommand>(startBuildingUpgradeCommandDto);
+            command.PlayerId = PlayerId;
+            return await Mediator.Send(command);
+        }
+        catch (FluentValidation.ValidationException ex)
+        {
+            foreach (var error in ex.Errors)
             {
-                return BadRequest(e.Message);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
+
+            return BadRequest(ModelState);
+        }
+        catch (DomainException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
         }
     }
 }
