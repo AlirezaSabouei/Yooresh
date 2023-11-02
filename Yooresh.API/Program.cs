@@ -6,6 +6,9 @@ using Yooresh.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
+using Hangfire;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Yooresh.API;
 
@@ -15,9 +18,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+
         //Add Database
 
-      //  builder.Services.AddDbContext<Context>(options => { options.UseInMemoryDatabase("TestDatabase"); });
+        //  builder.Services.AddDbContext<Context>(options => { options.UseInMemoryDatabase("TestDatabase"); });
 
         // Add services to the container.
 
@@ -51,6 +55,9 @@ public class Program
         builder.Services.AddAuthentication("BasicAuthentication")
             .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
+        builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -61,12 +68,13 @@ public class Program
         // }
 
         app.UseHttpsRedirection();
-
+        app.UseHangfireDashboard();
 
        // app.UseAuthorization();
 
 
         app.MapControllers();
+        RecurringJob.RemoveIfExists("mytestjob");
 
         app.Run();
     }

@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Common.Forms;
+﻿namespace Yooresh.Client.WinForms.Common.Forms;
 
 public enum MessageType
 {

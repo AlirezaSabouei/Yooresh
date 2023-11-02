@@ -1,9 +1,7 @@
-﻿using Yooresh.Village.WinForms.Common.ViewModels;
-using Yooresh.Village.WinForms.Properties;
+﻿using Yooresh.Client.WinForms.Properties;
 using System.Configuration;
-using System.Windows.Forms;
 
-namespace Yooresh.Village.WinForms.Common.Forms;
+namespace Yooresh.Client.WinForms.Common.Forms;
 
 public partial class BaseForm : Form
 {

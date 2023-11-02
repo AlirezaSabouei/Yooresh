@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using AutoMapper;
+using Yooresh.Application.Players.Dto;
 
 namespace Yooresh.API.Controllers;
 
@@ -18,16 +19,18 @@ public class PlayersController : BaseApiController
     public PlayersController(IMapper mapper) : base(mapper)
     {
     }
-    
+
     [HttpGet]
-    public async Task<ActionResult<Player>> GetPlayer()
+    public async Task<ActionResult<PlayerDto>> GetPlayer()
     {
         var emil = HttpContext.User.FindFirst(ClaimTypes.Email)!.Value;
         var query = new GetPlayerQuery()
         {
             Email = emil
         };
-        return await Mediator.Send(query);
+        var result = await Mediator.Send(query);
+        var playerDto = _mapper.Map<PlayerDto>(result);
+        return playerDto;
     }
 
     [HttpPost]
@@ -43,9 +46,9 @@ public class PlayersController : BaseApiController
         {
             foreach (var error in ex.Errors)
             {
-                ModelState.AddModelError(error.PropertyName,error.ErrorMessage);
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
             }
-  
+
             return BadRequest(ModelState);
         }
         catch (Exception e)

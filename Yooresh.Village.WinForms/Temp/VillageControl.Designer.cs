@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Temp
+﻿namespace Yooresh.Client.WinForms.Temp
 {
     partial class VillageControl
     {
@@ -41,6 +41,7 @@
             blacksmith1 = new Buildings.Blacksmith();
             magic_Center1 = new Buildings.Magic_Center();
             lumbermill1 = new Buildings.Lumbermill();
+            resourceControl1 = new Common.Controls.ResourceControl();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -168,6 +169,13 @@
             lumbermill1.Size = new Size(136, 88);
             lumbermill1.TabIndex = 11;
             // 
+            // resourceControl1
+            // 
+            resourceControl1.Location = new Point(865, 80);
+            resourceControl1.Name = "resourceControl1";
+            resourceControl1.Size = new Size(108, 149);
+            resourceControl1.TabIndex = 12;
+            // 
             // VillageControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -175,6 +183,7 @@
             BackColor = Color.White;
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.None;
+            Controls.Add(resourceControl1);
             Controls.Add(blacksmith1);
             Controls.Add(lumbermill1);
             Controls.Add(magic_Center1);
@@ -207,5 +216,6 @@
         private Buildings.Blacksmith blacksmith1;
         private Buildings.Magic_Center magic_Center1;
         private Buildings.Lumbermill lumbermill1;
+        private Common.Controls.ResourceControl resourceControl1;
     }
 }

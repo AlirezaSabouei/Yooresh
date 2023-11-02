@@ -8,9 +8,6 @@ public class Player : RootEntity
     public Role Role { get; private set; }
     public bool Confirmed { get; private set; }
 
-    //For EF
-    private Player() { }
-
     public Player(string name, string email, string password, Role role)
     {
         Id = Guid.NewGuid();
@@ -18,6 +15,16 @@ public class Player : RootEntity
         Email = email.ToLower();
         Password = password;
         Role = role;
+    }
+    
+    public Player(string name, string email, string password, Role role,Guid id)
+    {
+        Id = Guid.NewGuid();
+        Name = name;
+        Email = email.ToLower();
+        Password = password;
+        Role = role;
+        Id=id;
     }
 
     public virtual void ConfirmPlayer()
