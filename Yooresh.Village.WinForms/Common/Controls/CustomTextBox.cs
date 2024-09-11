@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Common.Controls;
+﻿namespace Yooresh.Client.WinForms.Common.Controls;
 
 public class CustomTextBox:TextBox
 {

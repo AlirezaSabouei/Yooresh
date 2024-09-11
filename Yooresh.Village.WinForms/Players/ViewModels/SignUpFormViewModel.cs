@@ -1,14 +1,14 @@
-﻿using Yooresh.Village.WinForms.Common;
-using Yooresh.Village.WinForms.Common.ViewModels;
+﻿using Yooresh.Client.WinForms.Common;
+using Yooresh.Client.WinForms.Common.ViewModels;
 using RestSharp;
 using System.Net;
-using Yooresh.Village.WinForms.Players.Models;
+using Yooresh.Client.WinForms.Players.Models;
 using System.Security.Cryptography;
 using System.Text.Unicode;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Yooresh.Village.WinForms.Players.ViewModels;
+namespace Yooresh.Client.WinForms.Players.ViewModels;
 
 public class SignUpFormViewModel : BaseViewModel
 {

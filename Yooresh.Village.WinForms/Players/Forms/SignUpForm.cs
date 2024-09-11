@@ -1,11 +1,9 @@
-﻿using Yooresh.Village.WinForms.Common;
-using Yooresh.Village.WinForms.Common.Forms;
-using Yooresh.Village.WinForms.Common.ViewModels;
-using Yooresh.Village.WinForms.Players.Models;
-using Yooresh.Village.WinForms.Players.ViewModels;
-using Yooresh.Village.WinForms.Village.Forms;
+﻿using Yooresh.Client.WinForms.Common;
+using Yooresh.Client.WinForms.Common.Forms;
+using Yooresh.Client.WinForms.Players.Models;
+using Yooresh.Client.WinForms.Players.ViewModels;
 
-namespace Yooresh.Village.WinForms.Players.Forms;
+namespace Yooresh.Client.WinForms.Players.Forms;
 
 public partial class SignUpForm : BaseForm
 {
@@ -32,7 +30,7 @@ public partial class SignUpForm : BaseForm
             Loader(true);
             var result = await _viewModel.SignUp();
             ShowMessage(result, MessageType.Success);
-            this.Close();
+            Close();         
         }
         catch (InformException informException)
         {

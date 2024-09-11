@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR" Version="12.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Yooresh.Application\Yooresh.Application.csproj" />
+    <ProjectReference Include="..\Yooresh.DTO\Eloy.DTO.csproj" />
     <ProjectReference Include="..\Yooresh.Infrustructure\Yooresh.Infrastructure.csproj" />
   </ItemGroup>
 

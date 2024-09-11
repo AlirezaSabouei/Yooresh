@@ -5,7 +5,8 @@ using Yooresh.UnitTests.Application.Base;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
-using Xunit;   
+using Xunit;
+using Yooresh.Application.Players.Commands.Validators;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 

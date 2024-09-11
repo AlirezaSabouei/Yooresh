@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Players.Forms
+﻿namespace Yooresh.Client.WinForms.Players.Forms
 {
     partial class SignUpForm
     {

@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Temp
+﻿namespace Yooresh.Client.WinForms.Temp
 {
     partial class WorldControl
     {

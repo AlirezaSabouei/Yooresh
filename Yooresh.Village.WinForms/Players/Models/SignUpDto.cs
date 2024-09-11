@@ -1,4 +1,4 @@
-﻿namespace Yooresh.Village.WinForms.Players.Models;
+﻿namespace Yooresh.Client.WinForms.Players.Models;
 
 [PropertyChanged.AddINotifyPropertyChangedInterface]
 public class SignUpModel
