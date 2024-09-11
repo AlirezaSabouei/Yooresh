@@ -2,26 +2,26 @@
 using Yooresh.Client.WinForms.Common.ViewModels;
 using RestSharp;
 using RestSharp.Authenticators;
-using Yooresh.Client.WinForms.Models;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Net.WebSockets;
 using System.ComponentModel;
 using System.Net;
+using Eloy.DTO;
 using Yooresh.Client.WinForms.Players.Models;
 
 namespace Yooresh.Client.WinForms.Players.ViewModels;
 
 public class CreateVillageFormViewModel : BaseViewModel
 {
-    public List<Faction> Factions { get; set; }
+    public List<FactionDto> Factions { get; set; }
 
     public CreateVillageDto CreateVillageDto { get; set; }
 
     public CreateVillageFormViewModel(IRestClient restClient)
         : base(restClient)
     {
-        Factions = new List<Faction>();
+        Factions = new List<FactionDto>();
         CreateVillageDto=new CreateVillageDto();
     }
 
@@ -37,7 +37,7 @@ public class CreateVillageFormViewModel : BaseViewModel
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            var result  = JsonConvert.DeserializeObject<List<Faction>>(response.Content);
+            var result  = JsonConvert.DeserializeObject<List<FactionDto>>(response.Content);
             Factions = result;
             return;
         }

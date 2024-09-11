@@ -1,6 +1,6 @@
-﻿namespace Yooresh.Client.WinForms.Models;
+﻿namespace Eloy.DTO;
 
-public class Resource
+public class ResourceDto
 {
     public int Food { get; set; }
     public int Lumber { get; set; }
@@ -8,11 +8,11 @@ public class Resource
     public int Gold { get; set; }
     public int Metal { get; set; }
 
-    public Resource()
+    public ResourceDto()
     {
     }
 
-    public Resource(int food, int lumber, int stone, int gold, int metal)
+    public ResourceDto(int food, int lumber, int stone, int gold, int metal)
     {
         Food = food;
         Lumber = lumber;
@@ -21,9 +21,9 @@ public class Resource
         Metal = metal;
     }
 
-    public static Resource operator +(Resource a, Resource b)
+    public static ResourceDto operator +(ResourceDto a, ResourceDto b)
     {
-        Resource villageResource = new();
+        ResourceDto villageResource = new();
         villageResource.Food = a.Food + b.Food;
         villageResource.Lumber = a.Lumber + b.Lumber;
         villageResource.Metal = a.Metal + b.Metal;
@@ -32,9 +32,9 @@ public class Resource
         return villageResource;
     }
 
-    public static Resource operator *(Resource a, double number)
+    public static ResourceDto operator *(ResourceDto a, double number)
     {
-        Resource villageResource = new();
+        ResourceDto villageResource = new();
         villageResource.Food = Convert.ToInt32(a.Food * number);
         villageResource.Lumber = Convert.ToInt32(a.Lumber * number);
         villageResource.Metal = Convert.ToInt32(a.Metal * number);
@@ -43,7 +43,7 @@ public class Resource
         return villageResource;
     }
 
-    public static bool operator >(Resource resourceCost, Resource currentResource)
+    public static bool operator >(ResourceDto resourceCost, ResourceDto currentResource)
     {
         return resourceCost.Food > currentResource.Food ||
                resourceCost.Lumber > currentResource.Lumber ||
@@ -52,7 +52,7 @@ public class Resource
                resourceCost.Gold > currentResource.Gold;
     }
 
-    public static bool operator <(Resource resourceCost, Resource currentResource)
+    public static bool operator <(ResourceDto resourceCost, ResourceDto currentResource)
     {
         return resourceCost.Food < currentResource.Food ||
                resourceCost.Lumber < currentResource.Lumber ||

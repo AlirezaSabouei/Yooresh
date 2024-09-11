@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
+using Yooresh.Application.Villages.Dto;
+using Yooresh.Domain.Entities.Villages;
 
 namespace Yooresh.Application.Common.Mappings;
 
@@ -8,6 +10,9 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         ApplyMappingsFromAssembly(Assembly.GetExecutingAssembly());
+
+        CreateMap<VillageDto, Village>()
+            .ReverseMap();
     }
 
     private void ApplyMappingsFromAssembly(Assembly assembly)

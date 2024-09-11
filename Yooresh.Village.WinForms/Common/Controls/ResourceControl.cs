@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Yooresh.Client.WinForms.Models;
+using Eloy.DTO;
 
 namespace Yooresh.Client.WinForms.Common.Controls;
 
 public partial class ResourceControl : UserControl
 {
-    public Village Village { get; set; }
+    public VillageDto Village { get; set; }
     public ResourceControl()
     {
         InitializeComponent();
@@ -21,7 +21,7 @@ public partial class ResourceControl : UserControl
 
     private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
     {
-        var village = e.Argument as Village;
+        var village = e.Argument as VillageDto;
         while (true)
         {
             if (backgroundWorker1.CancellationPending)
@@ -33,7 +33,7 @@ public partial class ResourceControl : UserControl
             {
                 var duration = (DateTime.UtcNow - villageVesourceBuilding.LastHarvestTime).TotalHours;
                 var resource= villageVesourceBuilding.ResourceBuilding.HourlyProduction * duration;
-                if (resource>new Resource(0,0,0,0,0))
+                if (resource>new ResourceDto(0,0,0,0,0))
                 {
                     village.Resource += resource;
                     villageVesourceBuilding.LastHarvestTime = DateTimeOffset.UtcNow;
@@ -51,7 +51,7 @@ public partial class ResourceControl : UserControl
 
     private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
     {
-        var resource = e.UserState as Resource;
+        var resource = e.UserState as ResourceDto;
 
         lblFood.Text = resource!.Food.ToString();
         lblLumber.Text = resource!.Lumber.ToString();

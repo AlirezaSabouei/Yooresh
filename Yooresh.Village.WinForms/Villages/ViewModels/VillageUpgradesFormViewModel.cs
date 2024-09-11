@@ -2,9 +2,9 @@
 using RestSharp;
 using RestSharp.Authenticators;
 using System.Net;
+using Eloy.DTO;
 using Yooresh.Client.WinForms.Common;
 using Yooresh.Client.WinForms.Common.ViewModels;
-using Yooresh.Client.WinForms.Models;
 using Yooresh.Client.WinForms.Villages.Models;
 
 namespace Yooresh.Client.WinForms.Villages.ViewModels;
@@ -13,7 +13,7 @@ public class VillageUpgradesFormViewModel : BaseViewModel
 {
     public List<ResourceBuilding> AvailableResourceBuildingUpgrades { get; set; }
     public UpdateResourceBuildingDto UpdateResourceBuildingDto { get; set; }
-    public Village Village { get; set; }
+    public VillageDto Village { get; set; }
 
     public VillageUpgradesFormViewModel(IRestClient restClient)
         : base(restClient)
@@ -31,7 +31,7 @@ public class VillageUpgradesFormViewModel : BaseViewModel
             .ToList();
     }
 
-    private async Task<Village> GetVillage()
+    private async Task<VillageDto> GetVillage()
     {
         var request = new RestRequest
         {
@@ -44,7 +44,7 @@ public class VillageUpgradesFormViewModel : BaseViewModel
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
-            var village = JsonConvert.DeserializeObject<Village>(response.Content);
+            var village = JsonConvert.DeserializeObject<VillageDto>(response.Content);
             Village = village;
             return village;
         }

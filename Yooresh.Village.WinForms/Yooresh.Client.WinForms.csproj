@@ -84,4 +84,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Yooresh.DTO\Eloy.DTO.csproj" />
+    </ItemGroup>
+
 </Project>

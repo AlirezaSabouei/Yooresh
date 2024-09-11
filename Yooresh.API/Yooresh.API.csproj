@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Yooresh.Application\Yooresh.Application.csproj" />
+    <ProjectReference Include="..\Yooresh.DTO\Eloy.DTO.csproj" />
     <ProjectReference Include="..\Yooresh.Infrustructure\Yooresh.Infrastructure.csproj" />
   </ItemGroup>
 

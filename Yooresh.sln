@@ -23,6 +23,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{286D80
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Yooresh.Client.WinForms", "Yooresh.Village.WinForms\Yooresh.Client.WinForms.csproj", "{80BABDFA-3354-44B2-A694-859919D132CA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{BDA55B41-5912-4C1B-B5B4-8FA5712512A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eloy.DTO", "Yooresh.DTO\Eloy.DTO.csproj", "{3554F8B8-C4F9-467F-B42C-397F0D8AF542}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,10 @@ Global
 		{80BABDFA-3354-44B2-A694-859919D132CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80BABDFA-3354-44B2-A694-859919D132CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80BABDFA-3354-44B2-A694-859919D132CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3554F8B8-C4F9-467F-B42C-397F0D8AF542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3554F8B8-C4F9-467F-B42C-397F0D8AF542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3554F8B8-C4F9-467F-B42C-397F0D8AF542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3554F8B8-C4F9-467F-B42C-397F0D8AF542}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +78,7 @@ Global
 		{57109FA3-5D74-477F-8BA3-BC700F213E2B} = {A12A5C54-11D6-4B16-A88A-F1599A42DCFC}
 		{92B9AA8B-50C1-4235-A07B-E7ADCEFCB01B} = {A12A5C54-11D6-4B16-A88A-F1599A42DCFC}
 		{80BABDFA-3354-44B2-A694-859919D132CA} = {286D8069-49AC-46A1-A948-ACC1E33F2DC6}
+		{3554F8B8-C4F9-467F-B42C-397F0D8AF542} = {BDA55B41-5912-4C1B-B5B4-8FA5712512A5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {02D4B454-EF5C-4351-BEE3-F5DA49B720C3}
