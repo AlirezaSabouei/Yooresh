@@ -1,6 +1,6 @@
-using Yooresh.Domain.Entities.Factions;
+using Yooresh.Domain.Common.ValueObjects;
+using Yooresh.Domain.Factions.Entities;
 using Yooresh.Domain.Interfaces;
-using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Domain.Entities.Troops;
 

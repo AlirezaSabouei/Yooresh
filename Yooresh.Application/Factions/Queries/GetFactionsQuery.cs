@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Factions;
+using Yooresh.Domain.Factions.Entities;
 
 namespace Yooresh.Application.Factions.Queries;
 

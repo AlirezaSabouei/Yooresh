@@ -1,3 +1,5 @@
+using Yooresh.Domain.Common.Exceptions;
+
 namespace Yooresh.Domain.Exceptions;
 
 public class NotAvailableTowerCapacityException : DomainException

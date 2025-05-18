@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.Entities.Buildings;
+using Yooresh.Domain.Common.ValueObjects;
+using Yooresh.Domain.DefenseBuildings.Entities;
 using Yooresh.Domain.Entities.Villages;
-using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 

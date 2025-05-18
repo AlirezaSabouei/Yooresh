@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Yooresh.Application.Villages.Dto;
 using Yooresh.Application.Villages.Queries;
-using Yooresh.Domain.Exceptions;
+using Yooresh.Domain.Common.Exceptions;
 
 namespace Yooresh.API.Controllers;
 

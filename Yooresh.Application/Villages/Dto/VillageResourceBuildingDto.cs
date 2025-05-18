@@ -1,6 +1,6 @@
 using AutoMapper;
 using Yooresh.Application.Common.Mappings;
-using Yooresh.Domain.Entities.Villages;
+using Yooresh.Domain.Villages.Entities;
 
 namespace Yooresh.Application.Villages.Dto;
 

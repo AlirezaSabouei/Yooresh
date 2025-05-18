@@ -15,4 +15,10 @@
       <Compile Remove="Interfaces\IDomainService.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Buildings\Exceptions\" />
+      <Folder Include="Villages\Exceptions\" />
+      <Folder Include="Villages\ValueObjects\" />
+    </ItemGroup>
+
 </Project>

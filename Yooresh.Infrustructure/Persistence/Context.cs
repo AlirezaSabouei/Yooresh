@@ -3,11 +3,13 @@ using MediatR;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.Players;
 using Microsoft.EntityFrameworkCore;
-using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.Entities.Villages;
 using Village = Yooresh.Domain.Entities.Villages.Village;
+using Yooresh.Domain.Villages.Entities;
+using Yooresh.Domain.Buildings.Entities;
+using Yooresh.Domain.ResourceBuildings.Entities;
+using Yooresh.Domain.DefenseBuildings.Entities;
+using Yooresh.Domain.Factions.Entities;
 
 namespace Yooresh.Infrastructure.Persistence;
 
