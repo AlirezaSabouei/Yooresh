@@ -1,7 +1,7 @@
-﻿using Yooresh.Domain.Buildings.Entities;
-using Yooresh.Domain.Entities;
+﻿using Yooresh.Domain.Common.Entities;
 using Yooresh.Domain.Entities.Villages;
-using Yooresh.Domain.ResourceBuildings.Entities;
+using Yooresh.Domain.Villages.Buildings.Entities;
+using Yooresh.Domain.Villages.ResourceBuildings.Entities;
 
 namespace Yooresh.Domain.Villages.Entities;
 

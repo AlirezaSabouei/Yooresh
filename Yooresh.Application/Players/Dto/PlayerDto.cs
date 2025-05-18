@@ -1,6 +1,6 @@
 using AutoMapper;
 using Yooresh.Application.Common.Mappings;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.Application.Players.Dto;
 

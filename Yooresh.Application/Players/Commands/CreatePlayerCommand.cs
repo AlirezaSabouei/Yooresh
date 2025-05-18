@@ -1,7 +1,7 @@
 ﻿using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
 using MediatR;
 using Microsoft.Extensions.Configuration;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.Application.Players.Commands;
 

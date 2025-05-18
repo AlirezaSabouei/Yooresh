@@ -1,6 +1,6 @@
-using Yooresh.Domain.DefenseBuildings.Entities;
-using Yooresh.Domain.Entities;
+using Yooresh.Domain.Common.Entities;
 using Yooresh.Domain.Entities.Villages;
+using Yooresh.Domain.Villages.DefenseBuildings.Entities;
 
 namespace Yooresh.Domain.Villages.Entities;
 

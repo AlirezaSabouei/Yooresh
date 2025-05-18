@@ -1,7 +1,7 @@
-using Yooresh.Domain.Entities.Players;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
