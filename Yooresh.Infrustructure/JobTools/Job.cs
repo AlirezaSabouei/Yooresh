@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 using Hangfire;
-using Yooresh.Domain.Interfaces;
+using Yooresh.Domain.Villages.Interfaces;
 
 namespace Yooresh.Infrastructure.JobTools;
 

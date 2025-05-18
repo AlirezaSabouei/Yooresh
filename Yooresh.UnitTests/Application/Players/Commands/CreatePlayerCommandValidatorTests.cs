@@ -1,12 +1,12 @@
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Players.Commands;
-using Yooresh.Domain.Entities.Players;
 using Yooresh.UnitTests.Application.Base;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
 using Yooresh.Application.Players.Commands.Validators;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 

@@ -1,6 +1,6 @@
-﻿using Yooresh.Domain.Entities.Players;
-using Shouldly;
+﻿using Shouldly;
 using Xunit;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.UnitTests.Domain.Entities;
 

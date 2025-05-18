@@ -1,5 +1,6 @@
-using Yooresh.Domain.Entities.Players;
-using Yooresh.Domain.Factions.Entities;
+using Yooresh.Domain.Common.Entities;
+using Yooresh.Domain.Players;
+using Yooresh.Domain.Villages.Factions.Entities;
 
 namespace Yooresh.Domain.Entities.Villages;
 

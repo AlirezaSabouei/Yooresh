@@ -3,10 +3,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.API.Filters;
 

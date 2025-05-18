@@ -1,9 +1,9 @@
 using System.Collections.ObjectModel;
-using Yooresh.Domain.DefenseBuildings.Entities;
-using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Troops;
+using Yooresh.Domain.Common.Entities;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.Exceptions;
+using Yooresh.Domain.Villages.DefenseBuildings.Entities;
+using Yooresh.Domain.Villages.Troops;
 
 namespace Yooresh.Domain.Villages.Entities;
 

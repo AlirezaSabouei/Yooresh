@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.API.Controllers;
 

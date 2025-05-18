@@ -1,10 +1,10 @@
 using AutoMapper;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.Application.Players.Queries;
 

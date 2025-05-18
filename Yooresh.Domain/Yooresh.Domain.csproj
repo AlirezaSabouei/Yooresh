@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
@@ -12,12 +12,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Remove="Interfaces\IDomainService.cs" />
+      <Compile Remove="Villages\Interfaces\IDomainService.cs" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Buildings\Exceptions\" />
+      <Folder Include="Villages\Buildings\Exceptions\" />
       <Folder Include="Villages\Exceptions\" />
+      <Folder Include="Villages\Camps\" />
       <Folder Include="Villages\ValueObjects\" />
     </ItemGroup>
 

@@ -5,8 +5,8 @@ using Yooresh.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Yooresh.Domain.Interfaces;
 using Yooresh.Infrastructure.JobTools;
+using Yooresh.Domain.Villages.Interfaces;
 
 namespace Yooresh.Infrastructure;
 

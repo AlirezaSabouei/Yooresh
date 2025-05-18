@@ -5,13 +5,13 @@ using System.Text;
 using Yooresh.API.Controllers;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Players.Commands;
-using Yooresh.Domain.Entities.Players;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit;
 using Yooresh.Application.Players.Dto;
 using IServiceScopeFactory = Microsoft.Extensions.DependencyInjection.IServiceScopeFactory;
+using Yooresh.Domain.Players;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;
 

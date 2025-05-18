@@ -10,12 +10,11 @@ using Yooresh.API.Controllers;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Villages.Commands;
 using Yooresh.Application.Villages.Dto;
-using Yooresh.Domain.Buildings.Entities;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.Enums;
-using Yooresh.Domain.Factions.Entities;
+using Yooresh.Domain.Players;
 using Yooresh.Domain.ValueObjects;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 

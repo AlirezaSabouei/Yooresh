@@ -2,9 +2,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Common.Events;
 using Yooresh.Domain.Entities.Villages;
-using Yooresh.Domain.Interfaces;
+using Yooresh.Domain.Events;
+using Yooresh.Domain.Villages.Interfaces;
 
 namespace Yooresh.Application.Villages.EventHandlers;
 
