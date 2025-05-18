@@ -1,5 +1,5 @@
-﻿using Yooresh.Domain.Entities;
-using Yooresh.Domain.ValueObjects;
+﻿using Yooresh.Domain.Common.ValueObjects;
+using Yooresh.Domain.Entities;
 
 namespace Yooresh.Domain.Interfaces;
 

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.ValueObjects;
 using System.Reflection.Emit;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Troops;
+using Yooresh.Domain.Common.ValueObjects;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 

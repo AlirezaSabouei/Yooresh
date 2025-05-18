@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
-using Yooresh.Domain.Events;
+using Yooresh.Domain.Common.Events;
 
 namespace Yooresh.Domain.Entities;
 

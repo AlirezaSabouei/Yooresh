@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Common.ValueObjects;
 
 namespace Yooresh.Domain.Interfaces;
 

@@ -1,6 +1,6 @@
 using AutoMapper;
 using Yooresh.Application.Common.Mappings;
-using Yooresh.Domain.Entities.Factions;
+using Yooresh.Domain.Factions.Entities;
 
 namespace Yooresh.Application.Factions.Dto;
 
