@@ -4,17 +4,12 @@ using System.Net;
 
 namespace Yooresh.Infrastructure.EmailTools;
 
-public class Email : IEmail
+public class Email(string senderEmail, string senderPassword) : IEmail
 {
-    private readonly string _senderEmail;
-    private readonly string _senderPassword;
+    private readonly string _senderEmail = senderEmail;
+    private readonly string _senderPassword = senderPassword;
 
-    public Email(string senderEmail,string senderPassword)
-    {
-        _senderEmail = senderEmail;
-        _senderPassword = senderPassword;
-    }
-    public async Task SendEmail(string email,string subject, string body)
+    public async Task SendEmailAsync(string email,string subject, string body)
     {
         // Create a new MailMessage object
         MailMessage mail = new(_senderEmail, email)
@@ -25,7 +20,7 @@ public class Email : IEmail
         };
 
         // Create an SMTP client to send the email
-        SmtpClient smtpClient = new SmtpClient("smtp.gmail.com")
+        SmtpClient smtpClient = new("smtp.gmail.com")
         {
             Port = 587, // Port for Gmail SMTP
             Credentials = new NetworkCredential(_senderEmail, _senderPassword),

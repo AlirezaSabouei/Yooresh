@@ -45,15 +45,16 @@ public class PlayerConfiguration : IEntityTypeConfiguration<Player>
 
     private void SeedData(EntityTypeBuilder<Player> builder)
     {
-        var player = new Player(
-            "Alireza Sabouei", 
-            "alireza.sabouei@gmail.com", 
-            "Aa123456", 
-            Role.SimplePlayer,
-            new Guid("a58bef94-8437-4856-bd87-a7b861285773"));
-
-        player.ConfirmPlayer();
-
+        var player = new Player()
+        {
+            Name = "Alireza Sabouei",
+            Email = "alireza.sabouei@gmail.com",
+            Password = "Aa123456",
+            Role = Role.SimplePlayer,
+            ConfirmationCode = "123",
+            Id = new Guid("a58bef94-8437-4856-bd87-a7b861285773")
+        };
+        player.ConfirmPlayer("123");
         builder.HasData(player);
     }
 }

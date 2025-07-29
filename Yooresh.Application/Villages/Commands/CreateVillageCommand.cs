@@ -2,7 +2,7 @@ using Yooresh.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Domain.Entities.Villages;
-using Yooresh.Domain.Enums;
+
 using Village = Yooresh.Domain.Entities.Villages.Village;
 
 namespace Yooresh.Application.Villages.Commands;

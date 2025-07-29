@@ -11,7 +11,7 @@ using Yooresh.Application.Players.Commands.Validators;
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class CreatePlayerCommandValidatorTests:
-    CommandValidatorTests<CreatePlayerCommandValidator,CreatePlayerCommand,bool>
+    CommandValidatorTests<CreatePlayerCommandValidator,CreatePlayerCommand,Player>
 {
     private Mock<IContext>? _contextMock;
 
@@ -33,8 +33,7 @@ public class CreatePlayerCommandValidatorTests:
         {
             Email = "a@gmail.com",
             Name = "PlayerName",
-            Password = "123pass",
-            PasswordConfirmation = "123pass"
+            Password = "123pass"
         };
     }
 

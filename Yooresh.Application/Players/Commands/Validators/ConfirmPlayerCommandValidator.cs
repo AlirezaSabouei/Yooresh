@@ -13,10 +13,15 @@ public class ConfirmPlayerCommandValidator : AbstractValidator<ConfirmPlayerComm
         _context = context;
 
         RuleFor(a => a.PlayerId)
-            .NotEqual(new Guid())
-            .WithMessage($"Should be provided")
+            .NotEmpty()
+            .WithMessage("'{PropertyName}' Should be provided")
             .MustAsync(ExistsInDatabase)
-            .WithMessage($"Does not exists");
+            .WithMessage("'{PropertyName}' Does not exists");
+
+        RuleFor(a => a.ConfirmationCode)
+            .NotEmpty()
+            .NotNull()
+            .WithMessage("'{PropertyName}' Should be provided");
     }
 
     private async Task<bool> ExistsInDatabase(Guid playerId, CancellationToken cancellationToken)

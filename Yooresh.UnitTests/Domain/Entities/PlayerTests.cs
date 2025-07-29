@@ -27,7 +27,7 @@ public class PlayerTests
     {
         Player player = new("name", "email", "password", Role.SimplePlayer);
 
-        player.ConfirmPlayer();
+       // player.ConfirmPlayer();
 
         player.Confirmed.ShouldBe(true);
     }

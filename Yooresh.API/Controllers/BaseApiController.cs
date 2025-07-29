@@ -7,7 +7,7 @@ namespace Yooresh.API.Controllers;
 
 public class BaseApiController : ControllerBase
 {
-    protected Guid PlayerId=>new Guid(HttpContext.User.FindFirst(nameof(Player.Id))!.Value);
+    protected Guid PlayerId=>new(HttpContext.User.FindFirst(nameof(Player.Id))!.Value);
     
     protected readonly IMapper _mapper;
 

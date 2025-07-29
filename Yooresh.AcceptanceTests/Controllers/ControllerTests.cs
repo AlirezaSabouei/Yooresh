@@ -19,11 +19,11 @@ public abstract class ControllerTests<TController> : IDisposable where TControll
         }
     }
 
-    protected readonly CustomWebApplicationFactory<Program> Factory;
+    protected readonly CustomYooreshWebApplicationFactory<Program> Factory;
 
     protected ControllerTests()
     {
-        Factory = new CustomWebApplicationFactory<Program>();
+        Factory = new CustomYooreshWebApplicationFactory<Program>();
     }
 
     protected abstract Task ClearDatabase();

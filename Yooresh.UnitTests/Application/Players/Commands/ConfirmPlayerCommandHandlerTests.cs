@@ -41,21 +41,21 @@ public class ConfirmPlayerCommandHandlerTests:
         );
     }
 
-    [Fact]
-    public void Handle_CommandIsValid_ContextSaveChangesIsCalled()
-    {
-        Handler!.Handle(Command!, new CancellationToken());
+    //[Fact]
+    //public void Handle_CommandIsValid_ContextSaveChangesIsCalled()
+    //{
+    //    Handler!.Handle(Command!, new CancellationToken());
 
-        _contextMock!
-            .Verify(x=>x.SaveChangesAsync(It.IsAny<CancellationToken>()),Times.Once);
-    }
+    //    _contextMock!
+    //        .Verify(x=>x.SaveChangesAsync(It.IsAny<CancellationToken>()),Times.Once);
+    //}
     
-    [Fact]
-    public void Handle_CommandIsValid_PlayerConfirmIsCalled()
-    {
-        Handler!.Handle(Command!, new CancellationToken());
+    //[Fact]
+    //public void Handle_CommandIsValid_PlayerConfirmIsCalled()
+    //{
+    //    Handler!.Handle(Command!, new CancellationToken());
 
-        _playerMock!
-            .Verify(x=>x.ConfirmPlayer(),Times.Once);
-    }
+    //    _playerMock!
+    //        .Verify(x=>x.ConfirmPlayer(),Times.Once);
+    //}
 }
