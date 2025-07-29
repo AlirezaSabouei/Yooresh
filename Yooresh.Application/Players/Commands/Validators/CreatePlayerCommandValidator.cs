@@ -15,37 +15,33 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
         RuleFor(a => a.Name)
             .NotEmpty()
             .NotNull()
-            .WithMessage($"{nameof(CreatePlayerCommand.Name)} should be provided");
+            .WithMessage("'{PropertyName}' should be provided");
 
         RuleFor(a => a.Email)
             .NotEmpty()
             .NotNull()
-            .WithMessage($"{nameof(CreatePlayerCommand.Email)} should be provided")
+            .WithMessage("'{PropertyName}' should be provided")
             .EmailAddress()
-            .WithMessage($"{nameof(CreatePlayerCommand.Email)} should be a valid email address")
+            .WithMessage("'{PropertyName}' should be a valid email address")
             .MustAsync(BeUniqueInDatabase)
-            .WithMessage($"{nameof(CreatePlayerCommand.Email)} should be unique");
+            .WithMessage("'{PropertyName}' is already in use");
 
         RuleFor(a => a.Password)
-            .Equal(b => b.PasswordConfirmation)
+            .Must(MeetPasswordStrength)
             .WithMessage(
-                $"{nameof(CreatePlayerCommand.Password)} and {nameof(CreatePlayerCommand.PasswordConfirmation)} should be equal")
-            .MustAsync(MeetPasswordStrength)
-            .WithMessage(
-                $"{nameof(CreatePlayerCommand.Password)} should be at least 5 chars consist of alphabet, Number and signs");
+                "'{PropertyName}' should be at least 5 chars consist of alphabet, Number and signs");
     }
 
     private async Task<bool> BeUniqueInDatabase(CreatePlayerCommand request, string property,
         CancellationToken cancellationToken)
     {
-        var count = await _context.Players.CountAsync(a => a.Email == request.Email,
+        var count = await _context.Players.CountAsync(a => a.Email.ToLower() == request.Email.ToLower(),
             cancellationToken);
 
         return count == 0;
     }
 
-    private async Task<bool> MeetPasswordStrength(CreatePlayerCommand request, string property,
-        CancellationToken cancellationToken)
+    private bool MeetPasswordStrength(CreatePlayerCommand request, string property)
     {
         return request.Password.Length > 5 &&
                request.Password.Any(c => char.IsLetter(c)) &&

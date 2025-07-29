@@ -8,13 +8,17 @@ using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.Buildings;
 using Yooresh.Domain.Entities.Villages;
 using Village = Yooresh.Domain.Entities.Villages.Village;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence;
 
 public class Context : DbContext, IContext
 {
     private readonly IMediator _mediator;
+
     public DbSet<Player> Players { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Resource> Resources { get; set; }
     public DbSet<Village> Villages { get; set; }
     public DbSet<Faction> Factions { get; set; }
     public DbSet<VillageBuilding> VillageBuildings { get; set; }
@@ -71,5 +75,10 @@ public class Context : DbContext, IContext
     public string Test(Village entity)
     {
         return Entry(entity).State.ToString();
+    }
+
+    public IQueryable<TEntity> QuerySet<TEntity>() where TEntity : BaseEntity
+    {
+        return base.Set<TEntity>();
     }
 }

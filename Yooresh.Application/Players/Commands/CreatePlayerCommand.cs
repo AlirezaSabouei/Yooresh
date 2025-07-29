@@ -1,44 +1,36 @@
 ﻿using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.Players;
 using MediatR;
-using Microsoft.Extensions.Configuration;
+using Yooresh.Domain.Events;
 
 namespace Yooresh.Application.Players.Commands;
 
-public record CreatePlayerCommand : IRequest<bool>
+public record CreatePlayerCommand : IRequest<Player>
 {
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
-    public string PasswordConfirmation { get; set; } = null!;
-    public string? SiteAddress { get; set; }
 }
 
-public class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCommand, bool>
+public class CreatePlayerCommandHandler(
+    IContext context)
+    : IRequestHandler<CreatePlayerCommand, Player>
 {
-    private readonly IContext _context;
-    private readonly IEmail _email;
-    private readonly IConfiguration _configuration;
+    private readonly IContext _context = context;
 
-    public CreatePlayerCommandHandler(IContext context, IEmail email,IConfiguration configuration)
+    public async Task<Player> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
     {
-        _context = context;
-        _email = email;
-        _configuration = configuration;
-    }
-
-    public async Task<bool> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
-    {
-        var player = new Player(request.Name, request.Email, request.Password, Role.SimplePlayer);
-        _context.Players.Add(player);
+        var player = new Player()
+        {
+            Name = request.Name,
+            Email = request.Email.ToLower(),
+            Password = request.Password,
+            Role = Role.SimplePlayer,
+            ConfirmationCode = (new Random(DateTime.Now.Millisecond).Next(12345678, 99999999)).ToString()
+        };
+        await _context.Players.AddAsync(player, cancellationToken);
+        player.AddDomainEvent(new PlayerCreatedEvent(player));
         await _context.SaveChangesAsync(cancellationToken);
-
-        var message = _configuration.GetSection("Email")["Message"];
-        message = message!
-            .Replace("@link", request.SiteAddress)
-            .Replace("@guid", player.Id.ToString());
-
-        await _email.SendEmail(player.Email, "Activate Your Account", message);
-        return true;
+        return player;
     }
 }

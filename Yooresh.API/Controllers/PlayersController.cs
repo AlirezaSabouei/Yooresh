@@ -1,25 +1,18 @@
-﻿using Yooresh.Application.Players.Commands;
-using Yooresh.Application.Players.Queries;
-using Yooresh.Domain.Entities.Players;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using AutoMapper;
+using Yooresh.Application.Players.Commands;
 using Yooresh.Application.Players.Dto;
+using Yooresh.Application.Players.Queries;
 
 namespace Yooresh.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "SimplePlayer,SuperAdmin,Admin")]
-public class PlayersController : BaseApiController
+public class PlayersController(IMapper mapper) : BaseApiController(mapper)
 {
-    public PlayersController(IMapper mapper) : base(mapper)
-    {
-    }
-
     [HttpGet]
     public async Task<ActionResult<PlayerDto>> GetPlayer()
     {
@@ -33,51 +26,54 @@ public class PlayersController : BaseApiController
         return playerDto;
     }
 
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<ActionResult<bool>> SignUp([FromBody] CreatePlayerCommand command)
+    [HttpPost("signup")]
+    public async Task<ActionResult<PlayerDto>> SignUp([FromBody] CreatePlayerCommand command)
     {
-        try
-        {
-            command.SiteAddress = $"{Request.Scheme}://{Request.Host.Value}/api/confirmplayer?playerid=";
-            return await Mediator.Send(command);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-            foreach (var error in ex.Errors)
-            {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
-
-            return BadRequest(ModelState);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+        // command.SiteAddress = $"{Request.Scheme}://{Request.Host.Value}/api/confirmplayer?playerid=";
+        var result = await Mediator.Send(command);
+        return _mapper.Map<PlayerDto>(result);
     }
 
-    [HttpGet("/api/ConfirmPlayer")]
-    [AllowAnonymous]
-    public async Task<ActionResult<bool>> ConfirmPlayer([FromQuery] Guid playerId)
+    [HttpPost("confirm")]
+    public async Task<ActionResult<bool>> ConfirmPlayer([FromBody] string confirmationCode)
     {
-        try
+        var command = new ConfirmPlayerCommand()
         {
-            var command = new ConfirmPlayerCommand()
-            {
-                PlayerId = playerId
-            };
-            return await Mediator.Send(command);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
+            PlayerId = PlayerId,
+            ConfirmationCode = confirmationCode
+        };
+        return await Mediator.Send(command);
     }
 
-    [HttpGet("/api/CheckPlayer")]
-    public ActionResult CheckPlayer()
+
+    [HttpPost("login")]
+    public async Task<ActionResult<Dictionary<string, string>?>> Login([FromBody] LoginDto request)
     {
-        return NoContent();
+        LoginCommand command = new()
+        {
+            Email = request.Email,
+            Password = request.Password
+        };
+        Dictionary<string, string>? result = await Mediator.Send(command);
+        if (result == null)
+        {
+            return Unauthorized();
+        }
+        return Ok(result);
+    }
+
+    [HttpPost("refresh")]
+    public async Task<ActionResult<Dictionary<string, string>?>> Refresh([FromBody] RefreshRequest request)
+    {
+        RefreshCommand command = new()
+        {
+            RefreshToken = request.RefreshToken
+        };
+        Dictionary<string, string>? result = await Mediator.Send(command);
+        if (result == null)
+        {
+            return Unauthorized();
+        }
+        return Ok(result);
     }
 }

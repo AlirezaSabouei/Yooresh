@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Yooresh.Domain.Interfaces;
 using Yooresh.Infrastructure.JobTools;
+using Hangfire.MemoryStorage;
 
 namespace Yooresh.Infrastructure;
 
@@ -14,11 +15,12 @@ public static class ConfigureServices
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<Context>(options =>
-            options.UseSqlServer(
-                configuration.GetConnectionString("DefaultConnection"),
-                builder => builder.MigrationsAssembly(typeof(Context).Assembly.GetName().Name)
-            ));
+        //services.AddDbContext<Context>(options =>
+        //    options.UseSqlServer(
+        //        configuration.GetConnectionString("DefaultConnection"),
+        //        builder => builder.MigrationsAssembly(typeof(Context).Assembly.GetName().Name)
+        //    ));
+        services.AddDbContext<Context>(options => { options.UseInMemoryDatabase("TestDatabase"); });
 
         services.AddScoped<IContext, Context>();
 
@@ -26,12 +28,11 @@ public static class ConfigureServices
         var senderPassword = configuration.GetSection("Email")!["Password"]!;
         
         services.AddScoped<IEmail>(s=> new Email(senderEmail, senderPassword));
-        
-        services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+
+       //services.AddHangfire(x => x.UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+        services.AddHangfire(x => x.UseMemoryStorage());
         services.AddHangfireServer();
         
         services.AddScoped<IJob, Job>();
-
-
     }
 }

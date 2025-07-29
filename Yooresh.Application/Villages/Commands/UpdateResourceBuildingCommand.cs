@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Villages.Dto;
 using Yooresh.Application.Villages.Queries;
-using Yooresh.Domain.Enums;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 
 namespace Yooresh.Application.Villages.Commands;
