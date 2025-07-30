@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Yooresh.Blazor.Village.Models.Players;
+﻿namespace Yooresh.Blazor.Village.Models.Players;
 
 public class Player
 {

@@ -9,7 +9,7 @@ using Xunit;
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class ConfirmPlayerCommandHandlerTests:
-    CommandHandlerTests<ConfirmPlayerCommandHandler,ConfirmPlayerCommand,bool>
+    RequestHandlerTests<ConfirmPlayerCommandHandler,ConfirmPlayerCommand,bool>
 {
     private Mock<IContext>? _contextMock;
     private Mock<Player>? _playerMock;
@@ -26,7 +26,7 @@ public class ConfirmPlayerCommandHandlerTests:
             .ReturnsDbSet((new List<Player>(){_playerMock!.Object}).AsQueryable());
     }
 
-    protected override ConfirmPlayerCommand CreateValidCommand()
+    protected override ConfirmPlayerCommand CreateValidRequest()
     {
         return new ConfirmPlayerCommand()
         {
@@ -34,7 +34,7 @@ public class ConfirmPlayerCommandHandlerTests:
         };
     }
 
-    protected override ConfirmPlayerCommandHandler CreateCommandHandler()
+    protected override ConfirmPlayerCommandHandler CreateRequestHandler()
     {
         return new ConfirmPlayerCommandHandler(
             _contextMock!.Object
