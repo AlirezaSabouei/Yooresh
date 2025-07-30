@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
+using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.Application.Players.Commands.Validators;
 
@@ -19,7 +20,6 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
 
         RuleFor(a => a.Email)
             .NotEmpty()
-            .NotNull()
             .WithMessage("'{PropertyName}' should be provided")
             .EmailAddress()
             .WithMessage("'{PropertyName}' should be a valid email address")
@@ -35,7 +35,7 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
     private async Task<bool> BeUniqueInDatabase(CreatePlayerCommand request, string property,
         CancellationToken cancellationToken)
     {
-        var count = await _context.Players.CountAsync(a => a.Email.ToLower() == request.Email.ToLower(),
+        var count = await _context.QuerySet<Player>().CountAsync(a => a.Email.ToLower() == request.Email.ToLower(),
             cancellationToken);
 
         return count == 0;
@@ -43,7 +43,8 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
 
     private bool MeetPasswordStrength(CreatePlayerCommand request, string property)
     {
-        return request.Password.Length > 5 &&
+        return !string.IsNullOrWhiteSpace(request.Password) &&
+               request.Password.Length > 5 &&
                request.Password.Any(c => char.IsLetter(c)) &&
                request.Password.Any(c => char.IsDigit(c));
     }

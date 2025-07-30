@@ -26,6 +26,7 @@ public class CreatePlayerCommandHandler(
             Email = request.Email.ToLower(),
             Password = request.Password,
             Role = Role.SimplePlayer,
+            Confirmed = false,
             ConfirmationCode = (new Random(DateTime.Now.Millisecond).Next(12345678, 99999999)).ToString()
         };
         await _context.Players.AddAsync(player, cancellationToken);

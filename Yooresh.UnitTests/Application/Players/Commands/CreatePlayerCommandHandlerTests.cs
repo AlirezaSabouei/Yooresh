@@ -1,26 +1,26 @@
-using Microsoft.Extensions.Configuration;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Players.Commands;
-using MockQueryable.NSubstitute;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.UnitTests.Application.Base;
 using NSubstitute;
 using NUnit.Framework;
+using Shouldly;
+using Yooresh.Domain.Events;
+using NSubstitute.ReceivedExtensions;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class CreatePlayerCommandHandlerTests:
-    CommandHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
+    RequestHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
 {
     private IContext _contextMock = Substitute.For<IContext>();
 
     protected override void SetupDependencies()
     {
-        IQueryable<Player> mockedList = (new List<Player>()).AsQueryable();//BuildMock();
-        _contextMock.QuerySet<Player>().Returns(call => mockedList);
+        
     }
 
-    protected override CreatePlayerCommand CreateValidCommand()
+    protected override CreatePlayerCommand CreateValidRequest()
     {
         return new CreatePlayerCommand()
         {
@@ -30,7 +30,7 @@ public class CreatePlayerCommandHandlerTests:
         };
     }
 
-    protected override CreatePlayerCommandHandler CreateCommandHandler()
+    protected override CreatePlayerCommandHandler CreateRequestHandler()
     {
         return new CreatePlayerCommandHandler(_contextMock);
     }
@@ -38,10 +38,27 @@ public class CreatePlayerCommandHandlerTests:
     [Test]
     public async Task Handle_CommandIsValid_ContextSaveChangesIsCalled()
     {
-        await Handler!.Handle(Command!, new CancellationToken());
+        await Handler!.Handle(Request!, new CancellationToken());
         
         await _contextMock
             .Received(1)
             .SaveChangesAsync(Arg.Any<CancellationToken>());
+        await _contextMock.Players
+            .Received(1)
+            .AddAsync(Arg.Any<Player>());
+    }
+
+    [Test]
+    public async Task Handle_CommandIsValid_PlayerIsCreated()
+    {
+        var player = await Handler!.Handle(Request!, new CancellationToken());
+
+        player.Name.ShouldBe(Request.Name);
+        player.Email.ShouldBe(Request.Email.ToLower());
+        player.Password.ShouldBe(Request.Password);
+        player.Confirmed.ShouldBeFalse();
+        (Convert.ToInt32(player.ConfirmationCode)).ShouldBeGreaterThanOrEqualTo(12345678);
+        player.Role.ShouldBe(Role.SimplePlayer);
+        player.DomainEvents.Count(a => a is PlayerCreatedEvent).ShouldBe(1);        
     }
 }

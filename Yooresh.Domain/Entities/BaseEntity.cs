@@ -6,12 +6,13 @@ namespace Yooresh.Domain.Entities;
 public abstract class BaseEntity
 {
     public Guid Id { get; set; }
+
+    private readonly List<BaseEvent> _domainEvents = new();
+
     protected BaseEntity()
     {
         Id = Guid.NewGuid();
     }
-
-    private readonly List<BaseEvent> _domainEvents = new();
 
     [NotMapped]
     public IReadOnlyCollection<BaseEvent> DomainEvents => _domainEvents.AsReadOnly();
