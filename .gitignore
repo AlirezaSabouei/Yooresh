@@ -362,3 +362,4 @@ Coverage/
 
 # Ignore appsettings.dev to prevent telegram bot token to be committed to server
 *.development.json
+/Yooresh.API/appsettings.Development.json
