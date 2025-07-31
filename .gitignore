@@ -359,3 +359,6 @@ Coverage/
 **/*.tfstate
 **/*.tfstate.backup
 **/.terraform.lock.hcl
+
+# Ignore appsettings.dev to prevent telegram bot token to be committed to server
+*.development.json
