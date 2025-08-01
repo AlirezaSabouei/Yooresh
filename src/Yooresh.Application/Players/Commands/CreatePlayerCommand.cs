@@ -2,6 +2,7 @@
 using Yooresh.Domain.Entities.Players;
 using MediatR;
 using Yooresh.Domain.Events;
+using Yooresh.Application.Common.Tools;
 
 namespace Yooresh.Application.Players.Commands;
 
@@ -13,22 +14,24 @@ public record CreatePlayerCommand : IRequest<Player>
 }
 
 public class CreatePlayerCommandHandler(
-    IContext context)
+    IContext context, IPasswordEncryption passwordEncryption)
     : IRequestHandler<CreatePlayerCommand, Player>
 {
     private readonly IContext _context = context;
+    private readonly IPasswordEncryption _passwordEncryption = passwordEncryption;
 
     public async Task<Player> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
     {
         var player = new Player()
         {
             Name = request.Name,
-            Email = request.Email.ToLower(),
+            Email = request.Email.Trim().ToLowerInvariant(),
             Password = request.Password,
             Role = Role.SimplePlayer,
             Confirmed = false,
-            ConfirmationCode = (new Random(DateTime.Now.Millisecond).Next(12345678, 99999999)).ToString()
+            ConfirmationCode = Guid.NewGuid().ToString()
         };
+        player.Password = _passwordEncryption.HashPassword(player);
         await _context.Players.AddAsync(player, cancellationToken);
         player.AddDomainEvent(new PlayerCreatedEvent(player));
         await _context.SaveChangesAsync(cancellationToken);

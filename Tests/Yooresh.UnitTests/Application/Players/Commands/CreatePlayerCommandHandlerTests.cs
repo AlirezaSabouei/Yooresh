@@ -1,23 +1,27 @@
-using Yooresh.Application.Common.Interfaces;
-using Yooresh.Application.Players.Commands;
-using Yooresh.Domain.Entities.Players;
-using Yooresh.UnitTests.Application.Base;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Shouldly;
+using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Tools;
+using Yooresh.Application.Players.Commands;
+using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Events;
-using NSubstitute.ReceivedExtensions;
+using Yooresh.UnitTests.Application.Base;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class CreatePlayerCommandHandlerTests:
     RequestHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
 {
-    private IContext _contextMock = Substitute.For<IContext>();
+    private readonly IContext _contextMock = Substitute.For<IContext>();
+    private readonly IPasswordEncryption _passwordEncryption = Substitute.For<IPasswordEncryption>();
 
     protected override void SetupDependencies()
     {
-        
+        _passwordEncryption.HashPassword(Arg.Any<Player>())
+            .Returns("HashedPassword");
     }
 
     protected override CreatePlayerCommand CreateValidRequest()
@@ -32,13 +36,13 @@ public class CreatePlayerCommandHandlerTests:
 
     protected override CreatePlayerCommandHandler CreateRequestHandler()
     {
-        return new CreatePlayerCommandHandler(_contextMock);
+        return new CreatePlayerCommandHandler(_contextMock, _passwordEncryption);
     }
 
     [Test]
     public async Task Handle_CommandIsValid_ContextSaveChangesIsCalled()
     {
-        await Handler!.Handle(Request!, new CancellationToken());
+        await Handler!.Handle(Request!, default);
         
         await _contextMock
             .Received(1)
@@ -49,16 +53,52 @@ public class CreatePlayerCommandHandlerTests:
     }
 
     [Test]
+    public async Task Handle_CommandIsValid_PasswordEncryptionIsCalled()
+    {
+        await Handler!.Handle(Request!, default);
+
+        _passwordEncryption
+            .Received(1)
+            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name && a.Password == Request.Password));
+    }
+
+    [Test]
     public async Task Handle_CommandIsValid_PlayerIsCreated()
     {
-        var player = await Handler!.Handle(Request!, new CancellationToken());
+        var player = await Handler!.Handle(Request!, default);
 
         player.Name.ShouldBe(Request.Name);
-        player.Email.ShouldBe(Request.Email.ToLower());
-        player.Password.ShouldBe(Request.Password);
         player.Confirmed.ShouldBeFalse();
-        (Convert.ToInt32(player.ConfirmationCode)).ShouldBeGreaterThanOrEqualTo(12345678);
+        Guid.TryParse(player.ConfirmationCode, out Guid confirmationCode).ShouldBeTrue();
         player.Role.ShouldBe(Role.SimplePlayer);
         player.DomainEvents.Count(a => a is PlayerCreatedEvent).ShouldBe(1);        
+    }
+
+    [Test]
+    public async Task Handle_PlayerCreated_EmailIsNormalized()
+    {
+        Request!.Email = "  TEST@EXAMPLE.COM  ";
+
+        var player = await Handler!.Handle(Request!, default);
+
+        player.Email.ShouldBe("test@example.com");
+    }
+
+    [Test]
+    public async Task Handle_PlayerCreated_PasswordIsEncrypted()
+    {
+        var player = await Handler!.Handle(Request!, default);
+
+        player.Password.ShouldBe("HashedPassword");
+        player.Password.ShouldNotBe(Request!.Password);
+    }
+
+    [Test]
+    public void Handle_WhenSaveFails_ThrowsException()
+    {
+        _contextMock.SaveChangesAsync(Arg.Any<CancellationToken>())
+            .Throws(new Exception("Database failed"));
+
+        Should.ThrowAsync<Exception>(() => Handler!.Handle(Request!, default));
     }
 }
