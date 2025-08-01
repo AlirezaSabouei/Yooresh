@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Yooresh.API;
 using Yooresh.Application.Common;
@@ -8,9 +9,9 @@ using Yooresh.Infrastructure.Persistence;
 
 namespace Yooresh.AcceptanceTests.Drivers;
 
-public abstract class DriverBase<TEntity,TDto> 
+public abstract class DriverBase<TEntity,TDto> : IDisposable
     where TEntity : BaseEntity
-    where TDto : BaseDto
+    where TDto : BaseDto 
 {
     public WebApplicationFactory<Program> Factory { get; set; }
 
@@ -61,8 +62,10 @@ public abstract class DriverBase<TEntity,TDto>
         await DbContext.SaveChangesAsync();
     }
 
-    public TEntity? GetEntityFromDatabase(Guid id)
+    public async Task<TEntity?> GetEntityFromDatabaseAsync(Guid id)
     {
-        return DbContext!.Set<TEntity>().FirstOrDefault(a => a.Id == id);
+        return await DbContext!.Set<TEntity>().FirstOrDefaultAsync(a => a.Id == id);
     }
+
+    public virtual void Dispose() => DbContext!.Dispose();
 }

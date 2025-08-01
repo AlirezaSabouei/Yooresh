@@ -25,7 +25,7 @@ public class PlayerConfiguration : IEntityTypeConfiguration<Player>
         builder.Property(a => a.Password)
             .IsRequired()
             .IsEncrypted()
-            .HasMaxLength(50);
+            .HasMaxLength(100);
         
         builder.Property(a => a.Role)
             .HasColumnType("nvarchar(24)")

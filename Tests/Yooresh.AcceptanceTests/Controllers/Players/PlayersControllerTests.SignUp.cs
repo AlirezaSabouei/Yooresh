@@ -1,15 +1,10 @@
 ﻿using NUnit.Framework;
 using Shouldly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-using Yooresh.AcceptanceTests.Drivers;
 using Yooresh.Application.Players.Commands;
 using Yooresh.Application.Players.Dto;
+using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;
 
@@ -49,7 +44,7 @@ public partial class PlayersControllerTests
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         var errors = await result.Content.ReadFromJsonAsync<List<string>>();
-        errors!.Count.ShouldBe(2);
+        errors!.Count.ShouldBe(3);
         errors.All(a => a.Contains(nameof(LoginDto.Email))).ShouldBeTrue();
     }
 
@@ -112,6 +107,27 @@ public partial class PlayersControllerTests
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
         var errors = await result.Content.ReadFromJsonAsync<List<string>>();
+        errors!.Count.ShouldBe(2);
+        errors.All(a => a.Contains(nameof(LoginDto.Password))).ShouldBeTrue();
+    }
+
+    [Test]
+    [TestCase("12345")]
+    [TestCase("aksdj")]
+    public async Task SignUp_WeakPassword_Returns400(string password)
+    {
+        var command = new CreatePlayerCommand()
+        {
+            Name = "some name",
+            Email = "a@gmail.com",
+            Password = password,
+        };
+
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+
+        result.IsSuccessStatusCode.ShouldBeFalse();
+        result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        var errors = await result.Content.ReadFromJsonAsync<List<string>>();
         errors!.Count.ShouldBe(1);
         errors.All(a => a.Contains(nameof(LoginDto.Password))).ShouldBeTrue();
     }
@@ -128,10 +144,24 @@ public partial class PlayersControllerTests
 
         var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
 
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        await AssertDatabaseCreatedPlayer(playerDto!);
+    }
+
+    private static async Task<PlayerDto?> AssertSuccessResult(HttpResponseMessage result)
+    {
         result.IsSuccessStatusCode.ShouldBeTrue();
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        PlayerDto player = await result.Content.ReadFromJsonAsync<PlayerDto>();
+        result.StatusCode.ShouldBe(HttpStatusCode.Created);
+        PlayerDto? player = await result.Content.ReadFromJsonAsync<PlayerDto>();
         player.ShouldNotBeNull();
+        return player;
+    }
+
+    private async Task<Player?> AssertDatabaseCreatedPlayer(PlayerDto player)
+    {
+        var createdPlayer = await _playersDriver.GetEntityFromDatabaseAsync(player!.Id);
+        createdPlayer.ShouldNotBeNull();
+        return createdPlayer;
     }
 
     [Test]
@@ -146,10 +176,28 @@ public partial class PlayersControllerTests
 
         var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
 
-        result.IsSuccessStatusCode.ShouldBeTrue();
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        PlayerDto player = await result.Content.ReadFromJsonAsync<PlayerDto>();
-        player.Confirmed.ShouldBeFalse();
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        playerDto!.Confirmed.ShouldBeFalse();
+        var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);
+        createdPlayer!.Confirmed.ShouldBeFalse();
+    }
+
+    [Test]
+    public async Task SignUp_PlayerCreated_ConfirmedCodeShouldCreatedInDatabase()
+    {
+        var command = new CreatePlayerCommand()
+        {
+            Name = "some name",
+            Email = "a@gmail.com",
+            Password = "some password123@",
+        };
+
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        playerDto!.Confirmed.ShouldBeFalse();
+        var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);
+        Guid.TryParse(createdPlayer!.ConfirmationCode, out _).ShouldBeTrue();
     }
 
     [Test]
@@ -164,10 +212,10 @@ public partial class PlayersControllerTests
 
         var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
 
-        result.IsSuccessStatusCode.ShouldBeTrue();
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        PlayerDto player = await result.Content.ReadFromJsonAsync<PlayerDto>();
-        player.Role.ShouldBe(RoleDto.SimplePlayer);
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        playerDto!.Role.ShouldBe(RoleDto.SimplePlayer);
+        var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);
+        createdPlayer!.Role.ShouldBe(Role.SimplePlayer);
     }
 
     [Test]
@@ -182,9 +230,26 @@ public partial class PlayersControllerTests
 
         var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
 
-        result.IsSuccessStatusCode.ShouldBeTrue();
-        result.StatusCode.ShouldBe(HttpStatusCode.OK);
-        PlayerDto player = await result.Content.ReadFromJsonAsync<PlayerDto>();
-        player!.Email.ShouldBe(command.Email.ToLower());
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        playerDto!.Email.ShouldBe(command.Email.ToLower());
+        var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);
+        createdPlayer!.Email.ShouldBe(command.Email.ToLower());
+    }
+
+    [Test]
+    public async Task SignUp_PlayerCreated_PasswordShouldBeHashed()
+    {
+        var command = new CreatePlayerCommand()
+        {
+            Name = "some name",
+            Email = "A@GMAIL.COM",
+            Password = "some password123@",
+        };
+
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+
+        PlayerDto? playerDto = await AssertSuccessResult(result);
+        var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);
+        createdPlayer!.Password.ShouldNotBe(command.Password);
     }
 }

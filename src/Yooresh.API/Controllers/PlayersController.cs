@@ -28,9 +28,9 @@ public class PlayersController(IMapper mapper) : BaseApiController(mapper)
     [HttpPost("signup")]
     public async Task<ActionResult<PlayerDto>> SignUp([FromBody] CreatePlayerCommand command)
     {
-        // command.SiteAddress = $"{Request.Scheme}://{Request.Host.Value}/api/confirmplayer?playerid=";
         var result = await Mediator.Send(command);
-        return _mapper.Map<PlayerDto>(result);
+        var dto = _mapper.Map<PlayerDto>(result);
+        return Created(string.Empty, dto);
     }
 
     [HttpPost("confirm")]

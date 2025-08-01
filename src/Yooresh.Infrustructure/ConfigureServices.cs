@@ -8,6 +8,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Yooresh.Domain.Interfaces;
 using Yooresh.Infrastructure.JobTools;
 using Hangfire.MemoryStorage;
+using Yooresh.Application.Common.Tools;
+using Yooresh.Infrastructure.PasswordTools;
 
 namespace Yooresh.Infrastructure;
 
@@ -34,5 +36,6 @@ public static class ConfigureServices
         services.AddHangfireServer();
         
         services.AddScoped<IJob, Job>();
+        services.AddScoped<IPasswordEncryption, PasswordEncryption>();
     }
 }
