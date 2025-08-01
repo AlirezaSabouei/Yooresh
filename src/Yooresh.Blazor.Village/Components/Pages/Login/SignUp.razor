@@ -1,0 +1,76 @@
+﻿@page "/SignUp"
+@using Yooresh.Village.Models;
+@using Yooresh.Village.Models.Players
+@using Yooresh.Village.Services
+mode InteractiveServer
+@inject Services.IPlayerServices _playerServices;
+@inject NavigationManager _navManager
+
+<h3>SignUp</h3>
+<EditForm Model="@SignUpDto" OnValidSubmit="@ValidSubmit">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <label for="full-name" class="col-sm-2 col-form-label">
+            Name :
+        </label>
+        <div class="col-sm-10">
+            <InputText id="full-name" class="form-control" placeholder="Example: john"
+                       @bind-Value="SignUpDto.Name" />
+        </div>
+        <ValidationMessage For="@(() => SignUpDto.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="email" class="col-sm-2 col-form-label">
+            Email :
+        </label>
+        <div class="col-sm-10">
+            <InputText id="email" class="form-control" placeholder="Example: myEmail@Domain.com"
+                       @bind-Value="SignUpDto.Email" @onblur="ValidateEmail" />
+            @* <EmailCheck Email="@SignUpDto.Email" /> *@
+            <ValidationMessage For="@(() => SignUpDto.Email)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password" class="col-sm-2 col-form-label">
+            Password :
+        </label>
+        <div class="col-sm-10">
+            <InputText id="password" class="form-control" @bind-Value="SignUpDto.Password" />
+            <ValidationMessage For="@(() => SignUpDto.Password)" />
+        </div>
+    </div>
+    <br/>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</EditForm>
+@if (ErrorMessage != null)
+{
+    <div class="alert alert-danger" role="alert">
+        @ErrorMessage!
+    </div>
+}
+
+@code {
+
+    public SignUpDto SignUpDto { get; set; } = new();
+
+    private string? emailToCheck;
+    private string? ErrorMessage;
+
+    private void ValidateEmail()
+    {
+        emailToCheck = SignUpDto.Email;
+    }
+
+    private async Task ValidSubmit()
+    {
+        var result = await _playerServices.SignUp(SignUpDto);
+        if (result.IsSuccess)
+        {
+            _navManager.NavigateTo($"/confirmaccount?playerId={result!.Data!.Id}");
+        }
+        else
+        {
+            ErrorMessage = result.ErrorMessage;
+        }      
+    }
+}

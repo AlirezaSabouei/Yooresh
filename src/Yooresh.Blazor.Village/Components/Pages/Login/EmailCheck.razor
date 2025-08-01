@@ -1,0 +1,36 @@
+﻿@using System.ComponentModel.DataAnnotations
+<div class="validation-message">
+    @if(ShowSpinner)
+    {
+        <div class="spinner-border text-success" role="status">
+            <span class="sr-only"></span>
+        </div>
+    }
+    @Message
+</div>
+
+@code {
+
+    [Parameter]
+    public string? Email { get; set; }
+
+    public string? Message;
+    public bool ShowSpinner;
+
+    protected async override Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(Email) && new EmailAddressAttribute().IsValid(Email))
+        {
+            ShowSpinner = true;
+            bool isUnique = await Task.Run(() => { Thread.Sleep(5000); return true; });
+            ShowSpinner = false;
+            Message = isUnique
+                ? "Email is valid"
+                : "Email is already registered";
+        }
+        else
+        {
+            Message = null;
+        }       
+    }
+}
