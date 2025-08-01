@@ -15,29 +15,32 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
 
         RuleFor(a => a.Name)
             .NotEmpty()
-            .NotNull()
-            .WithMessage("'{PropertyName}' should be provided");
+            .NotNull();
 
         RuleFor(a => a.Email)
             .NotEmpty()
-            .WithMessage("'{PropertyName}' should be provided")
-            .EmailAddress()
-            .WithMessage("'{PropertyName}' should be a valid email address")
+            .NotNull()
+            .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
             .MustAsync(BeUniqueInDatabase)
             .WithMessage("'{PropertyName}' is already in use");
 
         RuleFor(a => a.Password)
+            .NotEmpty()
+            .NotNull()
             .Must(MeetPasswordStrength)
             .WithMessage(
-                "'{PropertyName}' should be at least 5 chars consist of alphabet, Number and signs");
+                "'{PropertyName}' should be at least 5 characters and contain both letters and numbers");
     }
 
     private async Task<bool> BeUniqueInDatabase(CreatePlayerCommand request, string property,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(request.Email))
+        {
+            return false;
+        }
         var count = await _context.QuerySet<Player>().CountAsync(a => a.Email.ToLower() == request.Email.ToLower(),
             cancellationToken);
-
         return count == 0;
     }
 

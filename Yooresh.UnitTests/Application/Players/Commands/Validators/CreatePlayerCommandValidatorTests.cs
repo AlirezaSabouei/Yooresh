@@ -72,7 +72,7 @@ public class CreatePlayerCommandValidatorTests:
 
         //Assert
         result.IsValid.ShouldBe(false);
-        result.Errors.ShouldContain(a => a.ErrorMessage.Contains($"'{nameof(CreatePlayerCommand.Email)}' should be provided"));
+        result.Errors.ShouldContain(a => a.ErrorMessage.Contains($"'{nameof(CreatePlayerCommand.Email)}' must not be empty."));
     }
 
     [Test]
@@ -88,24 +88,27 @@ public class CreatePlayerCommandValidatorTests:
 
         //Assert
         result.IsValid.ShouldBe(false);
-        result.Errors.ShouldContain(a => a.ErrorMessage.Contains($"'{nameof(CreatePlayerCommand.Email)}' should be a valid email address"));
+        result.Errors.ShouldContain(a => a.ErrorMessage.Contains($"'{nameof(CreatePlayerCommand.Email)}' is not a valid email address."));
     }
 
     [Test]
-    public async Task Validator_EmailAlreadyExists_ValidationFalse()
+    [TestCase("test@test.com", "test@test.com")]    
+    [TestCase("TEST@TEST.COM", "test@test.com")]
+    [TestCase("test@test.com", "TEST@TEST.COM")]
+    [TestCase("Test@test.com", "test@Test.com")]
+    public async Task Validator_EmailAlreadyExists_ValidationFalse(string existingEmail, string incomingEmail)
     {
         //Arrange
-        var email = "test@test.com".ToUpper();
         var players = new List<Player>() 
         { 
             new()
             { 
                 Id = Guid.NewGuid(),
-                Email = email
+                Email = existingEmail
             }
         }.BuildMock();
         _contextMock!.QuerySet<Player>().Returns(players.AsQueryable());
-        Command!.Email = email.ToLower();
+        Command!.Email = incomingEmail;
 
         //Act
         var result = await Validator!.ValidateAsync(Command);
@@ -134,6 +137,6 @@ public class CreatePlayerCommandValidatorTests:
         //Assert
         result.IsValid.ShouldBe(false);
         result.Errors.ShouldContain(a => a.ErrorMessage.Contains(
-            $"'{nameof(CreatePlayerCommand.Password)}' should be at least 5 chars consist of alphabet, Number and signs"));
+            $"'{nameof(CreatePlayerCommand.Password)}' should be at least 5 characters and contain both letters and numbers"));
     }
 }
