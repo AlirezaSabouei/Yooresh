@@ -20,7 +20,7 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
         RuleFor(a => a.Email)
             .NotEmpty()
             .NotNull()
-            .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
+            .EmailAddress()
             .MustAsync(BeUniqueInDatabase)
             .WithMessage("'{PropertyName}' is already in use");
 
