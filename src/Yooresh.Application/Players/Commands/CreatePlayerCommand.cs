@@ -14,11 +14,11 @@ public record CreatePlayerCommand : IRequest<Player>
 }
 
 public class CreatePlayerCommandHandler(
-    IContext context, IPasswordEncryption passwordEncryption)
+    IContext context, IPasswordEncryption<Player> passwordEncryption)
     : IRequestHandler<CreatePlayerCommand, Player>
 {
     private readonly IContext _context = context;
-    private readonly IPasswordEncryption _passwordEncryption = passwordEncryption;
+    private readonly IPasswordEncryption<Player> _passwordEncryption = passwordEncryption;
 
     public async Task<Player> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
     {
@@ -31,7 +31,7 @@ public class CreatePlayerCommandHandler(
             Confirmed = false,
             ConfirmationCode = Guid.NewGuid().ToString()
         };
-        player.Password = _passwordEncryption.HashPassword(player);
+        player.Password = _passwordEncryption.HashPassword(player, player.Password);
         await _context.Players.AddAsync(player, cancellationToken);
         player.AddDomainEvent(new PlayerCreatedEvent(player));
         await _context.SaveChangesAsync(cancellationToken);

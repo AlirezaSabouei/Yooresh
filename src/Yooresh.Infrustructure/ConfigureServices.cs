@@ -10,6 +10,8 @@ using Yooresh.Infrastructure.JobTools;
 using Hangfire.MemoryStorage;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Infrastructure.PasswordTools;
+using Yooresh.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Yooresh.Infrastructure;
 
@@ -36,6 +38,7 @@ public static class ConfigureServices
         services.AddHangfireServer();
         
         services.AddScoped<IJob, Job>();
-        services.AddScoped<IPasswordEncryption, PasswordEncryption>();
+        services.AddScoped<IPasswordEncryption<BaseEntity>, PasswordEncryption<BaseEntity>>();
+        services.AddScoped<IPasswordHasher<BaseEntity>, PasswordHasher<BaseEntity>>();
     }
 }

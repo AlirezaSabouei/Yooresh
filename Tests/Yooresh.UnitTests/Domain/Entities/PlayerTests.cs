@@ -1,12 +1,12 @@
 ﻿using Yooresh.Domain.Entities.Players;
 using Shouldly;
-using Xunit;
+using NUnit.Framework;
 
 namespace Yooresh.UnitTests.Domain.Entities;
 
 public class PlayerTests
 {
-    [Fact]
+    [Test]
     public void Email_UpperCaseValueSet_ValueConvertedToLowerCase()
     {
         const string email = "MY EMAIL";
@@ -15,14 +15,14 @@ public class PlayerTests
         player.Email.ShouldBe(email.ToLower());
     }
 
-    [Fact]
+    [Test]
     public void CreatedPlayer_ShouldHaveFalseConfirmed()
     {
         Player player = new("name", "email", "password", Role.SimplePlayer);
         player.Confirmed.ShouldBe(false);
     }
 
-    [Fact]
+    [Test]
     public void ConfirmPlayer_ShouldMakeThePlayerConfirmed()
     {
         Player player = new("name", "email", "password", Role.SimplePlayer);

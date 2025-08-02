@@ -1,14 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Yooresh.Application.Common.Tools;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities;
 
 namespace Yooresh.Infrastructure.PasswordTools;
 
-public class PasswordEncryption : IPasswordEncryption
+public class PasswordEncryption<TBaseEntity>(IPasswordHasher<BaseEntity> passwordHasher) : 
+    IPasswordEncryption<BaseEntity> where TBaseEntity : BaseEntity
 {
-    public string HashPassword(Player player)
+    private readonly IPasswordHasher<BaseEntity> _passwordHasher = passwordHasher;
+
+    public string HashPassword(BaseEntity baseEntity,string password)
     {
-        var hasher = new PasswordHasher<Player>();
-        return hasher.HashPassword(player, player.Password);
+        return _passwordHasher.HashPassword(baseEntity, password);
+    }
+
+    public bool VerifyPassword(BaseEntity baseEntity,string hashedPassword, string password)
+    {
+        var result = _passwordHasher.VerifyHashedPassword(baseEntity, hashedPassword, password);
+        return result == PasswordVerificationResult.Success;
     }
 }

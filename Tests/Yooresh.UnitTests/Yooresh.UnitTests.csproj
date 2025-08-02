@@ -21,6 +21,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Yooresh.Application\Yooresh.Application.csproj" />
       <ProjectReference Include="..\..\src\Yooresh.Domain\Yooresh.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Yooresh.Infrustructure\Yooresh.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
