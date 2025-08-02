@@ -2,9 +2,9 @@
 @using Yooresh.Village.Models;
 @using Yooresh.Village.Models.Players
 @using Yooresh.Village.Services
-mode InteractiveServer
 @inject Services.IPlayerServices _playerServices;
 @inject NavigationManager _navManager
+@rendermode InteractiveServer
 
 <h3>SignUp</h3>
 <EditForm Model="@SignUpDto" OnValidSubmit="@ValidSubmit">
@@ -35,7 +35,7 @@ mode InteractiveServer
             Password :
         </label>
         <div class="col-sm-10">
-            <InputText id="password" class="form-control" @bind-Value="SignUpDto.Password" />
+            <InputText id="password" type="password" class="form-control" @bind-Value="SignUpDto.Password" />
             <ValidationMessage For="@(() => SignUpDto.Password)" />
         </div>
     </div>
@@ -58,6 +58,7 @@ mode InteractiveServer
 
     private void ValidateEmail()
     {
+        //TODO : Should Add the component to check email duplication
         emailToCheck = SignUpDto.Email;
     }
 

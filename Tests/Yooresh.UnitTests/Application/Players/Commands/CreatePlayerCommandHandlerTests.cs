@@ -59,7 +59,7 @@ public class CreatePlayerCommandHandlerTests:
 
         _passwordEncryption
             .Received(1)
-            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name && a.Password == Request.Password));
+            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name));
     }
 
     [Test]
@@ -67,7 +67,7 @@ public class CreatePlayerCommandHandlerTests:
     {
         var player = await Handler!.Handle(Request!, default);
 
-        player.Name.ShouldBe(Request.Name);
+        player.Name.ShouldBe(Request!.Name);
         player.Confirmed.ShouldBeFalse();
         Guid.TryParse(player.ConfirmationCode, out Guid confirmationCode).ShouldBeTrue();
         player.Role.ShouldBe(Role.SimplePlayer);

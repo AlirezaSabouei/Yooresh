@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Yooresh.Blazor.Village\Yooresh.Village.csproj" />
+    <ProjectReference Include="..\..\src\Yooresh.Village\Yooresh.Village.csproj" />
   </ItemGroup>
 
 </Project>

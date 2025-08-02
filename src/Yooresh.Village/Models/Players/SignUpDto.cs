@@ -5,13 +5,12 @@ namespace Yooresh.Village.Models.Players;
 
 public class SignUpDto : ModelBase
 {
-    [EmailAddress(ErrorMessage = "Valid Email is required")]
-    [Required(ErrorMessage = "Valid Email is required")]
+    [Required, EmailAddress]
     public string Email { get; set; } = string.Empty;
 
-    [PasswordStrength(ErrorMessage = "Password is required")]
+    [PasswordStrength(ErrorMessage = "The Password field is required")]
     public string Password { get; set; }
 
-    [Required(ErrorMessage = "Name is required")]
+    [Required]
     public string Name { get; set; }
 }

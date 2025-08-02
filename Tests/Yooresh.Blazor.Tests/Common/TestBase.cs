@@ -20,7 +20,7 @@ public abstract class TestBase
             StartInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = "run --project ../../../../Yooresh.Blazor.Village",
+                Arguments = "run --project ../../../../../src/Yooresh.Village",
                 WorkingDirectory = Directory.GetCurrentDirectory(),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -39,7 +39,7 @@ public abstract class TestBase
             StartInfo = new ProcessStartInfo
             {
                 FileName = "dotnet",
-                Arguments = "run --project ../../../../Yooresh.API",
+                Arguments = "run --project ../../../../../src/Yooresh.API",
                 WorkingDirectory = Directory.GetCurrentDirectory(),
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
@@ -62,7 +62,7 @@ public abstract class TestBase
 
         // Uncomment the following code to debug the process problems
 
-        /*_blazorProcess.OutputDataReceived += (sender, args) =>
+        _blazorProcess.OutputDataReceived += (sender, args) =>
         {
             if (!string.IsNullOrEmpty(args.Data))
                 Console.WriteLine("[Blazor STDOUT] " + args.Data);
@@ -73,7 +73,7 @@ public abstract class TestBase
                 Console.Error.WriteLine("[Blazor STDERR] " + args.Data);
         };
         _blazorProcess.BeginOutputReadLine();
-        _blazorProcess.BeginErrorReadLine();*/
+        _blazorProcess.BeginErrorReadLine();
 
         _playwright = await Playwright.CreateAsync();
         _browser = await _playwright.Chromium.LaunchAsync(new() { Headless = false });
