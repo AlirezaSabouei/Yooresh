@@ -1,4 +1,5 @@
 using MediatR;
+using NUnit.Framework;
 
 namespace Yooresh.UnitTests.Application.Base;
 
@@ -8,23 +9,24 @@ public abstract class RequestHandlerTests<THandler,TRequest,TResult>
 {
     protected TRequest? Request;
     protected THandler? Handler;
-    
-    protected RequestHandlerTests()
+
+    [SetUp]
+    protected async Task RunBeforeEachTest()
     {
-        InitDependencies();
-        SetupDependencies();
+        await InitDependenciesAsync();
+        await SetupDependenciesAsync();
         Request = CreateValidRequest();
         Handler = CreateRequestHandler();
     }
 
-    protected virtual void InitDependencies()
+    protected virtual Task InitDependenciesAsync()
     {
-        
+        return Task.CompletedTask;
     }
     
-    protected virtual void SetupDependencies()
+    protected virtual Task SetupDependenciesAsync()
     {
-        
+        return Task.CompletedTask;
     }
     
     protected abstract TRequest CreateValidRequest();

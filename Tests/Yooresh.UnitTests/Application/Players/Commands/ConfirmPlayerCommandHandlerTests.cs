@@ -14,16 +14,18 @@ public class ConfirmPlayerCommandHandlerTests:
     private Mock<IContext>? _contextMock;
     private Mock<Player>? _playerMock;
 
-    protected override void InitDependencies()
+    protected override Task InitDependenciesAsync()
     {
         _contextMock = new Mock<IContext>();
         _playerMock = new Mock<Player>("name", "my@email.com", "Aa123456", Role.SimplePlayer);
+        return Task.CompletedTask;
     }
 
-    protected override void SetupDependencies()
+    protected override Task SetupDependenciesAsync()
     {
         _contextMock!.Setup(a => a.Players)
             .ReturnsDbSet((new List<Player>(){_playerMock!.Object}).AsQueryable());
+        return Task.CompletedTask;
     }
 
     protected override ConfirmPlayerCommand CreateValidRequest()

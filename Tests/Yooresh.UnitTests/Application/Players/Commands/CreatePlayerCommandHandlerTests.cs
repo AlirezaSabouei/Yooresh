@@ -15,13 +15,21 @@ namespace Yooresh.UnitTests.Application.Players.Commands;
 public class CreatePlayerCommandHandlerTests:
     RequestHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
 {
-    private readonly IContext _contextMock = Substitute.For<IContext>();
-    private readonly IPasswordEncryption _passwordEncryption = Substitute.For<IPasswordEncryption>();
+    private IContext? _contextMock;
+    private IPasswordEncryption<Player>? _passwordEncryption;
 
-    protected override void SetupDependencies()
+    protected override Task InitDependenciesAsync()
     {
-        _passwordEncryption.HashPassword(Arg.Any<Player>())
+        _contextMock = Substitute.For<IContext>();
+        _passwordEncryption = Substitute.For<IPasswordEncryption<Player>>();
+        return Task.CompletedTask;
+    }
+
+    protected override Task SetupDependenciesAsync()
+    {
+        _passwordEncryption!.HashPassword(Arg.Any<Player>(), Arg.Any<string>())
             .Returns("HashedPassword");
+        return Task.CompletedTask;
     }
 
     protected override CreatePlayerCommand CreateValidRequest()
@@ -36,7 +44,7 @@ public class CreatePlayerCommandHandlerTests:
 
     protected override CreatePlayerCommandHandler CreateRequestHandler()
     {
-        return new CreatePlayerCommandHandler(_contextMock, _passwordEncryption);
+        return new CreatePlayerCommandHandler(_contextMock!, _passwordEncryption!);
     }
 
     [Test]
@@ -44,10 +52,10 @@ public class CreatePlayerCommandHandlerTests:
     {
         await Handler!.Handle(Request!, default);
         
-        await _contextMock
+        await _contextMock!
             .Received(1)
             .SaveChangesAsync(Arg.Any<CancellationToken>());
-        await _contextMock.Players
+        await _contextMock!.Players
             .Received(1)
             .AddAsync(Arg.Any<Player>());
     }
@@ -57,9 +65,9 @@ public class CreatePlayerCommandHandlerTests:
     {
         await Handler!.Handle(Request!, default);
 
-        _passwordEncryption
+        _passwordEncryption!
             .Received(1)
-            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name));
+            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name), Arg.Is<string>(a => a == Request!.Password));
     }
 
     [Test]
@@ -96,7 +104,7 @@ public class CreatePlayerCommandHandlerTests:
     [Test]
     public void Handle_WhenSaveFails_ThrowsException()
     {
-        _contextMock.SaveChangesAsync(Arg.Any<CancellationToken>())
+        _contextMock!.SaveChangesAsync(Arg.Any<CancellationToken>())
             .Throws(new Exception("Database failed"));
 
         Should.ThrowAsync<Exception>(() => Handler!.Handle(Request!, default));
