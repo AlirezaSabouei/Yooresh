@@ -1,10 +1,9 @@
 ﻿using NUnit.Framework;
 using Shouldly;
-using System.ComponentModel.DataAnnotations;
 using Yooresh.Village.Tests.Pages.Login;
-using Yooresh.Village.Models.Players;
 using Yooresh.Village.Tests.Common;
 using Yooresh.Village.Tests.Helpers;
+using Yooresh.Village.Models.Players;
 using Yooresh.Village.Validations;
 
 namespace Yooresh.Village.Tests.Tests.Login;
@@ -20,8 +19,8 @@ public class SignUpTests : TestBase
         await signUpPage.FillSignUpForm("Alireza Sabouei", "test@example.com", "Password123@");
         await signUpPage.SubmitForm();
 
-        await Page.WaitForURLAsync("**/counter");
-        Assert.That(Page.Url, Does.Contain("/counter"));
+        await Page.WaitForURLAsync("**/confirmaccount?playerId=*");
+        Assert.That(Page.Url, Does.Contain("/confirmaccount"));
     }
 
     [Test]
@@ -34,10 +33,10 @@ public class SignUpTests : TestBase
         await signUpPage.SubmitForm();
 
         var errorText = await Page.InnerTextAsync("css=div.validation-message");
-        var expectedMessage = ValidationHelper.GetErrorMessage<SignUpDto>(nameof(SignUpDto.Name));
+        var expectedMessage = "The Name field is required.";
         errorText.ShouldBe(expectedMessage);
     }
-
+    
     [Test]
     public async Task SignUp_InvalidEmail_ShouldError()
     {
@@ -48,7 +47,7 @@ public class SignUpTests : TestBase
         await signUpPage.SubmitForm();
 
         var errorText = await Page.InnerTextAsync("css=div.validation-message");
-        var expectedMessage = ValidationHelper.GetErrorMessage<SignUpDto>(nameof(SignUpDto.Email), typeof(EmailAddressAttribute));
+        var expectedMessage = "The Email field is not a valid e-mail address.";
         errorText.ShouldBe(expectedMessage);
     }
 
@@ -62,7 +61,7 @@ public class SignUpTests : TestBase
         await signUpPage.SubmitForm();
 
         var errorText = await Page.InnerTextAsync("css=div.validation-message");
-        var expectedMessage = ValidationHelper.GetErrorMessage<SignUpDto>(nameof(SignUpDto.Email));
+        var expectedMessage = "The Email field is required.";
         errorText.ShouldBe(expectedMessage);
     }
 
