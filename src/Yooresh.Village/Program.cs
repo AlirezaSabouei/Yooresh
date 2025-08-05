@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Yooresh.Village.Components;
 using Yooresh.Village.Services;
 
@@ -16,10 +17,12 @@ namespace Yooresh.Village
                 { BaseAddress = new Uri(builder.Configuration["ApiAddress"] ?? string.Empty) });
 
             builder.Services.AddScoped<IResourceServices, ResourceServices>();
-            builder.Services.AddScoped<IPlayerServices, PlayerServices>();
+            builder.Services.AddScoped<IAccountServices, AccountServices>();
 
             builder.Services.AddServerSideBlazor()
                 .AddCircuitOptions(options => { options.DetailedErrors = true; });
+
+            builder.Services.AddScoped<AuthenticationService>();
 
             var app = builder.Build();
 

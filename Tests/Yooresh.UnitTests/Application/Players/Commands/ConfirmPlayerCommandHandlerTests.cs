@@ -1,15 +1,15 @@
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Application.Players.Commands;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.UnitTests.Application.Base;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Xunit;
+using Yooresh.Application.Account.Commands;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class ConfirmPlayerCommandHandlerTests:
-    RequestHandlerTests<ConfirmPlayerCommandHandler,ConfirmPlayerCommand,bool>
+    RequestHandlerTests<ConfirmAccountCommandHandler,ConfirmAccountCommand,bool>
 {
     private Mock<IContext>? _contextMock;
     private Mock<Player>? _playerMock;
@@ -28,17 +28,18 @@ public class ConfirmPlayerCommandHandlerTests:
         return Task.CompletedTask;
     }
 
-    protected override ConfirmPlayerCommand CreateValidRequest()
+    protected override ConfirmAccountCommand CreateValidRequest()
     {
-        return new ConfirmPlayerCommand()
+        return new ConfirmAccountCommand()
         {
-            PlayerId = _playerMock!.Object.Id
+            PlayerId = _playerMock!.Object.Id,
+            ConfirmationCode = Guid.NewGuid().ToString()
         };
     }
 
-    protected override ConfirmPlayerCommandHandler CreateRequestHandler()
+    protected override ConfirmAccountCommandHandler CreateRequestHandler()
     {
-        return new ConfirmPlayerCommandHandler(
+        return new ConfirmAccountCommandHandler(
             _contextMock!.Object
         );
     }

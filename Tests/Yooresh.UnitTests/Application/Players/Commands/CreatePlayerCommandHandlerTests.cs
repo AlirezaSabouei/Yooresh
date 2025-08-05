@@ -3,9 +3,10 @@ using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Shouldly;
+using Yooresh.Application.Account.Commands;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
-using Yooresh.Application.Players.Commands;
+using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.Domain.Events;
 using Yooresh.UnitTests.Application.Base;
@@ -16,12 +17,12 @@ public class CreatePlayerCommandHandlerTests:
     RequestHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
 {
     private IContext? _contextMock;
-    private IPasswordEncryption<Player>? _passwordEncryption;
+    private IPasswordEncryption<BaseEntity>? _passwordEncryption;
 
     protected override Task InitDependenciesAsync()
     {
         _contextMock = Substitute.For<IContext>();
-        _passwordEncryption = Substitute.For<IPasswordEncryption<Player>>();
+        _passwordEncryption = Substitute.For<IPasswordEncryption<BaseEntity>>();
         return Task.CompletedTask;
     }
 

@@ -1,6 +1,6 @@
-﻿using Yooresh.Application.Common;
+﻿using Yooresh.Application.Account.Dto;
+using Yooresh.Application.Common;
 using Yooresh.Application.Common.Mappings;
-using Yooresh.Application.Players.Dto;
 using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Application.Resources.Dto;

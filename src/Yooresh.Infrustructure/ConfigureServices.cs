@@ -19,12 +19,12 @@ public static class ConfigureServices
 {
     public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        //services.AddDbContext<Context>(options =>
-        //    options.UseSqlServer(
-        //        configuration.GetConnectionString("DefaultConnection"),
-        //        builder => builder.MigrationsAssembly(typeof(Context).Assembly.GetName().Name)
-        //    ));
-        services.AddDbContext<Context>(options => { options.UseInMemoryDatabase("TestDatabase"); });
+        services.AddDbContext<Context>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection"),
+                builder => builder.MigrationsAssembly(typeof(Context).Assembly.GetName().Name)
+            ));
+        //services.AddDbContext<Context>(options => { options.UseInMemoryDatabase("TestDatabase"); });
 
         services.AddScoped<IContext, Context>();
 

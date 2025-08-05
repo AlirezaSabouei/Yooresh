@@ -1,16 +1,16 @@
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Application.Players.Commands;
 using Yooresh.Domain.Entities.Players;
 using Yooresh.UnitTests.Application.Base;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
-using Yooresh.Application.Players.Commands.Validators;
+using Yooresh.Application.Account.Commands;
+using Yooresh.Application.Account.Commands.Validators;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
-public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPlayerCommandValidator,ConfirmPlayerCommand,bool>
+public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPlayerCommandValidator,ConfirmAccountCommand,bool>
 {
     private Mock<IContext>? _contextMock;
 
@@ -30,11 +30,12 @@ public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPla
             .ReturnsDbSet(dataPlayers);
     }
 
-    protected override ConfirmPlayerCommand CreateValidCommand()
+    protected override ConfirmAccountCommand CreateValidCommand()
     {
-        return new ConfirmPlayerCommand()
+        return new ConfirmAccountCommand()
         {
-            PlayerId = _contextMock!.Object.Players.First().Id
+            PlayerId = _contextMock!.Object.Players.First().Id,
+            ConfirmationCode = Guid.NewGuid().ToString()
         };
     }
 
@@ -55,7 +56,7 @@ public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPla
         //Assert
         result.IsValid.ShouldBe(false);
         result.Errors
-            .All(a => a.PropertyName.Contains(nameof(ConfirmPlayerCommand.PlayerId)))
+            .All(a => a.PropertyName.Contains(nameof(ConfirmAccountCommand.PlayerId)))
             .ShouldBeTrue();
     }
     

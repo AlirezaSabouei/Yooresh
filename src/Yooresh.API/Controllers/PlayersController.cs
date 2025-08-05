@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Yooresh.Application.Players.Commands;
-using Yooresh.Application.Players.Dto;
-using Yooresh.Application.Players.Queries;
+using Yooresh.Application.Account.Commands;
+using Yooresh.Application.Account.Dto;
+using Yooresh.Application.Account.Queries;
 
 namespace Yooresh.API.Controllers;
 
@@ -34,14 +37,9 @@ public class PlayersController(IMapper mapper) : BaseApiController(mapper)
     }
 
     [HttpPost("confirm")]
-    public async Task<ActionResult<bool>> ConfirmPlayer([FromBody] string confirmationCode)
+    public async Task<ActionResult<bool>> ConfirmPlayer([FromBody] ConfirmAccountCommand confirmAccountCommand)
     {
-        var command = new ConfirmPlayerCommand()
-        {
-            PlayerId = PlayerId,
-            ConfirmationCode = confirmationCode
-        };
-        return await Mediator.Send(command);
+        return await Mediator.Send(confirmAccountCommand);
     }
 
 
@@ -58,6 +56,7 @@ public class PlayersController(IMapper mapper) : BaseApiController(mapper)
         {
             return Unauthorized();
         }
+
         return Ok(result);
     }
 
@@ -74,5 +73,12 @@ public class PlayersController(IMapper mapper) : BaseApiController(mapper)
             return Unauthorized();
         }
         return Ok(result);
+    }
+
+    [HttpPost("Test")]
+    [Authorize]
+    public async Task<ActionResult> Test()
+    {
+        return Ok();
     }
 }

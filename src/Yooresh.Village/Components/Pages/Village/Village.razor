@@ -1,7 +1,25 @@
-﻿@page "/Village"
+﻿@page "/village"
+@inject Services.AuthenticationService _authenticationService;
 
 <PageTitle>Village</PageTitle>
 
-<h1>Welcome to your village!</h1>
-<Yooresh.Village.Components.Pages.Login.SignUp />
+<h1>Welcome to your village! @_authenticationService.Name</h1>
 
+<div class="village">
+    <table class="resources">
+    <tr>
+            <td>1</td>
+            <td>4</td>
+            <td>5</td>
+            <td>8</td>
+    </tr>
+</table>
+</div>
+
+@code{
+    protected override void OnInitialized()
+    {
+        var test = _authenticationService;
+        base.OnInitialized();
+    }
+}

@@ -2,8 +2,8 @@
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
-using Yooresh.Application.Players.Commands;
-using Yooresh.Application.Players.Dto;
+using Yooresh.Application.Account.Commands;
+using Yooresh.Application.Account.Dto;
 using Yooresh.Domain.Entities.Players;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;

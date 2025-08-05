@@ -56,9 +56,10 @@ h1:focus {
     background-size: cover; /* or '100% 100%' depending on what you want */
     background-position: center;
     background-repeat: no-repeat;
-    width: 800px;
-    height: 533px;
+    width: 100%;
+    height: 100%;
     position: relative;
+    margin:0 auto;
 }
 
 .resources {
