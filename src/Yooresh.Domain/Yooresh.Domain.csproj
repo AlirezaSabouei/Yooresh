@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <Folder Include="Entities\DefensiveBuildings" />
+      <Folder Include="Entities\ResourceBuildingUpgrades\" />
       <Folder Include="Enums\" />
     </ItemGroup>
 

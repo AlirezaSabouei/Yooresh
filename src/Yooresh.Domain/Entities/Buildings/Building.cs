@@ -1,8 +1,8 @@
+using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.Events;
 using Yooresh.Domain.Exceptions;
 using Yooresh.Domain.Interfaces;
-using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Domain.Entities.Buildings;
 
@@ -14,7 +14,7 @@ public abstract class Building:BaseEntity,IUpgradableTemp<Building>
     public abstract string UpgradeName { get;}
     public abstract bool NeedBuilderForUpgrade { get;}
 
-    public Resource UpgradeCost { get; set; } = new (0, 0, 0, 0, 0);
+    public ResourceValueObject UpgradeCost { get; set; } = new (0, 0, 0, 0, 0);
     public TimeSpan UpgradeDuration { get; set; }
     public Guid? TargetId { get; set; }
     public Building? Target { get; set; }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -20,31 +20,31 @@ public class FarmConfiguration : IEntityTypeConfiguration<Farm>
         SeedFarms(builder);
     }
 
-    private void ConfigureHourlyProduction(OwnedNavigationBuilder<Farm, Resource> ownedNavigationBuilder)
+    private void ConfigureHourlyProduction(OwnedNavigationBuilder<Farm, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(Resource.Food))
+            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(Resource.Metal))
+            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(Resource.Stone))
+            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(Resource.Gold))
+            .HasColumnName(nameof(Farm.HourlyProduction) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
 

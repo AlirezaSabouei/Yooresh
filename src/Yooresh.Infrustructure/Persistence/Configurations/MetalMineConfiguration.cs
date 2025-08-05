@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Application.Villages.Dto;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -20,31 +20,31 @@ public class MetalMineConfiguration : IEntityTypeConfiguration<MetalMine>
         
         SeedMetalMines(builder);
     }
-    private void ConfigureHourlyProduction(OwnedNavigationBuilder<MetalMine, Resource> ownedNavigationBuilder)
+    private void ConfigureHourlyProduction(OwnedNavigationBuilder<MetalMine, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(Resource.Food))
+            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(Resource.Metal))
+            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(Resource.Stone))
+            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(Resource.Gold))
+            .HasColumnName(nameof(MetalMine.HourlyProduction) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
 

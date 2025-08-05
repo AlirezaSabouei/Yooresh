@@ -2,8 +2,8 @@ using AutoMapper;
 using Yooresh.Application.Account.Dto;
 using Yooresh.Application.Common.Mappings;
 using Yooresh.Application.Factions.Dto;
+using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.Villages;
-using Yooresh.Domain.ValueObjects;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 
 namespace Yooresh.Application.Villages.Dto;
@@ -16,7 +16,7 @@ public class VillageDto:IMapFrom<Village>
     public PlayerDto Player { get; set; }
     public Guid FactionId { get; set; }
     public FactionDto Faction { get; set; }
-    public Resource Resource { get; set; }
+    public ResourceValueObject Resource { get; set; }
     public int AvailableBuilders { get; set; }
     public DateTimeOffset LastResourceGatherDate { get; set; }
     public List<VillageBuildingDto> VillageBuildings { get; set; }

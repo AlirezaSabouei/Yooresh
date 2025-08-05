@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -35,31 +35,31 @@ public class BuildingConfiguration : IEntityTypeConfiguration<Building>
         
         ConfigureAutoIncludes(builder);
     }
-    private void ConfigureUpgradeCost(OwnedNavigationBuilder<Building, Resource> ownedNavigationBuilder)
+    private void ConfigureUpgradeCost(OwnedNavigationBuilder<Building, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(Resource.Food))
+            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(Resource.Metal))
+            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(Resource.Stone))
+            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(Resource.Gold))
+            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
 

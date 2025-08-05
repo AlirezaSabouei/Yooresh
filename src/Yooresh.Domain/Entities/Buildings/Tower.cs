@@ -1,3 +1,4 @@
+using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Domain.Entities.Buildings;
@@ -9,7 +10,7 @@ public class Tower : Building
     public override bool NeedBuilderForUpgrade => true;
     public Defense Defense { get; set; }
     public int Health { get; set; }
-    public Resource RepairCost { get; set; }
+    public ResourceValueObject RepairCost { get; set; }
     public int TroopCapacity { get; set; }
 
     public Tower()

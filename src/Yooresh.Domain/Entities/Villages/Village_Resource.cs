@@ -1,10 +1,10 @@
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Domain.Entities.Villages;
 
 public partial class Village
 {
-    public Resource Resource { get; set; } = new Resource(0, 0, 0, 0, 0);
+    public ResourceValueObject Resource { get; set; } = new Resource(0, 0, 0, 0, 0);
     public List<VillageBuilding> VillageResourceBuildings { get; set; } = new();
 
     public Village GatherResources()

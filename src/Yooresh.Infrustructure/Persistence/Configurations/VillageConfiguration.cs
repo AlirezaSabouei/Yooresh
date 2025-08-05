@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.ValueObjects;
 using System.Reflection.Emit;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Troops;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -39,7 +39,7 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
         ConfigureAutoIncludes(builder);
     }
 
-    private void ConfigureResource(OwnedNavigationBuilder<Village, Resource> ownedNavigationBuilder)
+    private void ConfigureResource(OwnedNavigationBuilder<Village, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)

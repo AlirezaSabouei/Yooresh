@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Yooresh.Domain\Yooresh.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ResourceBuildingUpgrades\Queries\Validators\" />
+  </ItemGroup>
+
 </Project>
