@@ -1,0 +1,54 @@
+﻿@page "/Login"
+@using Yooresh.Village.Models;
+@using Yooresh.Village.Models.Account
+@using Yooresh.Village.Services
+@inject Services.IAccountServices _accountServices;
+@inject NavigationManager _navManager
+@rendermode InteractiveServer
+
+<h3>Login</h3>
+<EditForm Model="@LoginDto" OnValidSubmit="@ValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="email" class="col-sm-2 col-form-label">
+            Email:
+        </label>
+        <div class="col-sm-10">
+            <InputText id="email" class="form-control" placeholder="Example: example@example.com"
+                       @bind-Value="LoginDto.Email" />
+        </div>
+        <ValidationMessage For="@(() => LoginDto.Email)" />
+    </div>
+    <div class="form-group">
+        <label for="password" class="col-sm-2 col-form-label">
+            Password:
+        </label>
+        <div class="col-sm-10">
+            <InputText id="password" type="password" class="form-control" @bind-Value="LoginDto.Password" />
+        </div>
+        <ValidationMessage For="@(() => LoginDto.Password)" />
+    </div>
+    <br />
+    <button class="btn btn-primary" type="submit">Login</button>
+</EditForm>
+<br />
+
+@code {
+
+    public LoginDto LoginDto { get; set; } = new();
+
+    private string? ErrorMessage;
+
+    private async Task ValidSubmit()
+    {
+        var result = await _accountServices.Login(LoginDto);
+        if (result.IsSuccess)
+        {
+            _navManager.NavigateTo($"/village");
+        }
+        else
+        {
+            ErrorMessage = result.ErrorMessage;
+        }
+    }
+}

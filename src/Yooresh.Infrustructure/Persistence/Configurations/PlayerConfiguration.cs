@@ -1,6 +1,5 @@
 using Yooresh.Domain.Entities.Players;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
@@ -24,7 +23,6 @@ public class PlayerConfiguration : IEntityTypeConfiguration<Player>
 
         builder.Property(a => a.Password)
             .IsRequired()
-            .IsEncrypted()
             .HasMaxLength(100);
         
         builder.Property(a => a.Role)

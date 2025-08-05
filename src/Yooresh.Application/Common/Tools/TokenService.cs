@@ -11,12 +11,14 @@ public class TokenService(IConfiguration config) : ITokenService
 {
     private readonly IConfiguration _config = config;
 
-    public string GenerateAccessToken(string userId, string role)
+    public string GenerateAccessToken(string userId, string role, string email, string name)
     {
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userId),
-            new Claim(ClaimTypes.Role, role)
+            new Claim(ClaimTypes.Role, role),
+            new(ClaimTypes.GivenName, name),
+            new(ClaimTypes.Email, email),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -26,7 +28,7 @@ public class TokenService(IConfiguration config) : ITokenService
             issuer: _config["Jwt:Issuer"],
             audience: null,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(15), // short lifespan
+            expires: DateTime.UtcNow.AddMinutes(60), // short lifespan
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

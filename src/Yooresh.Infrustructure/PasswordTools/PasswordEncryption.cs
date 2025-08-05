@@ -14,7 +14,7 @@ public class PasswordEncryption<TBaseEntity>(IPasswordHasher<BaseEntity> passwor
         return _passwordHasher.HashPassword(baseEntity, password);
     }
 
-    public bool VerifyPassword(BaseEntity baseEntity,string hashedPassword, string password)
+    public bool VerifyPassword(BaseEntity baseEntity, string hashedPassword, string password)
     {
         var result = _passwordHasher.VerifyHashedPassword(baseEntity, hashedPassword, password);
         return result == PasswordVerificationResult.Success;

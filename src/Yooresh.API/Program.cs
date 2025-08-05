@@ -2,6 +2,7 @@ using FluentValidation;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -15,9 +16,26 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        IdentityModelEventSource.ShowPII = true;
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
+
+
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowBlazorClient", policy =>
+            {
+                policy.WithOrigins("https://localhost:7292/") // your Blazor Server app URL
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials(); // only needed if using cookies or auth
+            });
+        });
+
+
+
 
         AddSwagger(builder);
         builder.Services.AddApplicationServices();
@@ -36,6 +54,11 @@ public class Program
         app.UseHttpsRedirection();
         app.UseHangfireDashboard();
 
+        // Enable CORS
+        app.UseCors("AllowBlazorClient");
+
+
+        app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
 
@@ -84,11 +107,6 @@ public class Program
 
     private static void AddAuthentication(WebApplicationBuilder builder)
     {
-        // builder.Services.AddAuthentication("BasicAuthentication")
-        // .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-        //builder.Services.AddAuthentication("BasicAuthentication")
-        //.AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>("BasicAuthentication", null);
-
         var key = builder.Configuration["Jwt:Key"]; // put in appsettings.json
         var issuer = builder.Configuration["Jwt:Issuer"];
 
@@ -108,6 +126,19 @@ public class Program
                 ValidIssuer = issuer,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
             };
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Console.WriteLine("Token failed: " + context.Exception.Message);
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Console.WriteLine("Token valid.");
+                    return Task.CompletedTask;
+                }
+            };
         });
 
         builder.Services.AddAuthorization();
@@ -119,19 +150,25 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
-            // Add the Basic Authorization button
-            c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
+                Name = "Authorization",
                 Type = SecuritySchemeType.Http,
-                Scheme = "basic",
-                Description = "Basic Authorization header using the Bearer scheme.",
+                Scheme = "bearer",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Description = "Enter your JWT token in the format: Bearer {your token}"
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
                     {
-                        Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "basic"}
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
                     },
                     Array.Empty<string>()
                 }
