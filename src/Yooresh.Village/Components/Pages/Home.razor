@@ -1,7 +1,22 @@
 ﻿@page "/"
+@inject NavigationManager _navManager
+@inject Services.AuthenticationService _authenticationService;
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@code{
+    private bool _shouldRedirect;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_authenticationService.Token))
+        {
+            await Task.Yield(); // Let Blazor finish rendering
+            _navManager.NavigateTo("/login");
+        }
+    }
+}

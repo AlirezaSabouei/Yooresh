@@ -2,24 +2,44 @@
 @inject Services.AuthenticationService _authenticationService;
 
 <PageTitle>Village</PageTitle>
-
-<h1>Welcome to your village! @_authenticationService.Name</h1>
-
 <div class="village">
-    <table class="resources">
-    <tr>
-            <td>1</td>
-            <td>4</td>
-            <td>5</td>
-            <td>8</td>
-    </tr>
-</table>
+    <Resource></Resource>
+    <div class="whiteBox gold-mine" data-toggle="modal" data-target="#exampleModal">1</div>
+    <div class="whiteBox stone-mine" data-toggle="modal" data-target="#exampleModal">2</div>
+    <div class="whiteBox lumber-mill" data-toggle="modal" data-target="#exampleModal">3</div>
+    <div class="whiteBox farm" data-toggle="modal" data-target="#exampleModal">4</div>
+    <div class="whiteBox wall">7</div>
+
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Launch demo modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code{
     protected override void OnInitialized()
     {
-        var test = _authenticationService;
         base.OnInitialized();
     }
 }
