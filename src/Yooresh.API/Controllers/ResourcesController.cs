@@ -8,7 +8,7 @@ namespace Yooresh.API.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(Roles = "SimplePlayer,SuperAdmin,Admin")]
+[Authorize]
 public class ResourcesController(IMapper mapper) : BaseApiController(mapper)
 {
     [HttpGet]

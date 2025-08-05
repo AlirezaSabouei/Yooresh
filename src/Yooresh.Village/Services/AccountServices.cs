@@ -1,4 +1,5 @@
-﻿using Yooresh.Village.Models;
+﻿using System.Net.Http.Headers;
+using Yooresh.Village.Models;
 using Yooresh.Village.Models.Account;
 
 namespace Yooresh.Village.Services;
@@ -52,6 +53,7 @@ public class AccountServices(HttpClient httpClient, AuthenticationService authen
             if (result.IsSuccessStatusCode)
             {
                 var success = await result.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", success["token"]);
                 _authenticationService.Token = success["token"];
                 _authenticationService.PlayerId = success["playerId"];
                 _authenticationService.Name = success["name"];

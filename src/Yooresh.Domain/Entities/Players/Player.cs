@@ -1,4 +1,6 @@
-﻿namespace Yooresh.Domain.Entities.Players;
+﻿using Yooresh.Domain.Events.Accounts;
+
+namespace Yooresh.Domain.Entities.Players;
 
 public class Player : RootEntity
 {
@@ -28,6 +30,7 @@ public class Player : RootEntity
     {
         if (confirmationCode == ConfirmationCode)
         {
+            AddDomainEvent(new PlayerConfirmedEvent(this));
             Confirmed = true;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.Buildings;
+using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.ValueObjects;
 
@@ -56,31 +57,31 @@ public class WallConfiguration : IEntityTypeConfiguration<Wall>
             .IsRequired();
     }
 
-    private void ConfigureRepairCost(OwnedNavigationBuilder<Wall, Resource> ownedNavigationBuilder)
+    private void ConfigureRepairCost(OwnedNavigationBuilder<Wall, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(Resource.Food))
+            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(Resource.Metal))
+            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(Resource.Stone))
+            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(Resource.Gold))
+            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
     

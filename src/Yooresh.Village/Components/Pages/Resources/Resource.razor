@@ -1,0 +1,95 @@
+﻿@using Yooresh.Village.Models;
+@using Yooresh.Village.Services
+@rendermode InteractiveServer
+@implements IDisposable
+@inject Services.IResourceServices _resourceServices;
+
+<table class="resources">
+    <tr>
+        <td>
+            @gold
+        </td>
+        <td>
+            @lumber
+        </td>
+        <td>
+            @stone
+        </td>
+        <td>
+            @food
+        </td>
+        <td>
+            Soldiers
+        </td>
+    </tr>
+</table>
+<br />
+<br />
+<br />
+
+@code {
+    private int gold = 0;
+    private int lumber = 0;
+    private int stone = 0;
+    private int food = 0;
+
+    private int goldRate = 0;
+    private int lumberRate = 0;
+    private int stoneRate = 0;
+    private int foodRate = 0;
+
+    private List<Models.Resource> resources;
+
+    System.Timers.Timer Timer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        resources = await _resourceServices.GetResources();
+        InitResources();
+        InitResourcesTimer();
+    }
+
+    private void InitResources()
+    {
+        var goldResource = resources.First(a => a.ResourceType == ResourceType.Gold);
+        gold = goldResource.AvailableAmount;
+        goldRate = goldResource.HarvestRatePerMinute;
+
+        var lumberResource = resources.First(a => a.ResourceType == ResourceType.Lumber);
+        lumber = lumberResource.AvailableAmount;
+        lumberRate = lumberResource.HarvestRatePerMinute;
+
+        var stoneResource = resources.First(a => a.ResourceType == ResourceType.Stone);
+        stone = stoneResource.AvailableAmount;
+        stoneRate = stoneResource.HarvestRatePerMinute;
+
+        var foodResource = resources.First(a => a.ResourceType == ResourceType.Food);
+        food = stoneResource.AvailableAmount;
+        foodRate = foodResource.HarvestRatePerMinute;
+    }
+
+    private void InitResourcesTimer()
+    {
+        Timer = new System.Timers.Timer(60000);
+        Timer.Elapsed += TimerElapsed;
+        Timer.AutoReset = true;
+        Timer.Enabled = true;
+    }
+
+    private void TimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {       
+        InvokeAsync(() =>
+        {
+            gold += goldRate;
+            lumber += lumberRate;
+            stone += stoneRate;
+            food += foodRate;
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        Timer?.Dispose();
+    }
+}

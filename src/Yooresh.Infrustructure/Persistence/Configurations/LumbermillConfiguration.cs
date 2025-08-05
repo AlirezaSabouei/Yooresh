@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -19,31 +19,31 @@ public class LumbermillConfiguration : IEntityTypeConfiguration<LumberMill>
         
         SeedLumbermills(builder);
     }
-    private void ConfigureHourlyProduction(OwnedNavigationBuilder<LumberMill, Resource> ownedNavigationBuilder)
+    private void ConfigureHourlyProduction(OwnedNavigationBuilder<LumberMill, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(Resource.Food))
+            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(Resource.Metal))
+            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(Resource.Stone))
+            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(Resource.Gold))
+            .HasColumnName(nameof(LumberMill.HourlyProduction) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
 

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.Buildings;
-using Yooresh.Domain.ValueObjects;
+using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 
@@ -19,31 +19,31 @@ public class StoneMineConfiguration : IEntityTypeConfiguration<StoneMine>
         
         SeedStoneMines(builder);
     }
-    private void ConfigureHourlyProduction(OwnedNavigationBuilder<StoneMine, Resource> ownedNavigationBuilder)
+    private void ConfigureHourlyProduction(OwnedNavigationBuilder<StoneMine, ResourceValueObject> ownedNavigationBuilder)
     {
         ownedNavigationBuilder
             .Property(a => a.Food)
-            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(Resource.Food))
+            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(ResourceValueObject.Food))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Lumber)
-            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(Resource.Lumber))
+            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(ResourceValueObject.Lumber))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Metal)
-            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(Resource.Metal))
+            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(ResourceValueObject.Metal))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Stone)
-            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(Resource.Stone))
+            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(ResourceValueObject.Stone))
             .IsRequired();
 
         ownedNavigationBuilder
             .Property(a => a.Gold)
-            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(Resource.Gold))
+            .HasColumnName(nameof(StoneMine.HourlyProduction) + nameof(ResourceValueObject.Gold))
             .IsRequired();
     }
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.DependencyInjection;
 using Yooresh.Village.Components;
 using Yooresh.Village.Services;
 
@@ -13,6 +14,7 @@ namespace Yooresh.Village
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
             builder.Services.AddScoped(_ => new HttpClient
                 { BaseAddress = new Uri(builder.Configuration["ApiAddress"] ?? string.Empty) });
 
@@ -22,7 +24,8 @@ namespace Yooresh.Village
             builder.Services.AddServerSideBlazor()
                 .AddCircuitOptions(options => { options.DetailedErrors = true; });
 
-            builder.Services.AddScoped<AuthenticationService>();
+            AuthenticationService authenticationService = new();
+            builder.Services.AddScoped<AuthenticationService>(a=>authenticationService);
 
             var app = builder.Build();
 
