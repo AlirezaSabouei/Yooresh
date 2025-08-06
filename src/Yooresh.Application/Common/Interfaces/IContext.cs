@@ -7,6 +7,7 @@ using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.ResourceBuildings;
+using Yooresh.Domain.ResourceBuildingUpgrades;
 
 namespace Yooresh.Application.Common.Interfaces;
 
@@ -27,10 +28,6 @@ public interface IContext
     
     
     public DbSet<Building> Buildings { get; set; }
-    public DbSet<Farm> Farms { get; set; }
-    public DbSet<LumberMill> LumberMills { get; set; }
-    public DbSet<StoneMine> StoneMines { get; set; }
-    public DbSet<GoldMine> GoldMines { get; set; }
     
     public Task SaveChangesAsync(CancellationToken cancellationToken = default);
     IQueryable<TEntity> QuerySet<TEntity>()

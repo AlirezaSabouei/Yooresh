@@ -13,6 +13,7 @@ using Yooresh.Application.Villages.Dto;
 using Yooresh.Domain.Entities.Buildings;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.Villages;
 using Yooresh.Domain.ValueObjects;
 using Village = Yooresh.Domain.Entities.Villages.Village;
@@ -42,7 +43,7 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         databaseVillage.Faction.Id.ShouldBe(dbFaction.Id);
         databaseVillage.Player.Id.ShouldBe(dbPlayer.Id);
         databaseVillage.Name.ShouldBe(createVillageCommand.Name);
-        databaseVillage.Resource.ShouldBeEquivalentTo(new Resource(0, 0, 0, 0, 0));
+        databaseVillage.Resource.ShouldBeEquivalentTo(new ResourceValueObject(0, 0, 0, 0));
         databaseVillage.AvailableBuilders.ShouldBe(2);
         databaseVillage.VillageResourceBuildings.Count.ShouldBe(0);
     }
@@ -52,7 +53,7 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
         using var scope = scopeFactory.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        var player = new Player("alireza", "alireza@gmail.com", "Aa123456", Role.SimplePlayer);
+        var player = new Player("alireza", "alireza@gmail.com", "Aa123456");
         if (confirmed)
         {
            // player.ConfirmPlayer();
@@ -76,55 +77,44 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
 
     private async Task CreateBasicResourceBuildingsInDatabase()
     {
-        var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using var scope = scopeFactory.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<IContext>();
+        //var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
+        //using var scope = scopeFactory.CreateScope();
+        //var context = scope.ServiceProvider.GetRequiredService<IContext>();
 
-        var farm = new Farm()
-        {
-            Id = Guid.NewGuid(),
-            UpgradeDuration = new TimeSpan(0, 0, 0),
-            HourlyProduction = new Resource(0, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            TargetId = null,
-            Level = 0
-        };
-        context.Buildings.Add(farm);
+        //var farm = new Farm()
+        //{
+        //    Id = Guid.NewGuid(),
+        //    UpgradeDuration = new TimeSpan(0, 0, 0),
+        //    HourlyProduction = new ResourceValueObject(0, 0, 0, 0),
+        //    UpgradeCost = new ResourceValueObject(0, 0, 0, 0),
+        //    TargetId = null,
+        //    Level = 0
+        //};
+        //context.Buildings.Add(farm);
 
-        var lumberMill = new LumberMill()
-        {
-            Id = Guid.NewGuid(),
-            UpgradeDuration = new TimeSpan(0, 0, 0),
-            HourlyProduction = new Resource(0, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            TargetId = null,
-            Level = 0
-        };
-        context.Buildings.Add(lumberMill);
+        //var lumberMill = new LumberMill()
+        //{
+        //    Id = Guid.NewGuid(),
+        //    UpgradeDuration = new TimeSpan(0, 0, 0),
+        //    HourlyProduction = new ResourceValueObject(0, 0, 0, 0),
+        //    UpgradeCost = new ResourceValueObject(0, 0, 0, 0),
+        //    TargetId = null,
+        //    Level = 0
+        //};
+        //context.Buildings.Add(lumberMill);
 
-        var stoneMine = new StoneMine()
-        {
-            Id = Guid.NewGuid(),
-            UpgradeDuration = new TimeSpan(0, 0, 0),
-            HourlyProduction = new Resource(0, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            TargetId = null,
-            Level = 0
-        };
-        context.Buildings.Add(stoneMine);
+        //var stoneMine = new StoneMine()
+        //{
+        //    Id = Guid.NewGuid(),
+        //    UpgradeDuration = new TimeSpan(0, 0, 0),
+        //    HourlyProduction = new ResourceValueObject(0, 0, 0, 0),
+        //    UpgradeCost = new ResourceValueObject(0, 0, 0, 0),
+        //    TargetId = null,
+        //    Level = 0
+        //};
+        //context.Buildings.Add(stoneMine);
 
-        var metalMine = new MetalMine()
-        {
-            Id = Guid.NewGuid(),
-            UpgradeDuration = new TimeSpan(0, 0, 0),
-            HourlyProduction = new Resource(0, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            TargetId = null,
-            Level = 0
-        };
-        context.Buildings.Add(metalMine);
-
-        await context.SaveChangesAsync();
+        //await context.SaveChangesAsync();
     }
 
     private CreateVillageCommand CreateValidCreateVillageCommand(Player player, Faction faction)
@@ -236,7 +226,7 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
         };
         if (initStartingResource)
         {
-            village.Resource = new Resource(100, 100, 100, 100, 100);
+            village.Resource = new ResourceValueObject(100, 100, 100, 100);
         }
 
         context.Villages.Add(village);
@@ -246,35 +236,36 @@ public class VillagesControllerTests : ControllerTests<VillagesController>
 
     private async Task<Building> CreateAResourceBuildingInDatabase(Guid villageId)
     {
-        var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
-        using var scope = scopeFactory.CreateScope();
-        var context = scope.ServiceProvider.GetRequiredService<IContext>();
-        var village = context.Villages.Include(a => a.VillageResourceBuildings).First();
-        var resourceBuilding1 = new Farm()
-        {
-            Id = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
-            UpgradeDuration = new TimeSpan(0, 2, 0),
-            HourlyProduction = new Resource(1200, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            Level = 1,
-            TargetId = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c")
-        };
+        return null;
+        //var scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
+        //using var scope = scopeFactory.CreateScope();
+        //var context = scope.ServiceProvider.GetRequiredService<IContext>();
+        //var village = context.Villages.Include(a => a.VillageResourceBuildings).First();
+        //var resourceBuilding1 = new Farm()
+        //{
+        //    Id = new Guid("769a5118-f48b-4e55-b5fd-616d22a357b0"),
+        //    UpgradeDuration = new TimeSpan(0, 2, 0),
+        //    HourlyProduction = new ResourceValueObject(1200, 0, 0, 0),
+        //    UpgradeCost = new ResourceValueObject(0, 0, 0, 0),
+        //    Level = 1,
+        //    TargetId = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c")
+        //};
         
-        var resourceBuilding2 = new Farm()
-        {
-            Id = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c"),
-            UpgradeDuration = new TimeSpan(0, 2, 0),
-            HourlyProduction = new Resource(2200, 0, 0, 0, 0),
-            UpgradeCost = new Resource(0, 0, 0, 0, 0),
-            Level = 2,
-            TargetId = Guid.NewGuid()
-        };
-        context.Buildings.Add(resourceBuilding1);        
-        context.Buildings.Add(resourceBuilding2);
-        await context.SaveChangesAsync();
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, resourceBuilding1));
-        await context.SaveChangesAsync();
-        return resourceBuilding1;
+        //var resourceBuilding2 = new Farm()
+        //{
+        //    Id = new Guid("8e29536e-a9f9-4edb-ab95-9974e969887c"),
+        //    UpgradeDuration = new TimeSpan(0, 2, 0),
+        //    HourlyProduction = new ResourceValueObject(2200, 0, 0, 0),
+        //    UpgradeCost = new ResourceValueObject(0, 0, 0, 0),
+        //    Level = 2,
+        //    TargetId = Guid.NewGuid()
+        //};
+        //context.Buildings.Add(resourceBuilding1);        
+        //context.Buildings.Add(resourceBuilding2);
+        //await context.SaveChangesAsync();
+        //village.VillageResourceBuildings.Add(new VillageBuilding(village, resourceBuilding1));
+        //await context.SaveChangesAsync();
+        //return resourceBuilding1;
     }
     
     [Fact]

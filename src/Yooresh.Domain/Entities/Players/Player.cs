@@ -12,25 +12,31 @@ public class Player : RootEntity
     public string ConfirmationCode { get; set; }
     public List<RefreshToken> RefreshTokens { get; set; }
 
-    public Player()
+    protected Player()
     {
         RefreshTokens = [];
+        Confirmed = false;
+        ConfirmationCode = Guid.NewGuid().ToString();
+        Role = Role.SimplePlayer;
     }
 
-    public Player(string name, string email, string password, Role role)
+    public Player(string name, string email, string password)
     {
-        Id = Guid.NewGuid();
+        RefreshTokens = [];
+        Confirmed = false;
+        ConfirmationCode = Guid.NewGuid().ToString();
+        Role = Role.SimplePlayer;
+
         Name = name;
         Email = email.ToLower();
         Password = password;
-        Role = role;
     }
 
     public virtual void ConfirmPlayer(string confirmationCode)
     {
-        if (confirmationCode == ConfirmationCode)
+        if (ConfirmationCode == confirmationCode)
         {
-            AddDomainEvent(new PlayerConfirmedEvent(this));
+            AddDomainEvent(new PlayerConfirmedEvent(Id));
             Confirmed = true;
         }
     }

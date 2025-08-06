@@ -23,8 +23,9 @@ public class ConfirmPlayerCommandValidatorTests:CommandValidatorTests<ConfirmPla
     {
         var dataPlayers = new List<Player>()
         {
-            new Player("Alireza","alireza@gmail.com","Aa123456",Role.SimplePlayer)
-        }.AsQueryable();
+            new("Alireza","alireza@gmail.com","Aa123456")
+        }
+        .AsQueryable();
         
         _contextMock!.Setup(x => x.Players)
             .ReturnsDbSet(dataPlayers);

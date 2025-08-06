@@ -52,11 +52,6 @@ public class VillageConfiguration : IEntityTypeConfiguration<Village>
             .IsRequired();
 
         ownedNavigationBuilder
-            .Property(a => a.Metal)
-            .HasColumnName(nameof(Village.Resource) + nameof(Village.Resource.Metal))
-            .IsRequired();
-
-        ownedNavigationBuilder
             .Property(a => a.Stone)
             .HasColumnName(nameof(Village.Resource) + nameof(Village.Resource.Stone))
             .IsRequired();

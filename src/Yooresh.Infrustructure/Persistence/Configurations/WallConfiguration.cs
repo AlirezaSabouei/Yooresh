@@ -70,11 +70,6 @@ public class WallConfiguration : IEntityTypeConfiguration<Wall>
             .IsRequired();
 
         ownedNavigationBuilder
-            .Property(a => a.Metal)
-            .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Metal))
-            .IsRequired();
-
-        ownedNavigationBuilder
             .Property(a => a.Stone)
             .HasColumnName(nameof(Tower.RepairCost) + nameof(ResourceValueObject.Stone))
             .IsRequired();
@@ -104,11 +99,11 @@ public class WallConfiguration : IEntityTypeConfiguration<Wall>
                 Id = ids[i],
                 Defense = new Defense(i * i * 5, i * i * 5, i * i * 5, i * i * 5, i * i * 5, i * i * 1),
                 Health = i * i * 25,
-                RepairCost = new Resource(i * i * 60, 0, 0, 0, 0),
+                RepairCost = new ResourceValueObject(i * i * 60, 0, 0, 0),
                 UpgradeDuration = new TimeSpan(0, i * i * i, 0),
                 UpgradeCost = i == 1
-                    ? new Resource(0, 0, 0, 0, 0)
-                    : new Resource(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
+                    ? new ResourceValueObject(0, 0, 0, 0)
+                    : new ResourceValueObject(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
                 TargetId = i == 24 ? null : ids[i + 1],
                 Level = i
             }, builder);
@@ -136,7 +131,6 @@ public class WallConfiguration : IEntityTypeConfiguration<Wall>
                 tower.RepairCost.Lumber,
                 tower.RepairCost.Stone,
                 tower.RepairCost.Gold,
-                tower.RepairCost.Metal,
                 WallId = tower.Id,
                 tower.Level
             });
@@ -148,7 +142,6 @@ public class WallConfiguration : IEntityTypeConfiguration<Wall>
                 tower.UpgradeCost.Lumber,
                 tower.UpgradeCost.Stone,
                 tower.UpgradeCost.Gold,
-                tower.UpgradeCost.Metal,
                 BuildingId = tower.Id,
                 tower.Level
             });

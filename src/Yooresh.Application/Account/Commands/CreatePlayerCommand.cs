@@ -23,14 +23,7 @@ public class CreatePlayerCommandHandler(
 
     public async Task<Player> Handle(CreatePlayerCommand request, CancellationToken cancellationToken)
     {
-        var player = new Player()
-        {
-            Name = request.Name,
-            Email = request.Email.Trim().ToLowerInvariant(),
-            Role = Role.SimplePlayer,
-            Confirmed = false,
-            ConfirmationCode = Guid.NewGuid().ToString()
-        };
+        var player = new Player(request.Name, request.Email, request.Password);
         player.Password = _passwordEncryption.HashPassword(player, request.Password);
         await _context.Players.AddAsync(player, cancellationToken);
         player.AddDomainEvent(new PlayerCreatedEvent(player));
