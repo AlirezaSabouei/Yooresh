@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Account;
 using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;

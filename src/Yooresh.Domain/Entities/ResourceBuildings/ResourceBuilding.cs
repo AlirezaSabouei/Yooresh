@@ -1,4 +1,4 @@
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Account;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Interfaces;
 

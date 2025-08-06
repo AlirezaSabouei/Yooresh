@@ -1,4 +1,4 @@
-namespace Yooresh.Domain.Entities.Players;
+namespace Yooresh.Domain.Entities.Account;
 
 public enum Role
 {

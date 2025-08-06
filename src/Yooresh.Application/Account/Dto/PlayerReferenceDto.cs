@@ -1,5 +1,5 @@
 ﻿using Yooresh.Application.Common.Mappings;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.Application.Account.Dto;
 

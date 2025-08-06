@@ -1,10 +1,10 @@
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
 using Yooresh.UnitTests.Application.Base;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Xunit;
 using Yooresh.Application.Account.Commands;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 

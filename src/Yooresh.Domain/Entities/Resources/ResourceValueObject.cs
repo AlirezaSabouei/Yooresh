@@ -48,9 +48,9 @@ public class ResourceValueObject : ValueObject
 
     public static bool operator >(ResourceValueObject resourceCost, ResourceValueObject currentResource)
     {
-        return resourceCost.Food > currentResource.Food ||
-               resourceCost.Lumber > currentResource.Lumber ||
-               resourceCost.Stone > currentResource.Stone ||
+        return resourceCost.Food > currentResource.Food &&
+               resourceCost.Lumber > currentResource.Lumber &&
+               resourceCost.Stone > currentResource.Stone &&
                resourceCost.Gold > currentResource.Gold;
     }
 
@@ -60,5 +60,27 @@ public class ResourceValueObject : ValueObject
                resourceCost.Lumber < currentResource.Lumber ||
                resourceCost.Stone < currentResource.Stone ||
                resourceCost.Gold < currentResource.Gold;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj == null || obj.GetType() != GetType()) return false;
+
+        var other = (ResourceValueObject)obj;
+
+        return other.Gold == Gold &&
+            other.Lumber == Lumber &&
+            other.Stone == Stone &&
+            other.Food == Food;
+    }
+
+    public static bool operator ==(ResourceValueObject? a, ResourceValueObject? b)
+    {
+        return Equals(a, b);
+    }
+
+    public static bool operator !=(ResourceValueObject? a, ResourceValueObject? b)
+    {
+        return !(a == b);
     }
 }

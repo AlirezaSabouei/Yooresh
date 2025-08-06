@@ -1,9 +1,9 @@
 ﻿using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
 using MediatR;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Events.Accounts;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.Application.Account.Commands;
 

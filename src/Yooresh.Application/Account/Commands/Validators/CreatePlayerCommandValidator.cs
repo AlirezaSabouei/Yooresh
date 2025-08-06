@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.Application.Account.Commands.Validators;
 

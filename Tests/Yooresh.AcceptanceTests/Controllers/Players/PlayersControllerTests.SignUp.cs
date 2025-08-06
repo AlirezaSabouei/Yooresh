@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Yooresh.Application.Account.Commands;
 using Yooresh.Application.Account.Dto;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;
 

@@ -1,5 +1,4 @@
-﻿using Yooresh.Domain.Entities.Players;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Yooresh.Domain.Entities.Buildings;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Villages;
@@ -8,6 +7,7 @@ using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.ResourceBuildingUpgrades;
+using Yooresh.Domain.Entities.Account;
 
 namespace Yooresh.Application.Common.Interfaces;
 
