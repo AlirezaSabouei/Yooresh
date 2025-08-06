@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.Resources;
+using Yooresh.Domain.ResourceBuildingUpgrades;
 
 namespace Yooresh.Infrastructure.Persistence.Configurations;
 

@@ -10,7 +10,7 @@ using Yooresh.UnitTests.Application.Base;
 
 namespace Yooresh.UnitTests.Application.Players.Commands.Validators;
 
-public class CreatePlayerCommandValidatorTests:
+public class CreatePlayerCommandValidatorTests :
     CommandValidatorTests<CreatePlayerCommandValidator, CreatePlayerCommand, Player>
 {
     private IContext? _contextMock;
@@ -92,21 +92,18 @@ public class CreatePlayerCommandValidatorTests:
     }
 
     [Test]
-    [TestCase("test@test.com", "test@test.com")]    
+    [TestCase("test@test.com", "test@test.com")]
     [TestCase("TEST@TEST.COM", "test@test.com")]
     [TestCase("test@test.com", "TEST@TEST.COM")]
     [TestCase("Test@test.com", "test@Test.com")]
     public async Task Validator_EmailAlreadyExists_ValidationFalse(string existingEmail, string incomingEmail)
     {
         //Arrange
-        var players = new List<Player>() 
-        { 
-            new()
-            { 
-                Id = Guid.NewGuid(),
-                Email = existingEmail
-            }
-        }.BuildMock();
+        var players = new List<Player>()
+        {
+            new("name", existingEmail,"password")
+        }
+        .BuildMock();
         _contextMock!.QuerySet<Player>().Returns(players.AsQueryable());
         Command!.Email = incomingEmail;
 

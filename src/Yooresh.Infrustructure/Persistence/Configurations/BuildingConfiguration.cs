@@ -48,11 +48,6 @@ public class BuildingConfiguration : IEntityTypeConfiguration<Building>
             .IsRequired();
 
         ownedNavigationBuilder
-            .Property(a => a.Metal)
-            .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Metal))
-            .IsRequired();
-
-        ownedNavigationBuilder
             .Property(a => a.Stone)
             .HasColumnName(nameof(Building.UpgradeCost) + nameof(ResourceValueObject.Stone))
             .IsRequired();

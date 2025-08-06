@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="ResourceBuildings\Commands\Validators\" />
     <Folder Include="ResourceBuildingUpgrades\Queries\Validators\" />
   </ItemGroup>
 

@@ -36,7 +36,7 @@ public class UpgradeResourceBuildingRequestedEventHandler : INotificationHandler
         _logger.LogInformation("Domain Event: {DomainEvent}", notification.GetType().Name);
 
         var village = await _context.Villages
-            .SingleAsync(a => a.Id == notification.VillageId, cancellationToken);
+            .SingleAsync(a => a.Id == notification.ResourceBuildingId, cancellationToken);
 
         var building = await _context.Buildings
             .Include(a => a.Target)

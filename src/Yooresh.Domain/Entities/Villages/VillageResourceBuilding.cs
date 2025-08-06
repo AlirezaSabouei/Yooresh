@@ -25,12 +25,12 @@ public class VillageBuilding : BaseEntity
 
     public void GatherProducedResources(Village village)
     {
-        if (Building.BuildingType is BuildingType.Farm or BuildingType.Lumbermill or BuildingType.StoneMine or BuildingType.MetalMine or BuildingType.GoldMine)
+        if (Building.BuildingType is BuildingType.Farm or BuildingType.Lumbermill or BuildingType.StoneMine or BuildingType.GoldMine)
         {
-            var elapsedTimeSinceLastResourceChangeTime = (DateTimeOffset.UtcNow - LastHarvestTime).TotalHours;
-            var building = Building as Farm;//It does not matter you can cast to any resource building. All of them support resource gathering
-            village.Resource += building!.HourlyProduction * elapsedTimeSinceLastResourceChangeTime;
-            LastHarvestTime = DateTimeOffset.UtcNow;
+            //var elapsedTimeSinceLastResourceChangeTime = (DateTimeOffset.UtcNow - LastHarvestTime).TotalHours;
+            //var building = Building as Farm;//It does not matter you can cast to any resource building. All of them support resource gathering
+            //village.Resource += building!.HourlyProduction * elapsedTimeSinceLastResourceChangeTime;
+            //LastHarvestTime = DateTimeOffset.UtcNow;
         }
     }
 }

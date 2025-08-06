@@ -9,7 +9,7 @@ public class ResourceValueObject : ValueObject
     public int Stone { get; private set; }
     public int Food { get; private set; }
 
-    public ResourceValueObject()
+    protected ResourceValueObject()
     {
         
     }

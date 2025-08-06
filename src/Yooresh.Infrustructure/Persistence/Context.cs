@@ -10,6 +10,7 @@ using Yooresh.Domain.Entities.Villages;
 using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.ResourceBuildings;
+using Yooresh.Domain.ResourceBuildingUpgrades;
 
 namespace Yooresh.Infrastructure.Persistence;
 
@@ -32,10 +33,6 @@ public class Context : DbContext, IContext
 
 
     public DbSet<Building> Buildings { get; set; }
-    public DbSet<Farm> Farms { get; set; }
-    public DbSet<LumberMill> LumberMills { get; set; }
-    public DbSet<StoneMine> StoneMines { get; set; }
-    public DbSet<GoldMine> GoldMines { get; set; }
 
     public Context(DbContextOptions options, IMediator mediator) : base(options)
     {

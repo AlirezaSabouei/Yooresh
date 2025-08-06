@@ -1,43 +1,53 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Configuration;
+using Yooresh.Application.ResourceBuildings.Commands;
 using Yooresh.Application.Resources.Commands;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Events.Accounts;
 
 namespace Yooresh.Application.Account.EventHandlers;
 
 public class PlayerConfirmedEventHandler(
-    IConfiguration configuration,
-    IRequestHandler<CreateResourceCommand, List<Resource>> createResourceCommandHandler)
+    IRequestHandler<InitResourcesCommand, List<Resource>> initResourcesCommandHandler,
+    IRequestHandler<InitResourceBuildingsCommand, List<ResourceBuilding>> initResourceBuildingsCommandHandler)
     : INotificationHandler<PlayerConfirmedEvent>
 {
-    private readonly IConfiguration _configuration = configuration;
-    private readonly IRequestHandler<CreateResourceCommand, List<Resource>> _createResourceCommandHandler =
-        createResourceCommandHandler;
+    private readonly IRequestHandler<InitResourcesCommand, List<Resource>> _initResourceCommandHandler =
+        initResourcesCommandHandler;
+    private readonly IRequestHandler<InitResourceBuildingsCommand, List<ResourceBuilding>> _initResourceBuildingsCommandHandler =
+        initResourceBuildingsCommandHandler;
 
     public async Task Handle(PlayerConfirmedEvent notification, CancellationToken cancellationToken)
     {
         await InitiateResourcesForPlayer(notification, cancellationToken);
+        await InitiateResourceBuildingsForPlayer(notification, cancellationToken);
     }
 
     private async Task InitiateResourcesForPlayer(PlayerConfirmedEvent notification, CancellationToken cancellationToken)
     {
-        var startingAvailableAmount = int.Parse(_configuration.GetSection("Resources")["StartingAvailableAmount"]!);
-        var startingHarvestRatePerMinute = int.Parse(_configuration.GetSection("Resources")["StartingHarvestRatePerMinute"]!);
-        CreateResourceCommand command = BuildCreateResourceCommand(
-            notification, startingAvailableAmount, startingHarvestRatePerMinute);
-        await _createResourceCommandHandler.Handle(command, cancellationToken);
+        InitResourcesCommand command = BuildInitResourcesCommand(notification);
+        await _initResourceCommandHandler.Handle(command, cancellationToken);
     }
 
-    private CreateResourceCommand BuildCreateResourceCommand(
-        PlayerConfirmedEvent notification, int startingAvailableAmount, int startingHarvestRatePerMinute)
+    private InitResourcesCommand BuildInitResourcesCommand(PlayerConfirmedEvent notification)
     {
         return new()
         {
-            PlayerId = notification.PlayerId,
-            StartingAvailableAmount = startingAvailableAmount,
-            StartingHarvestRatePerMinute = startingHarvestRatePerMinute
+            PlayerId = notification.PlayerId
+        };
+    }
+
+    private async Task InitiateResourceBuildingsForPlayer(PlayerConfirmedEvent notification, CancellationToken cancellationToken)
+    {
+        InitResourceBuildingsCommand command = BuildInitResourceBuildingsCommand(notification);
+        await _initResourceBuildingsCommandHandler.Handle(command, cancellationToken);
+    }
+
+    private InitResourceBuildingsCommand BuildInitResourceBuildingsCommand(PlayerConfirmedEvent notification)
+    {
+        return new()
+        {
+            PlayerId = notification.PlayerId
         };
     }
 }

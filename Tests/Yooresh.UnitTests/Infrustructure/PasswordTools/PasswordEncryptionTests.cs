@@ -39,16 +39,10 @@ public class PasswordEncryptionTests
 
     private Player CreateAPlayer()
     {
-        return new Player()
-        {
-            Id = Guid.NewGuid(),
-            Confirmed = false,
-            ConfirmationCode = Guid.NewGuid().ToString(),
-            Email = "alireza.sabouei@gmail.com",
-            Name = "Alireza",
-            Password = "Aa123456",
-            Role = Role.SimplePlayer
-        };
+        return new Player(
+            name: "name",
+            email: "alireza.sabouei@gmail.com",
+            password: "Aa123456");
     }
 
     [Test]

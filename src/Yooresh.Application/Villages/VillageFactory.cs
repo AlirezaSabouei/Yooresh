@@ -23,30 +23,10 @@ public class VillageFactory
             PlayerId = command.PlayerId,
             FactionId = command.FactionId,
             AvailableBuilders = 2,
-            Resource = new Resource(0, 0, 0, 0, 0)
+            Resource = new Domain.Entities.Resources.ResourceValueObject(0, 0, 0, 0)
         };
-        await AddBasicResourceBuildings(village);
         await AddBasicDefensiveBuildings(village);
         return village;
-    }
-
-    private async Task AddBasicResourceBuildings(Village village)
-    {
-        var farm = await _context.Farms.SingleAsync(a => a.Level == 0);
-
-        var lumberMill = await _context.LumberMills.SingleAsync(a => a.Level == 0);
-
-        var stoneMine = await _context.StoneMines.SingleAsync(a => a.Level == 0);
-
-        var metalMine = await _context.MetalMines.SingleAsync(a => a.Level == 0);
-
-        var goldMine = await _context.GoldMines.SingleAsync(a => a.Level == 0);
-
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, farm));
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, lumberMill));
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, stoneMine));
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, metalMine));
-        village.VillageResourceBuildings.Add(new VillageBuilding(village, goldMine));
     }
 
     private async Task AddBasicDefensiveBuildings(Village village)
