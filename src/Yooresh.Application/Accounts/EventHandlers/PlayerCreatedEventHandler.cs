@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Events.Accounts;
 
-namespace Yooresh.Application.Account.EventHandlers;
+namespace Yooresh.Application.Accounts.EventHandlers;
 
 public class PlayerCreatedEventHandler(
     IEmail email,

@@ -2,7 +2,7 @@
 using Shouldly;
 using System.Net;
 using System.Net.Http.Json;
-using Yooresh.Application.Account.Dto;
+using Yooresh.Application.Accounts.Dto;
 
 namespace Yooresh.AcceptanceTests.Controllers.Players;
 

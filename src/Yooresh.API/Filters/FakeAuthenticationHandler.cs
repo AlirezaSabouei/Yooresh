@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.API.Filters;
 

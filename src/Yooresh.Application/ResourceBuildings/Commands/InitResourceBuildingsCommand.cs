@@ -2,7 +2,7 @@
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Application.ResourceBuildingUpgrades.Queries;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.ResourceBuildingUpgrades;
 
@@ -67,13 +67,9 @@ public class InitResourceBuildingsCommandHandler(
             HarvestRatePerMinute = resourceBuildingUpgrade.BonusHarvestRatePerMinute,
             Level = 0,
             Name = $"Level 0 {resourceBuildingType}",
-            NeedBuilderForUpgrade = resourceBuildingUpgrade.NeedBuilderForUpgrade,
             Player = new PlayerReference() { Id = request.PlayerId },
             ResourceBuildingType = resourceBuildingType,
-            UpgradeCost = resourceBuildingUpgrade.UpgradeCost,
-            UpgradeDuration = resourceBuildingUpgrade.UpgradeDuration,
-            UpgradeEndTime = _dateTimeProvider.GetUtcNow() + resourceBuildingUpgrade.UpgradeDuration,
-            UpgradeName = resourceBuildingUpgrade.UpgradeName
+            IsUnderUpgrade = false
         };
     }
 

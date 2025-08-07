@@ -4,7 +4,7 @@ using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
 
-namespace Yooresh.Application.Account.Commands;
+namespace Yooresh.Application.Accounts.Commands;
 
 public class LoginCommand : IRequest<Dictionary<string, string>?>
 {

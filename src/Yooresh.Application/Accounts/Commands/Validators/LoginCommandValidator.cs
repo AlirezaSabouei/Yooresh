@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using Yooresh.Application.Account.Commands;
 
-namespace Yooresh.Application.Account.Commands.Validators;
+namespace Yooresh.Application.Accounts.Commands.Validators;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {

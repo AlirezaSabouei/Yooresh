@@ -10,7 +10,7 @@ using Yooresh.API.Controllers;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Villages.Commands;
 using Yooresh.Application.Villages.Dto;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Buildings;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.Resources;

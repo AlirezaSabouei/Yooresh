@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
-namespace Yooresh.Application.Account.Commands.Validators;
+namespace Yooresh.Application.Accounts.Commands.Validators;
 
 public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerCommand>
 {

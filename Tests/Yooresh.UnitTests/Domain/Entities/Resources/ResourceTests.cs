@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Shouldly;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.UnitTests.Domain.Entities.Resources;

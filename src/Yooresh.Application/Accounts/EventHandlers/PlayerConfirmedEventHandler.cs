@@ -5,7 +5,7 @@ using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Events.Accounts;
 
-namespace Yooresh.Application.Account.EventHandlers;
+namespace Yooresh.Application.Accounts.EventHandlers;
 
 public class PlayerConfirmedEventHandler(
     IRequestHandler<InitResourcesCommand, List<Resource>> initResourcesCommandHandler,

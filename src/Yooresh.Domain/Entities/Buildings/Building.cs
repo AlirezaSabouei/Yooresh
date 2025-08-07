@@ -58,4 +58,9 @@ public abstract class Building:BaseEntity,IUpgradableTemp
             village.AvailableBuilders -= 1;
         }
     }
+
+    public void StartUpgrade()
+    {
+        throw new NotImplementedException();
+    }
 }

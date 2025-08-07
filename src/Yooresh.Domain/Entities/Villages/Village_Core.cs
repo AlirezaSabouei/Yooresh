@@ -1,4 +1,4 @@
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Factions;
 
 namespace Yooresh.Domain.Entities.Villages;

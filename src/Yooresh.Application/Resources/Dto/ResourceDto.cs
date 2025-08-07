@@ -1,4 +1,4 @@
-﻿using Yooresh.Application.Account.Dto;
+﻿using Yooresh.Application.Accounts.Dto;
 using Yooresh.Application.Common;
 using Yooresh.Application.Common.Mappings;
 using Yooresh.Domain.Entities.Resources;

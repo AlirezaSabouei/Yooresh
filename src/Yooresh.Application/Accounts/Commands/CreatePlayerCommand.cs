@@ -3,9 +3,9 @@ using MediatR;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Events.Accounts;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
-namespace Yooresh.Application.Account.Commands;
+namespace Yooresh.Application.Accounts.Commands;
 
 public record CreatePlayerCommand : IRequest<Player>
 {

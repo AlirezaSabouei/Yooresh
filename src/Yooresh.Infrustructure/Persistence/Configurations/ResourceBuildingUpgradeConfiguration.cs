@@ -92,7 +92,7 @@ public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<Res
                 Id = ids[i],
                 Level = i,
                 ResourceBuildingType = ResourceBuildingType.GoldMine,
-                UpgradeName = $"Gold mine level {i}",
+                UpgradeName = $"Gold mine level {i+1}",
                 UpgradeCost = i == 1
                     ? new ResourceValueObject(0, 0, 0, 0)
                     : new ResourceValueObject(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
@@ -143,7 +143,7 @@ public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<Res
                 Id = ids[i],
                 Level = i,
                 ResourceBuildingType = ResourceBuildingType.LumberMill,
-                UpgradeName = $"Lumber mill level {i}",
+                UpgradeName = $"Lumber mill level {i+1}",
                 UpgradeCost = i == 1
                     ? new ResourceValueObject(0, 0, 0, 0)
                     : new ResourceValueObject(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
@@ -167,7 +167,7 @@ public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<Res
                 Id = ids[i],
                 Level = i,
                 ResourceBuildingType = ResourceBuildingType.StoneMine,
-                UpgradeName = $"Stone mine level {i}",
+                UpgradeName = $"Stone mine level {i + 1}",
                 UpgradeCost = i == 1
                     ? new ResourceValueObject(0, 0, 0, 0)
                     : new ResourceValueObject(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),
@@ -191,7 +191,7 @@ public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<Res
                 Id = ids[i],
                 Level = i,
                 ResourceBuildingType = ResourceBuildingType.Farm,
-                UpgradeName = $"Stone mine level {i}",
+                UpgradeName = $"Stone mine level {i + 1}",
                 UpgradeCost = i == 1
                     ? new ResourceValueObject(0, 0, 0, 0)
                     : new ResourceValueObject(i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10, i ^ 2 * 10),

@@ -10,7 +10,7 @@ using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.ResourceBuildingUpgrades;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Infrastructure.Persistence;
 

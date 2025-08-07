@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Yooresh.Application.Account.Commands;
+namespace Yooresh.Application.Accounts.Commands;
 
 public record ConfirmAccountCommand : IRequest<bool>
 {

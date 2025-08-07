@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Yooresh.API;
-using Yooresh.Application.Account.Dto;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Application.Accounts.Dto;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.AcceptanceTests.Drivers;
 

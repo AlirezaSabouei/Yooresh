@@ -4,9 +4,9 @@ using Moq;
 using Moq.EntityFrameworkCore;
 using Shouldly;
 using Xunit;
-using Yooresh.Application.Account.Commands;
-using Yooresh.Application.Account.Commands.Validators;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
+using Yooresh.Application.Accounts.Commands.Validators;
+using Yooresh.Application.Accounts.Commands;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 

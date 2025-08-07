@@ -1,8 +1,8 @@
 using Yooresh.Application.Common;
 using Yooresh.Application.Common.Mappings;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
-namespace Yooresh.Application.Account.Dto;
+namespace Yooresh.Application.Accounts.Dto;
 
 public class PlayerDto : BaseDto, IMapFrom<Player>
 {

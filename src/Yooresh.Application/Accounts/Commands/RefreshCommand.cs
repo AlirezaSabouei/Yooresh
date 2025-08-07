@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
-namespace Yooresh.Application.Account.Commands;
+namespace Yooresh.Application.Accounts.Commands;
 
 public class RefreshCommand : IRequest<Dictionary<string, string>?>
 {

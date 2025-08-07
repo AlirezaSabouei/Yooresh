@@ -1,26 +1,19 @@
-using AutoMapper;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities;
 using Yooresh.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
-namespace Yooresh.Application.Account.Queries;
+namespace Yooresh.Application.Accounts.Queries;
 
 public record GetPlayerQuery : IRequest<Player>
 {
     public string Email { get; set; } = null!;
 }
 
-public class GetPlayerQueryHandler : IRequestHandler<GetPlayerQuery, Player>
+public class GetPlayerQueryHandler(IContext context) : IRequestHandler<GetPlayerQuery, Player>
 {
-    private readonly IContext _context;
-
-    public GetPlayerQueryHandler(IContext context)
-    {
-        _context = context;
-    }
+    private readonly IContext _context = context;
 
     public async Task<Player> Handle(GetPlayerQuery request, CancellationToken cancellationToken)
     {
@@ -29,11 +22,6 @@ public class GetPlayerQueryHandler : IRequestHandler<GetPlayerQuery, Player>
             .FirstOrDefaultAsync(a => a.Email == request.Email,
                 cancellationToken);
 
-        if (player is null)
-        {
-            throw new PlayerNotExistsException();
-        }
-
-        return player;
+        return player is null ? throw new PlayerNotExistsException() : player;
     }
 }

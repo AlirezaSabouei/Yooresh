@@ -1,6 +1,6 @@
 ﻿using Yooresh.Domain.Events.Accounts;
 
-namespace Yooresh.Domain.Entities.Account;
+namespace Yooresh.Domain.Entities.Accounts;
 
 public class Player : RootEntity
 {

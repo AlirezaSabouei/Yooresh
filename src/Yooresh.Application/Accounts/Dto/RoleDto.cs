@@ -1,4 +1,4 @@
-namespace Yooresh.Application.Account.Dto;
+namespace Yooresh.Application.Accounts.Dto;
 
 public enum RoleDto
 {

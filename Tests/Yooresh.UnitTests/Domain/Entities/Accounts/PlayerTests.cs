@@ -1,7 +1,7 @@
 ﻿using Shouldly;
 using NUnit.Framework;
 using Yooresh.Domain.Events.Accounts;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.UnitTests.Domain.Entities.Accounts;
 
