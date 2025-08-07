@@ -3,11 +3,11 @@ using NSubstitute.ExceptionExtensions;
 using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Shouldly;
-using Yooresh.Application.Account.Commands;
+using Yooresh.Application.Accounts.Commands;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Events.Accounts;
 using Yooresh.UnitTests.Application.Base;
 

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.AcceptanceTests;
 

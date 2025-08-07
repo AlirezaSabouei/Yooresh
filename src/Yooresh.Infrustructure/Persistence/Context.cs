@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using MediatR;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities;
@@ -11,6 +10,7 @@ using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.ResourceBuildingUpgrades;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Infrastructure.Persistence;
 

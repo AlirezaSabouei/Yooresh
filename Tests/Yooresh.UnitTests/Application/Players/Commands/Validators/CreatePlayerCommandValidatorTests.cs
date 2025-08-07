@@ -2,10 +2,10 @@ using MockQueryable;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
-using Yooresh.Application.Account.Commands;
-using Yooresh.Application.Account.Commands.Validators;
+using Yooresh.Application.Accounts.Commands;
+using Yooresh.Application.Accounts.Commands.Validators;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.UnitTests.Application.Base;
 
 namespace Yooresh.UnitTests.Application.Players.Commands.Validators;

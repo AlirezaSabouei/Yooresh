@@ -1,4 +1,4 @@
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Domain.Events.Accounts;
 

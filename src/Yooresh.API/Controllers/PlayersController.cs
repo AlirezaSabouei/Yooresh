@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Yooresh.Application.Account.Commands;
-using Yooresh.Application.Account.Dto;
 using Yooresh.Application.Account.Queries;
+using Yooresh.Application.Accounts.Commands;
+using Yooresh.Application.Accounts.Dto;
 
 namespace Yooresh.API.Controllers;
 

@@ -3,7 +3,7 @@ using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
 using Yooresh.Domain.Entities;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Infrastructure.PasswordTools;
 
 namespace Yooresh.UnitTests.Infrustructure.PasswordTools;

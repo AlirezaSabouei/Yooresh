@@ -1,12 +1,14 @@
-﻿using Yooresh.Domain.Entities.Players;
-using Shouldly;
+﻿using Shouldly;
 using NUnit.Framework;
 using Yooresh.Domain.Events.Accounts;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.UnitTests.Domain.Entities.Accounts;
 
 public class PlayerTests
 {
+    private class TestPlayer : Player{}
+
     [Test]
     public void Constructor_SetPropertiesCorrectly()
     {
@@ -20,7 +22,23 @@ public class PlayerTests
         player.Email.ShouldBe(email.ToLower());
         player.Password.ShouldBe(password);
         player.Role.ShouldBe(Role.SimplePlayer);
+        player.Confirmed.ShouldBeFalse();
+        Guid.TryParse(player.ConfirmationCode, out _).ShouldBeTrue();
         player.RefreshTokens.ShouldBe([]);
+    }
+
+    [Test]
+    public void ProtectedConstructor_SetPropertiesCorrectly()
+    {
+        var testPlayer = new TestPlayer();
+
+        testPlayer.Name.ShouldBeEmpty();
+        testPlayer.Email.ShouldBeEmpty();
+        testPlayer.Password.ShouldBeEmpty();
+        testPlayer.Role.ShouldBe(Role.SimplePlayer);
+        testPlayer.Confirmed.ShouldBeFalse();
+        Guid.TryParse(testPlayer.ConfirmationCode, out _).ShouldBeTrue();
+        testPlayer.RefreshTokens.ShouldBe([]);
     }
 
     [Test]
