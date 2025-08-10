@@ -1,5 +1,5 @@
 ﻿using System.Net.Http.Headers;
-using Yooresh.Village.Models;
+using Yooresh.Village.Models.Resources;
 
 namespace Yooresh.Village.Services;
 
@@ -8,9 +8,9 @@ public class ResourceServices(HttpClient httpClient, AuthenticationService authe
     private readonly HttpClient _httpClient = httpClient;
     private readonly AuthenticationService _authenticationService = authenticationService;
 
-    public async Task<List<Resource>?> GetResources()
+    public async Task<List<ResourceModel>?> GetResources()
     {
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _authenticationService.Token);
-        return await _httpClient.GetFromJsonAsync<List<Resource>>("api/resources");
+        return await _httpClient.GetFromJsonAsync<List<ResourceModel>>("api/resources");
     }
 }

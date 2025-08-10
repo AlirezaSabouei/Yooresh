@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Shouldly;
-using Yooresh.Domain.Entities.Players;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Events.Accounts;
 
 namespace Yooresh.UnitTests.Domain.Events.Accounts;

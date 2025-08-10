@@ -21,8 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DefensiveBuildings\Commands\Validators\" />
+    <Folder Include="DefensiveBuildingUpgrades\Queries\Validators\" />
     <Folder Include="ResourceBuildings\Commands\Validators\" />
     <Folder Include="ResourceBuildingUpgrades\Queries\Validators\" />
+    <Folder Include="Villages\Dto\" />
   </ItemGroup>
 
 </Project>

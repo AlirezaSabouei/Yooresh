@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using Yooresh.Village.Models;
-using Yooresh.Village.Models.Account;
+using Yooresh.Village.Models.Accounts;
 
 namespace Yooresh.Village.Services;
 

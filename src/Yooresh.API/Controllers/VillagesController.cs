@@ -2,9 +2,9 @@
 using Yooresh.Application.Villages.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Yooresh.Application.Villages.Dto;
 using Yooresh.Application.Villages.Queries;
 using Yooresh.Domain.Exceptions;
+using Yooresh.Application.ResourceBuildings.Commands;
 
 namespace Yooresh.API.Controllers;
 
@@ -39,32 +39,32 @@ public class VillagesController(IMapper mapper) : BaseApiController(mapper)
         }
     }
 
-    [HttpGet]
-    public async Task<ActionResult<VillageDto>> GetVillage()
-    {
-        try
-        {
-            var query = new GetVillageQuery()
-            {
-                PlayerId = PlayerId
-            };
-            var result=await Mediator.Send(query);
-            return _mapper.Map<VillageDto>(result);
-        }
-        catch (FluentValidation.ValidationException ex)
-        {
-            foreach (var error in ex.Errors)
-            {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
+    //[HttpGet]
+    //public async Task<ActionResult<VillageDto>> GetVillage()
+    //{
+    //    try
+    //    {
+    //        var query = new GetVillageQuery()
+    //        {
+    //            PlayerId = PlayerId
+    //        };
+    //        var result=await Mediator.Send(query);
+    //        return _mapper.Map<VillageDto>(result);
+    //    }
+    //    catch (FluentValidation.ValidationException ex)
+    //    {
+    //        foreach (var error in ex.Errors)
+    //        {
+    //            ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+    //        }
 
-            return BadRequest(ModelState);
-        }
-        catch (Exception e)
-        {
-            return BadRequest(e.Message);
-        }
-    }
+    //        return BadRequest(ModelState);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return BadRequest(e.Message);
+    //    }
+    //}
 
     [HttpPost]
     public async Task<ActionResult<bool>> CreateVillage([FromBody] CreateVillageCommandDto createVillageCommandDto)

@@ -1,13 +1,13 @@
 ﻿@page "/village"
+@using Yooresh.Village.Components.Pages.ResourceBuildings
+@using Yooresh.Village.Components.Pages.Resources
 @inject Services.AuthenticationService _authenticationService;
 
 <PageTitle>Village</PageTitle>
 <div class="village">
-    <Resource></Resource>
-    <div class="whiteBox gold-mine" data-toggle="modal" data-target="#exampleModal">1</div>
-    <div class="whiteBox stone-mine" data-toggle="modal" data-target="#exampleModal">2</div>
-    <div class="whiteBox lumber-mill" data-toggle="modal" data-target="#exampleModal">3</div>
-    <div class="whiteBox farm" data-toggle="modal" data-target="#exampleModal">4</div>
+    <Resource/>
+    <ResourceBuildings/>
+
     <div class="whiteBox wall">7</div>
 
     <!-- Button trigger modal -->

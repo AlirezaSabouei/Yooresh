@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Yooresh.Application.Common.Interfaces;
-using Yooresh.Domain.Entities.Account;
+using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Application.Resources.Commands;

@@ -12,8 +12,6 @@ public static class ConfigureServices
 {
     public static void AddApplicationServices(this IServiceCollection services)
     {
-        services.AddTransient<VillageFactory, VillageFactory>();
-
         services.AddAutoMapper(cfg =>
         {
             cfg.AddMaps(Assembly.GetExecutingAssembly()); // scans for Profile classes
