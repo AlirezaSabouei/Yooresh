@@ -43,7 +43,7 @@ public class LoginCommandHandler(
 
         var accessToken = _tokenService.GenerateAccessToken(player.Id.ToString(), player.Role.ToString(), player.Email, player.Name);
         var refreshToken = _tokenService.GenerateRefreshToken();
-        _context.RefreshTokens.Add(new Domain.Entities.Players.RefreshToken()
+        _context.RefreshTokens.Add(new Domain.Entities.Accounts.RefreshToken()
         {
             Id = Guid.NewGuid(),
             Expires = _dateTimeProvider.GetUtcNow().AddDays(10),

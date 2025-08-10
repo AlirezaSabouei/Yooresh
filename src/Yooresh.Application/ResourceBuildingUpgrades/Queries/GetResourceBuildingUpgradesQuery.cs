@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.ResourceBuildings;
-using Yooresh.Domain.ResourceBuildingUpgrades;
+using Yooresh.Domain.Entities.ResourceBuildingUpgrades;
 
 namespace Yooresh.Application.ResourceBuildingUpgrades.Queries;
 

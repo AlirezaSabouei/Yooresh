@@ -1,5 +1,6 @@
 using AutoMapper;
 using Yooresh.Application.Common.Mappings;
+using Yooresh.Application.ResourceBuildings.Commands;
 
 namespace Yooresh.Application.Villages.Commands;
 

@@ -22,17 +22,7 @@ public class GetVillageQueryHandler : IRequestHandler<GetVillageQuery, Village>
     public async Task<Village> Handle(GetVillageQuery request, CancellationToken cancellationToken)
     { 
         var village = (await _context.Villages
-            .Include(a => a.VillageResourceBuildings)
-            .ThenInclude(b => b.Building)
-            .ThenInclude(c => c.Target)
-            .Include(a => a.VillageTower)
-            .ThenInclude(b => b.Tower)
-            .ThenInclude(c => c.Target)
-            .Include(a => a.VillageWall)
-            .ThenInclude(b => b.Wall)
-            .ThenInclude(c => c.Target)
-            .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken))
-            .GatherResources();
+            .FirstAsync(a => a.PlayerId == request.PlayerId, cancellationToken));
 
         await _context.SaveChangesAsync(cancellationToken);
 

@@ -1,0 +1,32 @@
+﻿@using Yooresh.Village.Models.ResourceBuildings
+@inject Services.IResourceBuildingsServices _resourceBuildingServices;
+
+<div class="whiteBox gold-mine" data-toggle="modal" data-target="#exampleModal">1</div>
+<div class="whiteBox lumber-mill" data-toggle="modal" data-target="#exampleModal">3</div>
+<div class="whiteBox stone-mine" data-toggle="modal" data-target="#exampleModal">2</div>
+<div class="whiteBox farm" data-toggle="modal" data-target="#exampleModal">4</div>
+
+@code {
+    ResourceBuildingModel goldMine;
+    ResourceBuildingModel lumbarMill;
+    ResourceBuildingModel stoneMine;
+    ResourceBuildingModel farm;
+
+    public string errorMessage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _resourceBuildingServices.GetResourceBuildings();
+        if (result.IsSuccess)
+        {
+            goldMine = result.Data!.First(a => a.ResourceBuildingType == ResourceBuildingTypeModel.GoldMine);
+            lumbarMill = result.Data!.First(a => a.ResourceBuildingType == ResourceBuildingTypeModel.LumberMill);
+            stoneMine = result.Data!.First(a => a.ResourceBuildingType == ResourceBuildingTypeModel.StoneMine);
+            farm = result.Data!.First(a => a.ResourceBuildingType == ResourceBuildingTypeModel.Farm);
+        }
+        else
+        {
+            errorMessage = result.ErrorMessage;
+        }
+    }
+}

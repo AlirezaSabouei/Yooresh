@@ -4,7 +4,7 @@ using Yooresh.Village.Tests.Pages.Login;
 using Yooresh.Village.Tests.Common;
 using Yooresh.Village.Tests.Helpers;
 using Yooresh.Village.Validations;
-using Yooresh.Village.Models.Account;
+using Yooresh.Village.Models.Accounts;
 
 namespace Yooresh.Village.Tests.Tests.Login;
 

@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Application.Common.Tools;
+using Yooresh.Application.DefensiveBuildingUpgrades.Queries;
 using Yooresh.Application.ResourceBuildingUpgrades.Queries;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.ResourceBuildings;
-using Yooresh.Domain.ResourceBuildingUpgrades;
+using Yooresh.Domain.Entities.ResourceBuildingUpgrades;
 
 namespace Yooresh.Application.ResourceBuildings.Commands;
 

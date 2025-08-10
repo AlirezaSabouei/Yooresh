@@ -1,4 +1,5 @@
 ﻿@using Yooresh.Village.Models;
+@using Yooresh.Village.Models.Resources
 @using Yooresh.Village.Services
 @rendermode InteractiveServer
 @implements IDisposable
@@ -38,7 +39,7 @@
     private int stoneRate = 0;
     private int foodRate = 0;
 
-    private List<Models.Resource> resources;
+    private List<ResourceModel> resources;
 
     System.Timers.Timer Timer;
 
