@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Configuration;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Resources;
@@ -11,29 +10,19 @@ public class InitResourcesCommand : IRequest<List<Resource>>
     public Guid PlayerId { get; internal set; }
 }
 
-public class InitResourcesCommandHandler(IContext context, IConfiguration configuration) :
+public class InitResourcesCommandHandler(IContext context) :
     IRequestHandler<InitResourcesCommand, List<Resource>>
 {
     private readonly IContext _context = context;
-    private readonly IConfiguration _configuration = configuration;
-
-   // private int _startingAvailableAmount;
-   // private int _startingHarvestRatePerMinute;
 
     public async Task<List<Resource>> Handle(
         InitResourcesCommand request, CancellationToken cancellationToken)
     {
-       // GetInitialValuesFromConfiguration();
+
         List<Resource> resources = CreateResourcesInstances(request);
         await InsertResources(resources, cancellationToken);
         return resources;
     }
-
-   // private void GetInitialValuesFromConfiguration()
-   // {
-        //_startingAvailableAmount = int.Parse(_configuration.GetSection("Resources")["StartingAvailableAmount"]!);
-        //_startingHarvestRatePerMinute = int.Parse(_configuration.GetSection("Resources")["StartingHarvestRatePerMinute"]!);
-  //  }
 
     private List<Resource> CreateResourcesInstances(InitResourcesCommand request)
     {

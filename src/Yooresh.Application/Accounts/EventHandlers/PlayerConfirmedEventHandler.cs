@@ -2,6 +2,7 @@
 using Yooresh.Application.DefensiveBuildings.Commands;
 using Yooresh.Application.ResourceBuildings.Commands;
 using Yooresh.Application.Resources.Commands;
+using Yooresh.Domain.Entities.DefensiveBuildings;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Events.Accounts;

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Yooresh.Application.Common.Interfaces;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.ResourceBuildingUpgrades;
@@ -17,18 +18,23 @@ public class GetResourceBuildingUpgradesQuery : IRequest<List<ResourceBuildingUp
     }
 }
 
-public class GetResourceBuildingUpgradesQueryHandler(IContext context) :
+public class GetResourceBuildingUpgradesQueryHandler(IContext context, IMemoryCache memoryCache) :
     IRequestHandler<GetResourceBuildingUpgradesQuery, List<ResourceBuildingUpgrade>>
 {
     private readonly IContext _context = context;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async Task<List<ResourceBuildingUpgrade>> Handle(
         GetResourceBuildingUpgradesQuery request, CancellationToken cancellationToken)
     {
-        var resourceBuildingUpgrades = await _context.ResourceBuildingUpgrades
+        if (_memoryCache.TryGetValue("ResourceBuildingUpgrades", out List<ResourceBuildingUpgrade> resourceBuildingUpgrades))
+        {
+            return resourceBuildingUpgrades!;
+        }
+        resourceBuildingUpgrades = await _context.ResourceBuildingUpgrades
             .Where(a => a.Level == request.Level)
             .Where(a => request.ResourceBuildingTypes.Contains(a.ResourceBuildingType))
             .ToListAsync(cancellationToken);
-        return resourceBuildingUpgrades;
+        return resourceBuildingUpgrades!;
     }
 }
