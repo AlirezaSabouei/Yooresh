@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Yooresh.Domain\Yooresh.Domain.csproj" />
+    <ProjectReference Include="..\Yooresh.Village\Yooresh.Village.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -25,7 +26,6 @@
     <Folder Include="DefensiveBuildingUpgrades\Queries\Validators\" />
     <Folder Include="ResourceBuildings\Commands\Validators\" />
     <Folder Include="ResourceBuildingUpgrades\Queries\Validators\" />
-    <Folder Include="Villages\Dto\" />
   </ItemGroup>
 
 </Project>

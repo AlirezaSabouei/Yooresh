@@ -3,7 +3,6 @@ using Yooresh.Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Yooresh.Application.Villages;
 using Yooresh.Application.Common.Tools;
 
 namespace Yooresh.Application;
