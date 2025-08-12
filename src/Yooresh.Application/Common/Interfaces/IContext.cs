@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Yooresh.Domain.Entities.Factions;
-using Village = Yooresh.Domain.Entities.Villages.Village;
 using Yooresh.Domain.Entities.Resources;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.ResourceBuildings;
@@ -20,7 +19,6 @@ public interface IContext
     public DbSet<DefensiveBuildingUpgrade> DefensiveBuildingUpgrades { get; set; }
     public DbSet<DefensiveBuilding> DefensiveBuildings { get; set; }
     public DbSet<Resource> Resources { get; set; }
-    public DbSet<Village> Villages { get; set; }
     public DbSet<Faction> Factions { get; set; }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken = default);

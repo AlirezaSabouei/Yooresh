@@ -10,7 +10,7 @@ namespace Yooresh.Application.DefensiveBuildings.Commands;
 
 public class InitDefensiveBuildingsCommand : IRequest<List<DefensiveBuilding>>
 {
-    public Guid PlayerId { get; internal set; }
+    public Guid PlayerId { get; set; }
 }
 
 public class InitDefensiveBuildingsCommandHandler(

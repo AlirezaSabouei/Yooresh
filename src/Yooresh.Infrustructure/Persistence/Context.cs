@@ -10,7 +10,6 @@ using Yooresh.Domain.Entities.Factions;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.ResourceBuildingUpgrades;
 using Yooresh.Domain.Entities.Resources;
-using Village = Yooresh.Domain.Entities.Villages.Village;
 
 namespace Yooresh.Infrastructure.Persistence;
 
@@ -25,7 +24,6 @@ public class Context(DbContextOptions options, IMediator mediator) : DbContext(o
     public DbSet<DefensiveBuildingUpgrade> DefensiveBuildingUpgrades { get; set; }
     public DbSet<DefensiveBuilding> DefensiveBuildings { get; set; }
     public DbSet<Resource> Resources { get; set; }
-    public DbSet<Village> Villages { get; set; }
     public DbSet<Faction> Factions { get; set; }
 
     public new async Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -58,11 +56,6 @@ public class Context(DbContextOptions options, IMediator mediator) : DbContext(o
             foreach (var entityDomainEvent in events)
                 await _mediator.Publish(entityDomainEvent);
         }
-    }
-
-    public string Test(Village entity)
-    {
-        return Entry(entity).State.ToString();
     }
 
     public IQueryable<TEntity> QuerySet<TEntity>() where TEntity : BaseEntity

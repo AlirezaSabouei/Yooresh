@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Yooresh.Domain.Entities.Accounts;
+﻿using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Domain.Entities.Armies;
 
