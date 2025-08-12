@@ -25,6 +25,7 @@ public static class ConfigureServices
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
            // cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         });
+        services.AddMemoryCache();
 
         services.AddMemoryCache();
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
