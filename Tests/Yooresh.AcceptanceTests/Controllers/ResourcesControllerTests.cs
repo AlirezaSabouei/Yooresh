@@ -38,6 +38,12 @@ public class ResourcesControllerTests
         await _resourcesDriver.ClearDatabaseAsync();
     }
 
+    [OneTimeTearDown]
+    public void Cleanup()
+    {
+        _resourcesDriver.Dispose();
+    }
+
     [Test]
     public async Task GetResources_QueryIsValid_ResourcesAreReturned()
     {

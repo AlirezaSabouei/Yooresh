@@ -1,17 +1,16 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Application.Accounts.Commands.Validators;
 
 public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerCommand>
 {
-    private readonly IContext _context;
+    private readonly IDocumentStore<Player> _documentStore;
 
-    public CreatePlayerCommandValidator(IContext context)
+    public CreatePlayerCommandValidator(IDocumentStore<Player> documentStore)
     {
-        _context = context;
+        _documentStore = documentStore;
 
         RuleFor(a => a.Name)
             .NotEmpty()
@@ -39,9 +38,10 @@ public class CreatePlayerCommandValidator : AbstractValidator<CreatePlayerComman
         {
             return false;
         }
-        var count = await _context.QuerySet<Player>().CountAsync(a => a.Email.ToLower() == request.Email.ToLower(),
-            cancellationToken);
-        return count == 0;
+
+        var players = await _documentStore.GetAsync(_ => true, cancellationToken);
+        return !players.Any(a =>
+            string.Equals(a.Email, request.Email.Trim(), StringComparison.OrdinalIgnoreCase));
     }
 
     private bool MeetPasswordStrength(CreatePlayerCommand request, string property)

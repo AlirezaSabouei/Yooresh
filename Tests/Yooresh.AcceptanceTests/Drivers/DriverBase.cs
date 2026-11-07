@@ -1,11 +1,10 @@
 ﻿using AutoFixture;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using Yooresh.API;
 using Yooresh.Application.Common;
 using Yooresh.Domain.Entities;
-using Yooresh.Infrastructure.Persistence;
 
 namespace Yooresh.AcceptanceTests.Drivers;
 
@@ -13,32 +12,30 @@ public abstract class DriverBase<TEntity,TDto> : IDisposable
     where TEntity : BaseEntity
     where TDto : BaseDto 
 {
+    private readonly IServiceScope _scope;
+
     public WebApplicationFactory<Program> Factory { get; set; }
 
     public readonly HttpClient HttpClient;
 
-    public Context? DbContext;
+    public IMongoDatabase Database { get; }
+
+    public IMongoCollection<TEntity> Collection { get; }
 
     public DriverBase(WebApplicationFactory<Program> factory)
     {
         Factory = factory;
         HttpClient = Factory.CreateClient();
-        GetDbContext();
-    }
 
-    private void GetDbContext()
-    {
-        IServiceScopeFactory scopeFactory = Factory.Services.GetRequiredService<IServiceScopeFactory>();
-        IServiceScope scope = scopeFactory.CreateScope();
-        DbContext = scope.ServiceProvider.GetRequiredService<Context>();
-        DbContext.Database.EnsureCreated();
+        _scope = Factory.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        Database = _scope.ServiceProvider.GetRequiredService<IMongoDatabase>();
+        Collection = Database.GetCollection<TEntity>(typeof(TEntity).Name);
     }
 
     public virtual async Task<TEntity> AddEntityToDatabaseAsync(TEntity baseEntity)
     {
-        await DbContext!.Set<TEntity>().AddAsync(baseEntity);
-        await DbContext!.SaveChangesAsync();
-        return (await DbContext.Set<TEntity>().FindAsync(baseEntity.Id))!;
+        await Collection.InsertOneAsync(baseEntity);
+        return await Collection.Find(a => a.Id == baseEntity.Id).FirstAsync();
     }
 
     public virtual TEntity CreateEntityInstance()
@@ -58,14 +55,27 @@ public abstract class DriverBase<TEntity,TDto> : IDisposable
 
     public async Task ClearDatabaseAsync()
     {
-        DbContext!.Set<TEntity>().RemoveRange(DbContext!.Set<TEntity>());
-        await DbContext.SaveChangesAsync();
+        await Collection.DeleteManyAsync(Builders<TEntity>.Filter.Empty);
     }
 
     public async Task<TEntity?> GetEntityFromDatabaseAsync(Guid id)
     {
-        return await DbContext!.Set<TEntity>().FirstOrDefaultAsync(a => a.Id == id);
+        return await Collection.Find(a => a.Id == id).FirstOrDefaultAsync();
     }
 
-    public virtual void Dispose() => DbContext!.Dispose();
+    public virtual void Dispose()
+    {
+        try
+        {
+            Database.Client.DropDatabase(Database.DatabaseNamespace.DatabaseName);
+        }
+        catch
+        {
+            // The test database is disposable; never fail test teardown because of cleanup.
+        }
+
+        _scope.Dispose();
+        HttpClient.Dispose();
+        Factory.Dispose();
+    }
 }

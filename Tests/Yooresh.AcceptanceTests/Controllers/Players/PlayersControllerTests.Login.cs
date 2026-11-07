@@ -17,7 +17,7 @@ public partial class PlayersControllerTests
             Password = "Some Password",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -35,7 +35,7 @@ public partial class PlayersControllerTests
             Password = "Some Password",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -53,7 +53,7 @@ public partial class PlayersControllerTests
             Password = string.Empty,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -71,7 +71,7 @@ public partial class PlayersControllerTests
             Password = "Some Password",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -91,7 +91,7 @@ public partial class PlayersControllerTests
             Password = user.Password,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeTrue();
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -111,7 +111,7 @@ public partial class PlayersControllerTests
             Password = user.Password.ToUpper(),
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
@@ -131,7 +131,7 @@ public partial class PlayersControllerTests
             Password = user.Password,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeTrue();
         result.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -154,7 +154,7 @@ public partial class PlayersControllerTests
             Password = user.Password,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/login", loginRequest);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/login", loginRequest);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);

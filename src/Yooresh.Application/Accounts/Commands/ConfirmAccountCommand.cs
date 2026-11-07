@@ -1,6 +1,6 @@
-﻿using Yooresh.Application.Common.Interfaces;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Yooresh.Application.Common.Data;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Application.Accounts.Commands;
 
@@ -10,20 +10,22 @@ public record ConfirmAccountCommand : IRequest<bool>
     public required string ConfirmationCode { get; set; }
 }
 
-public class ConfirmAccountCommandHandler(IContext context) 
+public class ConfirmAccountCommandHandler(IDocumentStore<Player> documentStore)
     : IRequestHandler<ConfirmAccountCommand, bool>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<Player> _documentStore = documentStore;
 
     public async Task<bool> Handle(ConfirmAccountCommand request, CancellationToken cancellationToken)
     {
-        var player = await _context.Players.FirstAsync(a => a.Id == request.PlayerId, cancellationToken);
+        var player = await _documentStore.GetByIdAsync(request.PlayerId, cancellationToken)
+            ?? throw new InvalidOperationException($"Player '{request.PlayerId}' was not found.");
+
         player.ConfirmPlayer(request.ConfirmationCode);
-        if (player.Confirmed) 
+        if (player.Confirmed)
         {
-            await _context.SaveChangesAsync(cancellationToken);
+            await _documentStore.UpdateAsync(player, cancellationToken);
             return true;
-        }        
+        }
         return false;
     }
 }

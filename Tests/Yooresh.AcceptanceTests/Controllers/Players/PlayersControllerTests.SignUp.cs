@@ -20,7 +20,7 @@ public partial class PlayersControllerTests
             Password = "Some Password@123",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -39,7 +39,7 @@ public partial class PlayersControllerTests
             Password = "Some Password@123",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -61,7 +61,7 @@ public partial class PlayersControllerTests
             Password = "Some Password@123",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -83,7 +83,7 @@ public partial class PlayersControllerTests
             Password = "Some Password@123",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -102,7 +102,7 @@ public partial class PlayersControllerTests
             Password = string.Empty,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -123,7 +123,7 @@ public partial class PlayersControllerTests
             Password = password,
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         result.IsSuccessStatusCode.ShouldBeFalse();
         result.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -142,7 +142,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         await AssertDatabaseCreatedPlayer(playerDto!);
@@ -174,7 +174,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         playerDto!.Confirmed.ShouldBeFalse();
@@ -192,7 +192,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         playerDto!.Confirmed.ShouldBeFalse();
@@ -210,7 +210,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         playerDto!.Role.ShouldBe(RoleDto.SimplePlayer);
@@ -228,7 +228,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         playerDto!.Email.ShouldBe(command.Email.ToLower());
@@ -246,7 +246,7 @@ public partial class PlayersControllerTests
             Password = "some password123@",
         };
 
-        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/players/signup", command);
+        var result = await _playersDriver.HttpClient.PostAsJsonAsync("api/accounts/signup", command);
 
         PlayerDto? playerDto = await AssertSuccessResult(result);
         var createdPlayer = await AssertDatabaseCreatedPlayer(playerDto!);

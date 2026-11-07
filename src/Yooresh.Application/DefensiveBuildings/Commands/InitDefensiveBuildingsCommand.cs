@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
+using Yooresh.Application.DefensiveBuildingUpgrades.Queries;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.DefensiveBuildings;
 using Yooresh.Domain.Entities.DefensiveBuildingUpgrades;
-using Yooresh.Application.DefensiveBuildingUpgrades.Queries;
 using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Application.DefensiveBuildings.Commands;
@@ -14,11 +14,11 @@ public class InitDefensiveBuildingsCommand : IRequest<List<DefensiveBuilding>>
 }
 
 public class InitDefensiveBuildingsCommandHandler(
-        IContext context,
+        IDocumentStore<DefensiveBuilding> documentStore,
         IRequestHandler<GetDefensiveBuildingUpgradesQuery, List<DefensiveBuildingUpgrade>> getResourceBuildingUpgradesCommandHandler)
     : IRequestHandler<InitDefensiveBuildingsCommand, List<DefensiveBuilding>>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<DefensiveBuilding> _documentStore = documentStore;
     private readonly IRequestHandler<GetDefensiveBuildingUpgradesQuery, List<DefensiveBuildingUpgrade>>
         _getDefensiveBuildingUpgradesCommandHandler = getResourceBuildingUpgradesCommandHandler;
 
@@ -83,13 +83,15 @@ public class InitDefensiveBuildingsCommandHandler(
             Player = new PlayerReference() { Id = request.PlayerId },
             DefensiveBuildingType = defensiveBuildingType,
             IsUnderUpgrade = false,
-            
+
         };
     }
 
     private async Task InsertDefensiveBuildings(List<DefensiveBuilding> defensiveBuildings, CancellationToken cancellationToken)
     {
-        await _context.DefensiveBuildings.AddRangeAsync(defensiveBuildings, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        foreach (var defensiveBuilding in defensiveBuildings)
+        {
+            await _documentStore.InsertAsync(defensiveBuilding, cancellationToken);
+        }
     }
 }

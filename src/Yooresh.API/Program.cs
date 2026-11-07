@@ -48,6 +48,9 @@ public class Program
 
         var app = builder.Build();
 
+        // Create MongoDB indexes and reference data (factions, upgrade catalogues).
+        app.Services.InitializeMongoDatabaseAsync().GetAwaiter().GetResult();
+
         UseSwagger(app);
         UseExceptionHandler(app);
 

@@ -1,10 +1,8 @@
 using NSubstitute;
-using NSubstitute.ExceptionExtensions;
-using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 using Shouldly;
 using Yooresh.Application.Accounts.Commands;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
 using Yooresh.Domain.Entities.Accounts;
@@ -16,19 +14,19 @@ namespace Yooresh.UnitTests.Application.Players.Commands;
 public class CreatePlayerCommandHandlerTests:
     RequestHandlerTests<CreatePlayerCommandHandler,CreatePlayerCommand,Player>
 {
-    private IContext? _contextMock;
+    private IDocumentStore<Player>? _documentStore;
     private IPasswordEncryption<BaseEntity>? _passwordEncryption;
 
     protected override Task InitDependenciesAsync()
     {
-        _contextMock = Substitute.For<IContext>();
+        _documentStore = Substitute.For<IDocumentStore<Player>>();
         _passwordEncryption = Substitute.For<IPasswordEncryption<BaseEntity>>();
         return Task.CompletedTask;
     }
 
     protected override Task SetupDependenciesAsync()
     {
-        _passwordEncryption!.HashPassword(Arg.Any<Player>(), Arg.Any<string>())
+        _passwordEncryption!.HashPassword(Arg.Any<BaseEntity>(), Arg.Any<string>())
             .Returns("HashedPassword");
         return Task.CompletedTask;
     }
@@ -45,20 +43,17 @@ public class CreatePlayerCommandHandlerTests:
 
     protected override CreatePlayerCommandHandler CreateRequestHandler()
     {
-        return new CreatePlayerCommandHandler(_contextMock!, _passwordEncryption!);
+        return new CreatePlayerCommandHandler(_documentStore!, _passwordEncryption!);
     }
 
     [Test]
-    public async Task Handle_CommandIsValid_ContextSaveChangesIsCalled()
+    public async Task Handle_CommandIsValid_PlayerIsInserted()
     {
         await Handler!.Handle(Request!, default);
-        
-        await _contextMock!
+
+        await _documentStore!
             .Received(1)
-            .SaveChangesAsync(Arg.Any<CancellationToken>());
-        await _contextMock!.Players
-            .Received(1)
-            .AddAsync(Arg.Any<Player>());
+            .InsertAsync(Arg.Any<Player>(), Arg.Any<CancellationToken>());
     }
 
     [Test]
@@ -68,7 +63,8 @@ public class CreatePlayerCommandHandlerTests:
 
         _passwordEncryption!
             .Received(1)
-            .HashPassword(Arg.Is<Player>(a=>a.Name == Request!.Name), Arg.Is<string>(a => a == Request!.Password));
+            .HashPassword(Arg.Is<BaseEntity>(a=>a is Player && ((Player)a).Name == Request!.Name),
+                Arg.Is<string>(a => a == Request!.Password));
     }
 
     [Test]
@@ -80,7 +76,7 @@ public class CreatePlayerCommandHandlerTests:
         player.Confirmed.ShouldBeFalse();
         Guid.TryParse(player.ConfirmationCode, out Guid confirmationCode).ShouldBeTrue();
         player.Role.ShouldBe(Role.SimplePlayer);
-        player.DomainEvents.Count(a => a is PlayerCreatedEvent).ShouldBe(1);        
+        player.DomainEvents.Count(a => a is PlayerCreatedEvent).ShouldBe(1);
     }
 
     [Test]
@@ -103,11 +99,11 @@ public class CreatePlayerCommandHandlerTests:
     }
 
     [Test]
-    public void Handle_WhenSaveFails_ThrowsException()
+    public async Task Handle_WhenInsertFails_ThrowsException()
     {
-        _contextMock!.SaveChangesAsync(Arg.Any<CancellationToken>())
-            .Throws(new Exception("Database failed"));
+        _documentStore!.InsertAsync(Arg.Any<Player>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromException(new Exception("Database failed")));
 
-        Should.ThrowAsync<Exception>(() => Handler!.Handle(Request!, default));
+        await Should.ThrowAsync<Exception>(() => Handler!.Handle(Request!, default));
     }
 }

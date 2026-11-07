@@ -1,16 +1,16 @@
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Application.Accounts.Commands.Validators;
 
 public class ConfirmPlayerCommandValidator : AbstractValidator<ConfirmAccountCommand>
 {
-    private readonly IContext _context;
+    private readonly IDocumentStore<Player> _documentStore;
 
-    public ConfirmPlayerCommandValidator(IContext context)
+    public ConfirmPlayerCommandValidator(IDocumentStore<Player> documentStore)
     {
-        _context = context;
+        _documentStore = documentStore;
 
         RuleFor(a => a.PlayerId)
             .NotEmpty()
@@ -26,8 +26,8 @@ public class ConfirmPlayerCommandValidator : AbstractValidator<ConfirmAccountCom
 
     private async Task<bool> ExistsInDatabase(Guid playerId, CancellationToken cancellationToken)
     {
-        var count = await _context.Players.CountAsync(a => a.Id == playerId, cancellationToken);
+        var player = await _documentStore.GetByIdAsync(playerId, cancellationToken);
 
-        return count == 1;
+        return player is not null;
     }
 }

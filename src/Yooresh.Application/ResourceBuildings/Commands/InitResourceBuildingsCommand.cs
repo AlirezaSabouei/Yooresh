@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Application.Common.Tools;
-using Yooresh.Application.DefensiveBuildingUpgrades.Queries;
 using Yooresh.Application.ResourceBuildingUpgrades.Queries;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.ResourceBuildings;
@@ -15,12 +14,12 @@ public class InitResourceBuildingsCommand : IRequest<List<ResourceBuilding>>
 }
 
 public class InitResourceBuildingsCommandHandler(
-        IContext context,
+        IDocumentStore<ResourceBuilding> documentStore,
         IRequestHandler<GetResourceBuildingUpgradesQuery, List<ResourceBuildingUpgrade>> getResourceBuildingUpgradesCommandHandler,
         IDateTimeProvider dateTimeProvider)
     : IRequestHandler<InitResourceBuildingsCommand, List<ResourceBuilding>>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<ResourceBuilding> _documentStore = documentStore;
     private readonly IRequestHandler<GetResourceBuildingUpgradesQuery, List<ResourceBuildingUpgrade>>
         _getResourceBuildingUpgradesCommandHandler = getResourceBuildingUpgradesCommandHandler;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
@@ -76,7 +75,9 @@ public class InitResourceBuildingsCommandHandler(
 
     private async Task InsertResourceBuildings(List<ResourceBuilding> resourceBuildings, CancellationToken cancellationToken)
     {
-        await _context.ResourceBuildings.AddRangeAsync(resourceBuildings, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        foreach (var resourceBuilding in resourceBuildings)
+        {
+            await _documentStore.InsertAsync(resourceBuilding, cancellationToken);
+        }
     }
 }
