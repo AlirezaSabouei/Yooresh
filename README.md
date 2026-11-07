@@ -9,17 +9,16 @@ project around modern .NET and Domain-Driven Design.
 The repository is a .NET 10 solution following Clean Architecture (the Jason Taylor layout) with a
 MediatR-based CQRS application layer and a Blazor Server client.
 
-> **Status:** active development on the `dev` branch. The solution builds and the unit test suite is green;
-> parts of the API surface are still being moved from the old `Players` controller to `Accounts`, so the
-> acceptance/UI test suites are not reliable yet (see [Running the tests](#running-the-tests)).
+> **Status:** active development on the `dev` branch. Persistence uses MongoDB through a document-store
+> abstraction (the same pattern as the TreePomodoro project). The solution builds and the unit and
+> acceptance test suites are green; the Playwright UI tests remain experimental.
 
 ## Prerequisites
 
 | Requirement | Version | Needed for |
 |---|---|---|
 | [.NET SDK](https://dotnet.microsoft.com/download) | **10.0.x** | Everything. Every project targets `net10.0`. |
-| SQL Server | 2019 or newer (Express / Developer / a container) | Running the API against a real database. |
-| Entity Framework Core CLI | 10.x (`dotnet tool install --global dotnet-ef`) | Creating the database from migrations. |
+| [MongoDB](https://www.mongodb.com/try/download/community) | 7.0 or newer | Running the API and the acceptance tests. |
 | Gmail account + app password | — | Optional. Sending account-confirmation emails. |
 | Playwright browsers | — | Optional. The browser UI tests. |
 
@@ -31,11 +30,11 @@ MediatR-based CQRS application layer and a Blazor Server client.
 |---|---|---|
 | `src/Yooresh.Domain` | Domain | Entities, value objects, domain events, domain exceptions and capability interfaces. No dependencies. |
 | `src/Yooresh.Application` | Application | Commands, queries, validators, DTOs, MediatR handlers and pipeline behaviours. |
-| `src/Yooresh.Infrustructure` | Infrastructure | EF Core `Context`, entity configurations, migrations, email, password hashing, Hangfire jobs and a RabbitMQ event bus (present, not yet wired up). |
+| `src/Yooresh.Infrustructure` | Infrastructure | MongoDB `DocumentStore`, database initializer/seed data, email, password hashing, Hangfire jobs (MongoDB storage) and a RabbitMQ event bus (present, not yet wired up). |
 | `src/Yooresh.API` | Presentation | ASP.NET Core Web API: controllers, JWT authentication, Swagger, Hangfire dashboard. |
 | `src/Yooresh.Village` | Presentation | Blazor Server (Razor Components) client. Talks to the API over HTTP. |
 | `Tests/Yooresh.UnitTests` | Tests | NUnit + Shouldly unit tests for domain and application logic. |
-| `Tests/Yooresh.AcceptanceTests` | Tests | API tests through `WebApplicationFactory` using an in-memory SQLite database. |
+| `Tests/Yooresh.AcceptanceTests` | Tests | API tests through `WebApplicationFactory` using an isolated MongoDB database per test run. |
 | `Tests/Yooresh.Blazor.Tests` | Tests | Playwright end-to-end tests that launch the API and the Blazor app. |
 
 Project folders are referenced by path. Note that the infrastructure project lives in
@@ -59,7 +58,7 @@ dotnet build Yooresh.sln
 `UserSecretsId`. Never commit real credentials.
 
 ```bash
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=Yooresh;User Id=sa;Password=<your-password>;TrustServerCertificate=True" --project src/Yooresh.API
+dotnet user-secrets set "ConnectionStrings:MongoConnection" "mongodb://localhost:27017/Yooresh" --project src/Yooresh.API
 dotnet user-secrets set "Jwt:Key" "<a random string of at least 32 characters>" --project src/Yooresh.API
 dotnet user-secrets set "Email:Address" "you@gmail.com" --project src/Yooresh.API
 dotnet user-secrets set "Email:Password" "<gmail app password>" --project src/Yooresh.API
@@ -67,7 +66,7 @@ dotnet user-secrets set "Email:Password" "<gmail app password>" --project src/Yo
 
 | Configuration key | Required | Description |
 |---|---|---|
-| `ConnectionStrings:DefaultConnection` | Yes | SQL Server connection string used by the API. |
+| `ConnectionStrings:MongoConnection` | Yes | MongoDB connection string used by the API. The database name is taken from the path (`/Yooresh`) and defaults to `Yooresh`. |
 | `Jwt:Key` | Yes | Symmetric signing key for access tokens. Must be at least 32 characters for HS256; shorter keys fail at login time. |
 | `Jwt:Issuer` | Yes | Issuer written into tokens. Has a development default. |
 | `Email:Address` | No | Gmail address used as the sender of confirmation emails. |
@@ -76,21 +75,20 @@ dotnet user-secrets set "Email:Password" "<gmail app password>" --project src/Yo
 | `ApiAddress` (Blazor app) | Yes | Base URL of the API as seen by `Yooresh.Village`, e.g. `http://localhost:5000`. |
 
 If email is not configured, registration still succeeds: `Email.SendEmailAsync` swallows send failures, and
-the confirmation code is stored on the player row.
+the confirmation code is stored on the player document.
 
-### 3. Make sure the database schema is up to date
+### 3. Start MongoDB
 
-The API does not create or migrate the database on startup. Apply the migrations once, and again after
-pulling schema changes:
+MongoDB must be running and reachable through `ConnectionStrings:MongoConnection`. There are no
+migrations to apply: on startup the API creates the required indexes and seeds the reference data
+(the four factions and the level 0–20 resource/defensive building upgrade catalogues) into empty
+collections. Seeding is idempotent, so it is safe to start the API more than once.
+
+With a local server the default works as-is:
 
 ```bash
-dotnet ef database update \
-  --project src/Yooresh.Infrustructure \
-  --startup-project src/Yooresh.API
+mongod --dbpath /path/to/data        # or: docker run -p 27017:27017 mongo:7
 ```
-
-Install the EF Core 10 CLI (`dotnet tool install --global dotnet-ef`). An older global tool still runs but
-warns that its version is behind the project runtime.
 
 ### 4. Run the API
 
@@ -102,7 +100,7 @@ There are no `launchSettings.json` files, so ports are not fixed — pick them w
 `ASPNETCORE_URLS`. With the command above:
 
 - Swagger UI: <http://localhost:5000/swagger>
-- Hangfire dashboard: <http://localhost:5000/hangfire> (in-memory storage, so queued jobs are lost on restart)
+- Hangfire dashboard: <http://localhost:5000/hangfire> (job storage is MongoDB, so queued jobs survive restarts)
 
 For HTTPS, run `dotnet dev-certs https --trust` first and pass an `https://` URL.
 
@@ -138,10 +136,10 @@ dotnet test Tests/Yooresh.AcceptanceTests/Yooresh.AcceptanceTests.csproj
 dotnet test Tests/Yooresh.Blazor.Tests/Yooresh.Village.Tests.csproj  # end-to-end, see below
 ```
 
-- **Unit tests** run entirely in memory and are the suite to trust while developing.
-- **Acceptance tests** boot the API in-process with `WebApplicationFactory` and swap SQL Server for an
-  in-memory SQLite database, so no database server is needed. Some of them still call the pre-rename
-  `api/players` endpoints and fail; they are being migrated to `api/accounts`.
+- **Unit tests** run entirely in memory and need no MongoDB instance.
+- **Acceptance tests** boot the API in-process with `WebApplicationFactory` and point it at a fresh
+  per-run database (`YooreshAcceptance_<guid>`). A local MongoDB server is therefore required; the
+  database is dropped when the factory is disposed.
 - **UI tests** start `dotnet run` for both the API and the Blazor app, then drive Chromium through Playwright.
   They need the API configured (database, JWT) and `playwright.ps1 install` / `Microsoft.Playwright.Program.Main(["install"])`
   executed once for the test project. They also assume the Blazor app listens on `http://localhost:5163`.
@@ -156,16 +154,17 @@ dotnet test Tests/Yooresh.Blazor.Tests/Yooresh.Village.Tests.csproj  # end-to-en
 | `UriFormatException` when starting the Blazor app | `ApiAddress` is missing. |
 | Login returns `401` after signing up | The account is not confirmed yet; use `/api/accounts/confirm` with the code stored in `Players.ConfirmationCode`. |
 | `Login` throws an IDX error | `Jwt:Key` is missing or shorter than 32 characters. |
-| SQL Server connection errors | The default connection string uses Windows integrated security (`.\sqlexpress`). Use SQL authentication on Linux/macOS, or a SQL Server container. |
-| `dotnet ef` warns that "the Entity Framework tools version is older than that of the runtime" | Update the global tool: `dotnet tool update --global dotnet-ef`. |
+| MongoDB connection errors / timeouts | MongoDB is not running, or `ConnectionStrings:MongoConnection` points at the wrong host, port or database. |
+| Acceptance tests fail with a MongoDB timeout | Start a local MongoDB on port 27017 (or update the connection string in `appsettings.json`). |
+| Seeding fails with a missing `Persistence/Seeding/Id/*.txt` file | Build the solution first; those files are content items copied to the infrastructure output. |
 
 ## Technologies
 
 - [.NET 10](https://learn.microsoft.com/dotnet/core/whats-new/dotnet-10) — ASP.NET Core Web API and Blazor Server
-- [Entity Framework Core 10](https://learn.microsoft.com/ef/core/) — SQL Server provider, code-first migrations
+- [MongoDB](https://www.mongodb.com/docs/drivers/csharp/) + `MongoDB.Driver` 3.5 — document database and repository-style document store
 - [MediatR](https://github.com/jbogard/MediatR) 14 — CQRS handlers and domain-event dispatching
 - [AutoMapper](https://automapper.org/) 16 and [FluentValidation](https://docs.fluentvalidation.net/) 12
-- [Hangfire](https://www.hangfire.io/) — background jobs (in-memory storage)
+- [Hangfire](https://www.hangfire.io/) + `Hangfire.Mongo` — background jobs backed by MongoDB
 - [Swashbuckle](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) 10 — OpenAPI/Swagger
 - [NUnit 5](https://nunit.org/), [Shouldly](https://github.com/shouldly/shouldly) and [Playwright](https://playwright.dev/dotnet/) for tests
 - Clean Architecture and Domain-Driven Design: aggregate roots, value objects, domain events and

@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Domain.Entities.ResourceBuildings;
 using Yooresh.Domain.Entities.ResourceBuildingUpgrades;
 
@@ -18,23 +17,36 @@ public class GetResourceBuildingUpgradesQuery : IRequest<List<ResourceBuildingUp
     }
 }
 
-public class GetResourceBuildingUpgradesQueryHandler(IContext context, IMemoryCache memoryCache) :
+public class GetResourceBuildingUpgradesQueryHandler(
+    IDocumentStore<ResourceBuildingUpgrade> documentStore, IMemoryCache memoryCache) :
     IRequestHandler<GetResourceBuildingUpgradesQuery, List<ResourceBuildingUpgrade>>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<ResourceBuildingUpgrade> _documentStore = documentStore;
     private readonly IMemoryCache _memoryCache = memoryCache;
 
     public async Task<List<ResourceBuildingUpgrade>> Handle(
         GetResourceBuildingUpgradesQuery request, CancellationToken cancellationToken)
     {
-        if (_memoryCache.TryGetValue("ResourceBuildingUpgrades", out List<ResourceBuildingUpgrade> resourceBuildingUpgrades))
+        var cacheKey = BuildCacheKey(request);
+
+        if (_memoryCache.TryGetValue(cacheKey, out List<ResourceBuildingUpgrade>? resourceBuildingUpgrades)
+            && resourceBuildingUpgrades is not null)
         {
-            return resourceBuildingUpgrades!;
+            return resourceBuildingUpgrades;
         }
-        resourceBuildingUpgrades = await _context.ResourceBuildingUpgrades
-            .Where(a => a.Level == request.Level)
+
+        var matchingLevel = await _documentStore.GetAsync(a => a.Level == request.Level, cancellationToken);
+        resourceBuildingUpgrades = matchingLevel
             .Where(a => request.ResourceBuildingTypes.Contains(a.ResourceBuildingType))
-            .ToListAsync(cancellationToken);
-        return resourceBuildingUpgrades!;
+            .ToList();
+
+        _memoryCache.Set(cacheKey, resourceBuildingUpgrades);
+        return resourceBuildingUpgrades;
+    }
+
+    private static string BuildCacheKey(GetResourceBuildingUpgradesQuery request)
+    {
+        var types = string.Join(',', request.ResourceBuildingTypes.OrderBy(a => a));
+        return $"ResourceBuildingUpgrades:{request.Level}:{types}";
     }
 }

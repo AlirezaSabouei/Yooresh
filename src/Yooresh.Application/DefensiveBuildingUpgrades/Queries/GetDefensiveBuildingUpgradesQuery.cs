@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Domain.Entities.DefensiveBuildings;
 using Yooresh.Domain.Entities.DefensiveBuildingUpgrades;
 
@@ -18,25 +17,36 @@ public class GetDefensiveBuildingUpgradesQuery : IRequest<List<DefensiveBuilding
     }
 }
 
-public class GetDefensiveBuildingUpgradesQueryHandler(IContext context, IMemoryCache cache) :
+public class GetDefensiveBuildingUpgradesQueryHandler(
+    IDocumentStore<DefensiveBuildingUpgrade> documentStore, IMemoryCache cache) :
     IRequestHandler<GetDefensiveBuildingUpgradesQuery, List<DefensiveBuildingUpgrade>>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<DefensiveBuildingUpgrade> _documentStore = documentStore;
     private readonly IMemoryCache _cache = cache;
 
     public async Task<List<DefensiveBuildingUpgrade>> Handle(
         GetDefensiveBuildingUpgradesQuery request, CancellationToken cancellationToken)
     {
-        if (_cache.TryGetValue("DefensiveBuildingUpgrades", out List<DefensiveBuildingUpgrade>? defensiveBuildingUpgrades))
+        var cacheKey = BuildCacheKey(request);
+
+        if (_cache.TryGetValue(cacheKey, out List<DefensiveBuildingUpgrade>? defensiveBuildingUpgrades)
+            && defensiveBuildingUpgrades is not null)
         {
-            return defensiveBuildingUpgrades!;
+            return defensiveBuildingUpgrades;
         }
 
-        defensiveBuildingUpgrades = await _context.DefensiveBuildingUpgrades
-             .Where(a => a.Level == request.Level)
-             .Where(a => request.DefensiveBuildingTypes.Contains(a.DefensiveBuildingType))
-             .ToListAsync(cancellationToken);
-        _cache.Set("DefensiveBuildingUpgrades", defensiveBuildingUpgrades);
+        var matchingLevel = await _documentStore.GetAsync(a => a.Level == request.Level, cancellationToken);
+        defensiveBuildingUpgrades = matchingLevel
+            .Where(a => request.DefensiveBuildingTypes.Contains(a.DefensiveBuildingType))
+            .ToList();
+
+        _cache.Set(cacheKey, defensiveBuildingUpgrades);
         return defensiveBuildingUpgrades;
+    }
+
+    private static string BuildCacheKey(GetDefensiveBuildingUpgradesQuery request)
+    {
+        var types = string.Join(',', request.DefensiveBuildingTypes.OrderBy(a => a));
+        return $"DefensiveBuildingUpgrades:{request.Level}:{types}";
     }
 }

@@ -1,3 +1,4 @@
+﻿using MongoDB.Bson.Serialization.Attributes;
 using Yooresh.Domain.Events.Accounts;
 
 namespace Yooresh.Domain.Entities.Accounts;
@@ -16,6 +17,7 @@ public class Player : RootEntity
     {
     }
 
+    [BsonConstructor]
     public Player(string name, string email, string password)
     {
         Name = name;
@@ -25,10 +27,8 @@ public class Player : RootEntity
 
     public virtual void ConfirmPlayer(string confirmationCode)
     {
-        if (ConfirmationCode == confirmationCode)
-        {
-            AddDomainEvent(new PlayerConfirmedEvent(Id));
-            Confirmed = true;
-        }
+        if (ConfirmationCode != confirmationCode) return;
+        AddDomainEvent(new PlayerConfirmedEvent(Id));
+        Confirmed = true;
     }
 }

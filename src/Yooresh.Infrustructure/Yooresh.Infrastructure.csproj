@@ -8,15 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire" Version="1.8.25" />
-    <PackageReference Include="Hangfire.MemoryStorage" Version="1.8.1.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.14" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.14">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="Hangfire.Mongo" Version="1.12.2" />
+    <PackageReference Include="MongoDB.Driver" Version="3.5.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="RabbitMQ.Client" Version="7.2.2" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
@@ -27,32 +20,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Persistence\Configurations\Id\StoneMine.txt" />
-    <None Remove="Persistence\Configurations\Id\Wall.txt" />
-    <Content Include="Persistence\Configurations\Id\StoneMine.txt">
+    <Content Include="Persistence\Seeding\Id\Farm.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="Persistence\Configurations\Id\MetalMine.txt" />
-    <Content Include="Persistence\Configurations\Id\MetalMine.txt">
+    <Content Include="Persistence\Seeding\Id\GoldMine.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="Persistence\Configurations\Id\LumberMill.txt" />
-    <Content Include="Persistence\Configurations\Id\LumberMill.txt">
+    <Content Include="Persistence\Seeding\Id\LumberMill.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="Persistence\Configurations\Id\Farm.txt" />
-    <Content Include="Persistence\Configurations\Id\Farm.txt">
+    <Content Include="Persistence\Seeding\Id\MetalMine.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="Persistence\Configurations\Id\Tower.txt" />
-    <Content Include="Persistence\Configurations\Id\Tower.txt">
+    <Content Include="Persistence\Seeding\Id\StoneMine.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Persistence\Configurations\Id\Wall.txt">
+    <Content Include="Persistence\Seeding\Id\Tower.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Remove="Persistence\Configurations\Id\GoldMine.txt" />
-    <Content Include="Persistence\Configurations\Id\GoldMine.txt">
+    <Content Include="Persistence\Seeding\Id\Wall.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

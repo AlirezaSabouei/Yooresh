@@ -3,57 +3,40 @@ using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
-using System.Data.Common;
-using Yooresh.Infrastructure.Persistence;
+using MongoDB.Driver;
 
 namespace Yooresh.AcceptanceTests;
 
 public class CustomYooreshWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
 {
+    private readonly string _databaseName = $"YooreshAcceptance_{Guid.NewGuid():N}";
+
+    public string DatabaseName => _databaseName;
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
         {
-            ReplaceDatabaseWithSqLiteInMemory(services);
+            ReplaceDatabaseWithTestMongoDatabase(services);
             InjectFakeHangfireService(services);
-            InjectFakeAuthenticationHandelr(services);
+            InjectFakeAuthenticationHandler(services);
         });
 
         builder.UseEnvironment("Test");
     }
 
-    private void ReplaceDatabaseWithSqLiteInMemory(IServiceCollection services)
+    private void ReplaceDatabaseWithTestMongoDatabase(IServiceCollection services)
     {
-        var dbContextDescriptor = services.SingleOrDefault(
-            d => d.ServiceType ==
-                typeof(IDbContextOptionsConfiguration<Context>));
-        services.Remove(dbContextDescriptor!);
+        services.RemoveAll<IMongoDatabase>();
 
-        var dbConnectionDescriptor = services.SingleOrDefault(
-            d => d.ServiceType ==
-                typeof(DbConnection));
-        services.Remove(dbConnectionDescriptor!);
-
-        // Create open SqliteConnection so EF won't automatically close it.
-        services.AddSingleton<DbConnection>(container =>
+        services.AddScoped<IMongoDatabase>(sp =>
         {
-            var connection = new SqliteConnection("DataSource=:memory:");
-            connection.Open();
-
-            return connection;
-        });
-
-        services.AddDbContext<Context>((container, options) =>
-        {
-            var connection = container.GetRequiredService<DbConnection>();
-            options.UseSqlite(connection);
+            var client = sp.GetRequiredService<IMongoClient>();
+            return client.GetDatabase(_databaseName);
         });
     }
 
@@ -72,22 +55,37 @@ public class CustomYooreshWebApplicationFactory<TProgram>
 
         services.AddSingleton(Mock.Of<IGlobalConfiguration>())
                 .AddSingleton(Mock.Of<JobStorage>())
-                //.AddSingleton(Mock.Of<IUpdateVendorDataJobsScheduler>())
                 .AddSingleton(Mock.Of<RouteCollection>());
     }
 
-    private void InjectFakeAuthenticationHandelr(IServiceCollection services)
+    private void InjectFakeAuthenticationHandler(IServiceCollection services)
     {
-        // Remove existing authentication handlers
-        var descriptor = services.SingleOrDefault(
-            d => d.ServiceType == typeof(AuthenticationSchemeOptions));
-
-        // Optionally remove real BasicAuth handler registrations
         services.RemoveAll<AuthenticationHandler<AuthenticationSchemeOptions>>();
 
-        // Add fake handler
-        services.AddAuthentication(FakeAuthenticationHandler.AuthenticationScheme)
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = FakeAuthenticationHandler.AuthenticationScheme;
+                options.DefaultChallengeScheme = FakeAuthenticationHandler.AuthenticationScheme;
+                options.DefaultScheme = FakeAuthenticationHandler.AuthenticationScheme;
+            })
             .AddScheme<AuthenticationSchemeOptions, FakeAuthenticationHandler>(
-                FakeAuthenticationHandler.AuthenticationScheme, options => { });
+                FakeAuthenticationHandler.AuthenticationScheme, _ => { });
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            try
+            {
+                Services.GetRequiredService<IMongoClient>().DropDatabase(_databaseName);
+            }
+            catch
+            {
+                // The test database is disposable; never fail test teardown because of cleanup.
+            }
+        }
+
+        base.Dispose(disposing);
     }
 }

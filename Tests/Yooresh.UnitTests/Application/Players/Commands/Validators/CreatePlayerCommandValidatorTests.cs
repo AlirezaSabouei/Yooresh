@@ -1,10 +1,10 @@
-using MockQueryable;
+using System.Linq.Expressions;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
 using Yooresh.Application.Accounts.Commands;
 using Yooresh.Application.Accounts.Commands.Validators;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.UnitTests.Application.Base;
 
@@ -13,17 +13,17 @@ namespace Yooresh.UnitTests.Application.Players.Commands.Validators;
 public class CreatePlayerCommandValidatorTests :
     CommandValidatorTests<CreatePlayerCommandValidator, CreatePlayerCommand, Player>
 {
-    private IContext? _contextMock;
+    private IDocumentStore<Player>? _documentStore;
 
     protected override void InitDependencies()
     {
-        _contextMock = Substitute.For<IContext>();
+        _documentStore = Substitute.For<IDocumentStore<Player>>();
     }
 
     protected override void SetupDependencies()
     {
-        var players = new List<Player>().BuildMock();
-        _contextMock!.QuerySet<Player>().Returns(players.AsQueryable());
+        _documentStore!.GetAsync(Arg.Any<Expression<Func<Player, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns([]);
     }
 
     protected override CreatePlayerCommand CreateValidCommand()
@@ -38,7 +38,7 @@ public class CreatePlayerCommandValidatorTests :
 
     protected override CreatePlayerCommandValidator CreateCommandValidator()
     {
-        return new CreatePlayerCommandValidator(_contextMock!);
+        return new CreatePlayerCommandValidator(_documentStore!);
     }
 
     [Test]
@@ -102,9 +102,9 @@ public class CreatePlayerCommandValidatorTests :
         var players = new List<Player>()
         {
             new("name", existingEmail,"password")
-        }
-        .BuildMock();
-        _contextMock!.QuerySet<Player>().Returns(players.AsQueryable());
+        };
+        _documentStore!.GetAsync(Arg.Any<Expression<Func<Player, bool>>>(), Arg.Any<CancellationToken>())
+            .Returns(players);
         Command!.Email = incomingEmail;
 
         //Act

@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Application.Common.Tools;
 using Yooresh.Domain.Entities;
+using Yooresh.Domain.Entities.Accounts;
 
 namespace Yooresh.Application.Accounts.Commands;
 
@@ -13,22 +13,23 @@ public class LoginCommand : IRequest<Dictionary<string, string>?>
 }
 
 public class LoginCommandHandler(
-    IContext context,
+    IDocumentStore<Player> documentStore,
     ITokenService tokenService,
     IDateTimeProvider dateTimeProvider,
     IPasswordEncryption<BaseEntity> passwordEncryption)
     : IRequestHandler<LoginCommand, Dictionary<string, string>?>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<Player> _documentStore = documentStore;
     private readonly ITokenService _tokenService = tokenService;
     private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
     private readonly IPasswordEncryption<BaseEntity> _passwordEncryption = passwordEncryption;
 
     public async Task<Dictionary<string, string>?> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var player = await _context.Players
-            .Where(a => a.Confirmed)
-            .FirstOrDefaultAsync(a => a.Email.ToLower() == request.Email.ToLower(), cancellationToken);
+        var confirmedPlayers = await _documentStore.GetAsync(a => a.Confirmed, cancellationToken);
+
+        var player = confirmedPlayers.FirstOrDefault(a =>
+            string.Equals(a.Email, request.Email, StringComparison.OrdinalIgnoreCase));
 
         if (player is null)
         {
@@ -43,15 +44,14 @@ public class LoginCommandHandler(
 
         var accessToken = _tokenService.GenerateAccessToken(player.Id.ToString(), player.Role.ToString(), player.Email, player.Name);
         var refreshToken = _tokenService.GenerateRefreshToken();
-        _context.RefreshTokens.Add(new Domain.Entities.Accounts.RefreshToken()
+        player.RefreshTokens.Add(new RefreshToken
         {
             Id = Guid.NewGuid(),
             Expires = _dateTimeProvider.GetUtcNow().AddDays(10),
             IsRevoked = false,
-            Token = refreshToken,
-            Player = player
+            Token = refreshToken
         });
-        await _context.SaveChangesAsync(cancellationToken);
+        await _documentStore.UpdateAsync(player, cancellationToken);
 
         var result = new Dictionary<string, string>
         {

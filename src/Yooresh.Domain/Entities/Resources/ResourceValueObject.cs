@@ -1,7 +1,9 @@
+using MongoDB.Bson.Serialization.Attributes;
 using Yooresh.Domain.ValueObjects;
 
 namespace Yooresh.Domain.Entities.Resources;
 
+[BsonIgnoreExtraElements]
 public class ResourceValueObject : ValueObject
 {
     public int Gold { get; private set; }
@@ -14,6 +16,7 @@ public class ResourceValueObject : ValueObject
         
     }
 
+    [BsonConstructor]
     public ResourceValueObject(int gold,int lumber,int stone,int food)
     {
         Gold = gold;

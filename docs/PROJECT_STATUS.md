@@ -1,5 +1,11 @@
 # Yooresh — Project Status
 
+> **Update (MongoDB migration branch):** the persistence layer described below has since been migrated
+> from EF Core/SQL Server to MongoDB (document store plus startup seeding), and the acceptance suite now
+> runs against an isolated MongoDB database. References to `Context`, EF migrations and SQL Server in this
+> snapshot describe commit `e8dd2a4` and are kept for history. See the [README](../README.md) for the
+> current setup.
+
 A factual snapshot of where the project stands, so work can resume without reconstructing its history.
 
 - **Base branch:** `dev` at `e8dd2a4` (2026-11-07)

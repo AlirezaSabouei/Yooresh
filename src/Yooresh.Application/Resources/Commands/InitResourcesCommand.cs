@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Yooresh.Application.Common.Interfaces;
+using Yooresh.Application.Common.Data;
 using Yooresh.Domain.Entities.Accounts;
 using Yooresh.Domain.Entities.Resources;
 
@@ -10,15 +10,14 @@ public class InitResourcesCommand : IRequest<List<Resource>>
     public Guid PlayerId { get; internal set; }
 }
 
-public class InitResourcesCommandHandler(IContext context) :
+public class InitResourcesCommandHandler(IDocumentStore<Resource> documentStore) :
     IRequestHandler<InitResourcesCommand, List<Resource>>
 {
-    private readonly IContext _context = context;
+    private readonly IDocumentStore<Resource> _documentStore = documentStore;
 
     public async Task<List<Resource>> Handle(
         InitResourcesCommand request, CancellationToken cancellationToken)
     {
-
         List<Resource> resources = CreateResourcesInstances(request);
         await InsertResources(resources, cancellationToken);
         return resources;
@@ -48,7 +47,9 @@ public class InitResourcesCommandHandler(IContext context) :
 
     private async Task InsertResources(List<Resource> resources, CancellationToken cancellationToken)
     {
-        await _context.Resources.AddRangeAsync(resources, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        foreach (var resource in resources)
+        {
+            await _documentStore.InsertAsync(resource, cancellationToken);
+        }
     }
 }

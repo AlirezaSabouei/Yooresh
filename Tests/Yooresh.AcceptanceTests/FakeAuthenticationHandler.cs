@@ -28,7 +28,7 @@ public class FakeAuthenticationHandler : AuthenticationHandler<AuthenticationSch
         {
             new Claim(ClaimTypes.Email, "test@gmail.com"),
             new Claim(ClaimTypes.Role, Role.SimplePlayer.ToString()),
-            new Claim("id", PlayerId.ToString())
+            new Claim(ClaimTypes.NameIdentifier, PlayerId.ToString())
         };
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);

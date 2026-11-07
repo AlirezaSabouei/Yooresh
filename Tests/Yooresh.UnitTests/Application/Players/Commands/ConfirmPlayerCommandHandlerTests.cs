@@ -1,30 +1,30 @@
-using Yooresh.Application.Common.Interfaces;
-using Yooresh.UnitTests.Application.Base;
-using Moq;
-using Moq.EntityFrameworkCore;
-using Xunit;
-using Yooresh.Domain.Entities.Accounts;
+using NSubstitute;
+using NUnit.Framework;
+using Shouldly;
 using Yooresh.Application.Accounts.Commands;
+using Yooresh.Application.Common.Data;
+using Yooresh.Domain.Entities.Accounts;
+using Yooresh.UnitTests.Application.Base;
 
 namespace Yooresh.UnitTests.Application.Players.Commands;
 
 public class ConfirmPlayerCommandHandlerTests:
     RequestHandlerTests<ConfirmAccountCommandHandler,ConfirmAccountCommand,bool>
 {
-    private Mock<IContext>? _contextMock;
-    private Mock<Player>? _playerMock;
+    private IDocumentStore<Player>? _documentStore;
+    private Player? _player;
 
     protected override Task InitDependenciesAsync()
     {
-        _contextMock = new Mock<IContext>();
-        _playerMock = new Mock<Player>("name", "my@email.com", "Aa123456", Role.SimplePlayer);
+        _documentStore = Substitute.For<IDocumentStore<Player>>();
+        _player = new Player("name", "my@email.com", "Aa123456");
         return Task.CompletedTask;
     }
 
     protected override Task SetupDependenciesAsync()
     {
-        _contextMock!.Setup(a => a.Players)
-            .ReturnsDbSet((new List<Player>(){_playerMock!.Object}).AsQueryable());
+        _documentStore!.GetByIdAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(_player);
         return Task.CompletedTask;
     }
 
@@ -32,33 +32,37 @@ public class ConfirmPlayerCommandHandlerTests:
     {
         return new ConfirmAccountCommand()
         {
-            PlayerId = _playerMock!.Object.Id,
-            ConfirmationCode = Guid.NewGuid().ToString()
+            PlayerId = _player!.Id,
+            ConfirmationCode = _player.ConfirmationCode
         };
     }
 
     protected override ConfirmAccountCommandHandler CreateRequestHandler()
     {
-        return new ConfirmAccountCommandHandler(
-            _contextMock!.Object
-        );
+        return new ConfirmAccountCommandHandler(_documentStore!);
     }
 
-    //[Fact]
-    //public void Handle_CommandIsValid_ContextSaveChangesIsCalled()
-    //{
-    //    Handler!.Handle(Command!, new CancellationToken());
+    [Test]
+    public async Task Handle_CommandIsValid_PlayerIsConfirmedAndUpdated()
+    {
+        var result = await Handler!.Handle(Request!, default);
 
-    //    _contextMock!
-    //        .Verify(x=>x.SaveChangesAsync(It.IsAny<CancellationToken>()),Times.Once);
-    //}
-    
-    //[Fact]
-    //public void Handle_CommandIsValid_PlayerConfirmIsCalled()
-    //{
-    //    Handler!.Handle(Command!, new CancellationToken());
+        result.ShouldBeTrue();
+        _player!.Confirmed.ShouldBeTrue();
+        await _documentStore!.Received(1)
+            .UpdateAsync(_player, Arg.Any<CancellationToken>());
+    }
 
-    //    _playerMock!
-    //        .Verify(x=>x.ConfirmPlayer(),Times.Once);
-    //}
+    [Test]
+    public async Task Handle_ConfirmationCodeIsWrong_ReturnsFalseAndDoesNotUpdate()
+    {
+        Request!.ConfirmationCode = "wrong code";
+
+        var result = await Handler!.Handle(Request!, default);
+
+        result.ShouldBeFalse();
+        _player!.Confirmed.ShouldBeFalse();
+        await _documentStore!.DidNotReceive()
+            .UpdateAsync(Arg.Any<Player>(), Arg.Any<CancellationToken>());
+    }
 }
