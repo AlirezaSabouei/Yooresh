@@ -8,7 +8,8 @@ namespace Yooresh.Infrastructure.Persistence.Configurations;
 
 public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<ResourceBuildingUpgrade>
 {
-    private readonly string basePath = AppDomain.CurrentDomain.BaseDirectory + "\\Persistence\\Configurations\\Id\\";
+    private readonly string basePath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, "Persistence", "Configurations", "Id") + Path.DirectorySeparatorChar;
 
     public void Configure(EntityTypeBuilder<ResourceBuildingUpgrade> builder)
     {
@@ -125,8 +126,7 @@ public class ResourceBuildingUpgradeConfiguration : IEntityTypeConfiguration<Res
                 resourceBuildingUpgrade.UpgradeCost.Lumber,
                 resourceBuildingUpgrade.UpgradeCost.Stone,
                 resourceBuildingUpgrade.UpgradeCost.Gold,
-                BuildingId = resourceBuildingUpgrade.Id,
-                resourceBuildingUpgrade.Level
+                ResourceBuildingUpgradeId = resourceBuildingUpgrade.Id
             });
     }
 

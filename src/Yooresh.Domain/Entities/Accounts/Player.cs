@@ -1,4 +1,4 @@
-﻿using Yooresh.Domain.Events.Accounts;
+using Yooresh.Domain.Events.Accounts;
 
 namespace Yooresh.Domain.Entities.Accounts;
 
@@ -19,7 +19,7 @@ public class Player : RootEntity
     public Player(string name, string email, string password)
     {
         Name = name;
-        Email = email.ToLower();
+        Email = email.Trim().ToLowerInvariant();
         Password = password;
     }
 

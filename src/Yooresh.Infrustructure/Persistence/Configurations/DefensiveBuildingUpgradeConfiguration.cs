@@ -8,7 +8,8 @@ namespace Yooresh.Infrastructure.Persistence.Configurations;
 
 public class DefensiveBuildingUpgradeConfiguration : IEntityTypeConfiguration<DefensiveBuildingUpgrade>
 {
-    private readonly string basePath = AppDomain.CurrentDomain.BaseDirectory + "\\Persistence\\Configurations\\Id\\";
+    private readonly string basePath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory, "Persistence", "Configurations", "Id") + Path.DirectorySeparatorChar;
 
     public void Configure(EntityTypeBuilder<DefensiveBuildingUpgrade> builder)
     {
@@ -155,8 +156,17 @@ public class DefensiveBuildingUpgradeConfiguration : IEntityTypeConfiguration<De
                 defensiveBuildingUpgrade.UpgradeCost.Lumber,
                 defensiveBuildingUpgrade.UpgradeCost.Stone,
                 defensiveBuildingUpgrade.UpgradeCost.Gold,
-                BuildingId = defensiveBuildingUpgrade.Id,
-                defensiveBuildingUpgrade.Level
+                DefensiveBuildingUpgradeId = defensiveBuildingUpgrade.Id
+            });
+
+        builder.OwnsOne(a => a.RepairCost).HasData(
+            new
+            {
+                defensiveBuildingUpgrade.RepairCost.Food,
+                defensiveBuildingUpgrade.RepairCost.Lumber,
+                defensiveBuildingUpgrade.RepairCost.Stone,
+                defensiveBuildingUpgrade.RepairCost.Gold,
+                DefensiveBuildingUpgradeId = defensiveBuildingUpgrade.Id
             });
     }
 
