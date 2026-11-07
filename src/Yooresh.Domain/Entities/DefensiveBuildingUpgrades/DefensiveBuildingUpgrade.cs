@@ -1,4 +1,4 @@
-﻿using Yooresh.Domain.Entities.DefensiveBuildings;
+using Yooresh.Domain.Entities.DefensiveBuildings;
 using Yooresh.Domain.Entities.Resources;
 
 namespace Yooresh.Domain.Entities.DefensiveBuildingUpgrades;
@@ -9,7 +9,7 @@ public class DefensiveBuildingUpgrade : BaseEntity
     public DefensiveBuildingType DefensiveBuildingType { get; set; }
     public string UpgradeName { get; set; }
     public ResourceValueObject UpgradeCost { get; set; }
-    public ResourceValueObject RepairCost { get; set; }
+    public ResourceValueObject RepairCost { get; set; } = new ResourceValueObject(0, 0, 0, 0);
     public int BonusAttack { get; set; }
     public int BonusDefense { get; set; }
     public int BonusHitPoint { get; set; }
